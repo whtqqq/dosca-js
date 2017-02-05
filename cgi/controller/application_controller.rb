@@ -3,9 +3,10 @@ require 'cgi'
 require 'cgi/session'
 
 class ApplicationController
-  attr_accessor :cgi, :session, :params, :controller, :action
+  attr_accessor :cgi, :session, :params, :controller, :action, :header
 
   def initialize
+    @header = {}
     @cgi = CGI.new
     find_session
     @params = @cgi.params
@@ -50,7 +51,7 @@ class ApplicationController
   def render(viewfile=nil)
     if @render_once
       viewfile ||= "view/#{@controller}/#{@action}.html.erb"
-      @cgi.out(){
+      @cgi.out(@header){
         ERB.new(File.read(viewfile)).result(binding)
       }
       @render_once = false
