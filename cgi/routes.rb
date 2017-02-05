@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 begin
-  require './application'
+  require './config/application'
   require './controller/application_controller'
   LOAD_DIR = %w(model controller)
   LOAD_DIR.each do |dir|
@@ -22,7 +22,7 @@ begin
   @controller.render
 
 rescue Exception
-  # when exctption 404 Not Found
+  # when exception 404 Not Found
 
   puts "Status: 404 Not Found\n"
   puts "Content-Type: text/html\n\n"
