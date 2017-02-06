@@ -1,0 +1,4 @@
+server:
+  root_uri: /dosca-js
+api:
+  login_url: http://localhost/dosca-js/api/auth.cgi

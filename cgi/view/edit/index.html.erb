@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+  <title>Title</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/dosca-js/contents/css/bootstrap.css" rel="stylesheet">
+  <link href="/dosca-js/contents/css/bootstrap-theme.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="/dosca-js/contents/css/theme.css" rel="stylesheet">
+  <link href="/dosca-js/contents/pikaday/css/pikaday.css" rel="stylesheet">
+  <link href="/dosca-js/contents/css/combo.select.css" rel="stylesheet">
+  <link href="/dosca-js/contents/bootstrap-fileinput-master20161101/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+  <style>@import url(/dosca-js/contents/css/maps.css);</style>
+</head>
+<body>
+<div class="navbar-static-top">
+  <div class="col-md-12 padding-top-10">
+    <div class="col-md-8 none-padding-left">
+      <ul class="nav nav-tabs">
+        <li><a href="./page1.html" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')">INCIDENT NEWS</a></li>
+        <li class="active"><a href="#" class="nav-bg-blue">PAST INCIDENT</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+<form class="form-horizontal" role="form">
+  <!--Left-Start-->
+  <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
+    <div class="panel panel-default left-panel panel-bg-blue">
+      <div class="panel-body">
+        <div class="col-md-12">
+          <div class="row">
+            <!-- <button class="btn btn-blue" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
+            <a href="./page2.html" id="newBtn" class="btn btn-blue new-Btn">New</a>
+            <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" disabled>Edit</button>
+            <button class="btn btn-grey" id="delBtn" style="width: 80px" disabled>Delete</button>
+          </div>
+        </div>
+        <!--Line-1-->
+        <div class="col-md-12 padding-top-25">
+          <div class="form-group">
+            <label for="IssueDate" class="col-sm-2 control-label">Issue Date</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control bg-white" id="IssueDate" readonly>
+            </div>
+          </div>
+        </div>
+        <!--Line-2-->
+        <div class="col-md-12 padding-top-25">
+          <div class="panel panel-default panel-bg-blue" style="border-width: 2px">
+            <div class="panel-body">
+              <div class="col-md-12 text-center">
+                <div class="text-center title-in-solid">
+                  <b>
+                    <span class="title-in-solid-span">Displayed this area on the MAP</span>
+                  </b>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div>
+                    <label for="Category" class="col-sm-6 control-label" style="text-align: left;">CATEGORY</label>
+                    <div class="col-sm-6 pull-right">
+                      <select class="form-control" id="Category">
+                        <option value=""></option>
+                        <option>Sinking</option>
+                        <option>Aground</option>
+                        <option>Collision</option>
+                        <option>Oil Leak</option>
+                        <option>Water Seepage</option>
+                        <option>Engine Fault</option>
+                      </select>
+                      <span class="text-danger" id="CategoryMsg" hidden>Please select the Category.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="incident" class="col-sm-6 control-label" style="text-align: left;">DATE and TIME of occurrence of the incident(UTC)</label>
+                  <div class="col-sm-6 pull-right">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <input type="text" class="form-control bg-white" id="incidentDate" placeholder="2016/11/14" readonly>
+                      </div>
+                      <div class="col-md-6 ">
+                        <div class="col-md-5">
+                          <select type="" class="form-control" id="incidentDateHour" style="display: inline-block;" placeholder="06">
+                            <option value=""></option>
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                          </select>
+                        </div>
+                        <div class="col-md-1 text-center none-padding">
+                          <span class="text-center" style="display: inline-block; padding-top: 5px;"><b>:</b></span>
+                        </div>
+                        <div class="col-md-5">
+                          <select type="text" class="form-control" id="incidentDateMin" style="display: inline-block;" placeholder="33">
+                            <option value=""></option>
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="VESSELNAME" class="col-sm-6 control-label" style="text-align: left;">VESSEL NAME</label>
+                  <div class="col-sm-6 pull-right">
+                    <input type="text" class="form-control" id="Vessel" placeholder="WNI CONFORT">
+                    <span class="text-danger"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="CARGO" class="col-sm-6 control-label" style="text-align: left;">CARGO</label>
+                  <div class="col-sm-6 pull-right">
+                    <input type="text" class="form-control" id="Cargo" placeholder="CONTAINER">
+                    <span class="text-danger"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!--Panel-End-->
+        <!--Line-3-->
+        <div class="col-md-12 ">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <input id="Picture" class="file" type="file" multiple data-preview-file-type="any" data-upload-url="#">
+            </div>
+          </div>
+        </div>
+        <!--Line-4-->
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="col-sm-5">
+              <div class="btn-group">
+                <button type="button" class="btn btn-grey" id="noPeriod" style="width: 110px;margin-left: 50px">No Period</button>
+                <button type="button" class="btn btn-blue" id="Period" style="width: 110px">Period</button>
+              </div>
+            </div>
+            <div>
+              <label for="TerminationDate" class="col-sm-3 control-label">Termination Date</label>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <input type="text" class="form-control bg-white" id="TerminationDate" placeholder="2017/01/01" style="cursor:pointer;" readonly>
+                  <span class="input-group-addon hand-mouse" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                <span class="text-danger"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Line-5-->
+        <div class="col-md-12">
+          <div class="col-md-offset-5">
+            <button type="button" class="btn btn-grey" id="submitBtn" style="width: 120px; margin-right: 20px;" onclick="submitChk();" disabled>Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Left-End-->
+  <!--right-Start-->
+  <div class="col-lg-4 col-md-4 col-sm-4 none-padding">
+    <div class="panel panel-default panel-bg-blue">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-2"><h3>Location</h3></div>
+          <div class="col-xs-9 col-xs-offset-1">
+            <div class="form-group">
+              <label for="Port" class="col-sm-2 control-label">Port</label>
+              <div class="col-sm-10">
+                <!-- <input type="text" class="form-control" id="Port" placeholder="OMAEZAKI"> -->
+                <select id="Port" class="form-control">
+                  <option value=""></option>
+                  <option value="KOBE">KOBE</option>
+                  <option value="YOKOHAMA">YOKOHAMA</option>
+                  <option value="OSAKA">OSAKA</option>
+                  <option value="HAKATA">HAKATA</option>
+                  <option value="HITACHI">HITACHI</option>
+                  <option value="HIROSHIMA">HIROSHIMA</option>
+                  <option value="NAGOYA">NAGOYA</option>
+                  <option value="NIIGATA">NIIGATA</option>
+                  <option value="CHIBA">CHIBA</option>
+                  <option value="PUSAN">PUSAN</option>
+                  <option value="DALIAN">DALIAN</option>
+                  <option value="XIAMEN">XIAMEN</option>
+                  <option value="FUZHOU">FUZHOU </option>
+                  <option value="NINGBO">NINGBO </option>
+                  <option value="SHEN ZHEN">SHEN ZHEN</option>
+                  <option value="KEELUNG">KEELUNG</option>
+                  <option value="KAOHSIUNG">KAOHSIUNG </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="Position" class="col-sm-2 control-label">Position</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="Position" placeholder="45-35.8 N    145-56.3 E">
+                <span class="text-danger"></span>
+              </div>
+            </div>
+          </div><!--col-xs-9-->
+        </div>
+        <div class="col-md-12 none-padding text-center bg-white" id="map">
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default panel-bg-yellow" >
+      <div class="panel-body">
+        <div class="text-center"><h3 style="margin-top: 0px">Historical Contents</h3></div>
+        <div class="col-md-12 none-padding history-style">
+          <ul class="list-group history-ul-style" id="historyList" style="height: 318px;">
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/25_15:55:54  Stranding</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/26_02:09:08  Collision</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/29_06:29:56  Freight Damage</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/30_00:35:27  Crew Death</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/02_03:42:13  Machinery Damage</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/04_21:45:55  Engine Trouble</span>
+            <span class="list-group-item li-padding hand-mouse active" onclick="selectHistory(this);">2016/11/06_05:35:40  Collision</span>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--right-End-->
+</form>
+</div>
+
+
+  <!-- Bootstrap core JavaScript
+   ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="/dosca-js/contents/js/jquery.min.js"></script>
+  <script src="/dosca-js/contents/js/bootstrap.min.js"></script>
+  <script src="/dosca-js/contents/pikaday/js/moment.min.js"></script>
+  <script src="/dosca-js/contents/pikaday/js/pikaday.js"></script>
+  <script src="/dosca-js/contents/js/init.js"></script>
+  <!-- <script src="./js/d3.js"></script> -->
+  <!-- <script src="./js/d3show.js"></script> -->
+  <script src="/dosca-js/contents/js/jquery.combo.select.js"></script>
+  <script src="/dosca-js/contents/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
+  <!--D3-start-->
+  <script src="/dosca-js/contents/d3/d3.min.js"></script>
+  <script src="/dosca-js/contents/d3/d3.geo.projection.min.js"></script>
+  <script src="/dosca-js/contents/d3/topojson.min.js"></script>
+  <script src="/dosca-js/contents/d3/app.min.js"></script>
+  <!--D3-End-->
+</body>
+</html>

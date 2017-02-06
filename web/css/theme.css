@@ -1,0 +1,118 @@
+.li-padding{padding:0px 0px 0px 10px !important;}
+.none-padding{padding:0px 0px 0px 0px !important;}
+.none-padding-left{padding-left: 0px !important;}
+.padding-top-10{padding-top: 10px !important;}
+.padding-top-25{padding-top: 25px !important;}
+
+.panel-bg-blue{background-color: #CEE5F7 !important;border-color: #0070C0 !important;}
+.panel-bg-yellow{background-color: #FFFFCC !important;border-color: #0070C0 !important;}
+.nav-bg-blue{background-color: #CEE5F7 !important;border:1px 1px 0px 1px solid #0070C0 !important;}
+.nav-border{border:1px solid #0070C0 !important;}
+.no-border-bottom{border-bottom: 0px !important;}
+.nav-tabs-bottom{border-bottom: 1px solid #0070C0;}
+.bg-white{background-color: white !important;}
+.bg-disable{background-color: #eee !important;}
+.left-panel{
+  min-height: 782px;
+  border-top: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+.new-Btn{
+  width: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.hand-mouse{
+  cursor:pointer;
+}
+.title-in-solid{
+  margin-top: -32px; font-size: 30px; padding-bottom: 15px;
+}
+.title-in-solid-span{
+  padding:0px 20px 0px 20px;
+  background-color: #CEE5F7 !important;
+  color: #0070C0;
+  width: 500px;
+}
+.history-style{
+  min-height: 250px;background-color: white; border:1px solid #CCCCCC;
+}
+.history-ul-style{
+  overflow: auto; margin-bottom: 0px;
+}
+
+
+.btn-grey {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+	background: #9C9C9C;
+  background-repeat: repeat-x;
+  border-color: #9C9C9C;
+  color: #fff;
+  font-family: "微软雅黑";
+}
+.btn-grey:hover,
+.btn-grey:focus {
+  background-color: #868686;
+  background-position: 0 -15px;
+	-webkit-box-shadow: 0 0 20px rgba(153, 51, 204, .3);
+				  box-shadow: 0 0 20px rgba(153, 51, 204, .3);
+	color:#fff;
+}
+.btn-grey:active,
+.btn-grey.active {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+
+
+.btn-blue {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+  background: #00B0F0;
+  background-repeat: repeat-x;
+  border-color: #00B0F0;
+  color: #fff;
+  font-family: "微软雅黑";
+}
+.btn-blue:hover,
+.btn-blue:focus {
+  background-color: #008EFF;
+  background-position: 0 -15px;
+  -webkit-box-shadow: 0 0 20px rgba(153, 51, 204, .3);
+          box-shadow: 0 0 20px rgba(153, 51, 204, .3);
+  color:#fff;
+}
+.btn-blue:active,
+.btn-blue.active {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+
+
+.btn-pink {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+  background: #FF7C80;
+  background-repeat: repeat-x;
+  border-color: #FF7C80;
+  color: #fff;
+  font-family: "微软雅黑";
+}
+.btn-pink:hover,
+.btn-pink:focus {
+  background-color: #FA7174;
+  background-position: 0 -15px;
+  -webkit-box-shadow: 0 0 20px rgba(153, 51, 204, .3);
+          box-shadow: 0 0 20px rgba(153, 51, 204, .3);
+  color:#fff;
+}
+.btn-pink:active,
+.btn-pink.active {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}

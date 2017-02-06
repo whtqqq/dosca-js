@@ -1,7 +1,13 @@
 #!/usr/bin/ruby
 
+require 'rubygems'
+require 'bundler'
+
+Bundler.require
+
 begin
   require './config/application'
+  require './config/settings'
   require './controller/application_controller'
   LOAD_DIR = %w(model controller)
   LOAD_DIR.each do |dir|
@@ -9,6 +15,9 @@ begin
       require file
     end
   end
+
+  # load config file
+  Settings.load!("config/app_conf.yaml")
 
   #create controller
   controller_name = Application.get_controller_and_action_name[:controller]

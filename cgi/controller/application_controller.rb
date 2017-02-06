@@ -3,9 +3,11 @@ require 'cgi'
 require 'cgi/session'
 
 class ApplicationController
-  attr_accessor :cgi, :session, :params, :controller, :action, :header
+  attr_accessor :cgi, :session, :params, :controller, :action
+  attr_accessor :header, :no_render, :error_message
 
   def initialize
+    @error_message = nil
     @header = {}
     @cgi = CGI.new
     find_session
@@ -42,6 +44,7 @@ class ApplicationController
   end
 
   def redirect_to(url, status="REDIRECT")
+    @no_render = true
     print @cgi.header( {
       "status"     => status,
       "Location"   => url
@@ -49,12 +52,43 @@ class ApplicationController
   end
 
   def render(viewfile=nil)
-    if @render_once
-      viewfile ||= "view/#{@controller}/#{@action}.html.erb"
-      @cgi.out(@header){
-        ERB.new(File.read(viewfile)).result(binding)
-      }
-      @render_once = false
+    if @no_render 
+      @no_render = false
+      return
     end
+
+    if !@render_once
+      return
+    end
+
+    if @error_message
+      viewfile = set_view(@session["_prev_action"])
+    else 
+      viewfile =  default_view
+      @session["_prev_action"] = @action
+    end
+
+    @cgi.out(@header){
+      ERB.new(File.read(viewfile)).result(binding)
+    }
+    @render_once = false
+    @error_message = nil
+  end
+
+  private 
+
+  def default_view
+    "view/#{@controller}/#{@action}.html.erb"
+  end
+
+  def set_view(action="index")
+    @view_file = "view/#{@controller}/#{action}.html.erb"
+  end
+
+  def has_error(resp) 
+    return false if resp.nil?
+    return false if resp[:result].nil?
+    return false if resp[:result] == "SUCCESS"
+    true
   end
 end
