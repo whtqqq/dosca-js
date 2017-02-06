@@ -62,7 +62,7 @@ class ApplicationController
     end
 
     if @error_message
-      viewfile = set_view(@session["_prev_action"])
+      viewfile = prev_view
     else 
       viewfile =  default_view
       @session["_prev_action"] = @action
@@ -81,8 +81,9 @@ class ApplicationController
     "view/#{@controller}/#{@action}.html.erb"
   end
 
-  def set_view(action="index")
-    @view_file = "view/#{@controller}/#{action}.html.erb"
+  def prev_view
+    action = @session["_prev_action"]
+    "view/#{@controller}/#{action}.html.erb"
   end
 
   def has_error(resp) 
