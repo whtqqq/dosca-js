@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/dosca-js/contents/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/dosca-js/contents/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<%=@contents_uri%>/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=@contents_uri%>/css/bootstrap-theme.min.css" rel="stylesheet">
 
     <!-- Website CSS style -->
-    <link rel="stylesheet" type="text/css" href="/dosca-js/contents/css/login.css">
+    <link rel="stylesheet" type="text/css" href="<%=@contents_uri%>/css/login.css">
 
-    <title>Login</title>
+    <title>DOSCA JS Contents</title>
   </head>
   <body>
     <div class="container">
@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="main-login main-center">
-          <form class="form-horizontal" method="post" action="/dosca-js/login/auth">
+          <form class="form-horizontal" method="post" action="<%=@root_uri%>/login/auth">
             <div>
                <span class="text-danger"><%= @error_message %></span>
             </div>
@@ -66,8 +66,8 @@
       </div>
     </div>
 
-    <script src="/dosca-js/contents/js/jquery.min.js"></script>
-    <script src="/dosca-js/contents/js/bootstrap.min.js"></script>
+    <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
+    <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
     <script>
       function chkSubmit() {
         var flg = 0;

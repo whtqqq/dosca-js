@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+  <title>DOSCA JS Contents</title>
+  <!-- Bootstrap core CSS -->
+  <link href="<%=@contents_uri%>/css/bootstrap.css" rel="stylesheet">
+  <link href="<%=@contents_uri%>/css/bootstrap-theme.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="<%=@contents_uri%>/css/theme.css" rel="stylesheet">
+  <link href="<%=@contents_uri%>/pikaday/css/pikaday.css" rel="stylesheet">
+  <link href="<%=@contents_uri%>/css/combo.select.css" rel="stylesheet">
+  <link href="<%=@contents_uri%>/bootstrap-fileinput-master20161101/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+  <style>@import url('<%=@contents_uri%>/css/maps.css');</style>
+</head>
+<body>
+<div class="navbar-static-top">
+  <div class="col-md-12 padding-top-10">
+    <div class="col-md-8 none-padding-left">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#" class="nav-bg-blue">INCIDENT NEWS</a></li>
+        <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')">PAST INCIDENT</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+<form class="form-horizontal" role="form">
+  <input type="hidden" id="ClientCode" value="">
+  <input type="hidden" id="ContentNo" value="">
+  <input type="hidden" id="pageStatus" value="">
+  <!--Left-Start-->
+  <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
+    <div class="panel panel-default left-panel panel-bg-blue">
+      <div class="panel-body">
+        <div class="col-md-12">
+          <div class="row">
+            <a href="./page1.html" id="newBtn" class="btn btn-blue new-Btn">New</a>
+            <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
+            <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" disabled>Edit</button>
+            <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" disabled>Delete</button>
+          </div>
+        </div>
+        <!--Line-1-->
+        <div class="col-md-12 padding-top-25">
+          <div class="form-group">
+            <label for="IssueDate" class="col-sm-2 control-label">Issue Date</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control bg-white" id="IssueDate" readonly>
+            </div>
+            <div class="pull-right">
+              <div class="btn-group">
+                <button type="button" class="btn btn-grey" id="noPeriod" style="width: 110px;">No Period</button>
+                <button type="button" class="btn btn-blue" id="Period" style="width: 110px;margin-right: 17px">Period</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Line-2-->
+        <div class="col-md-12">
+          <div class="form-group">
+            <div>
+              <label for="Category" class="col-sm-2 control-label">Category</label>
+              <div class="col-sm-4">
+                <select class="form-control" id="Category">
+                  <option value=""></option>
+                  <option>Sinking</option>
+                  <option>Aground</option>
+                  <option>Collision</option>
+                  <option>Oil Leak</option>
+                  <option>Water Seepage</option>
+                  <option>Engine Fault</option>
+                </select>
+                <span class="text-danger" id="CategoryMsg" hidden>Please select the Category.</span>
+              </div>
+            </div>
+            <div>
+              <label for="TerminationDate" class="col-sm-3 control-label">Termination Date</label>
+              <div class="col-sm-3">
+                <div class="input-group">
+                  <input type="text" class="form-control bg-white" id="TerminationDate" placeholder="2017/01/01" style="cursor:pointer;" readonly>
+                  <span class="input-group-addon hand-mouse" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                <span class="text-danger"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Line-3-->
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="Subject" class="col-sm-2 control-label">Subject</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="Subject" placeholder="Vessel A sank  in the off Kashima">
+              <span class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+        <!--Line-4-->
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="Summary" class="col-sm-2 control-label">Summary</label>
+            <div class="col-sm-10">
+              <textarea cols="120" rows="10" class="form-control" id="Summary" placeholder="The engine room of  M/V MURAT HACIBEKIROGLU II flooded, sank off the coast of Turkey. Entire crew of 10 people in the lifeboat, was rescued in the vicinity of the sailing ship.
+
+<Ship Charactoristics>
+Vessel Name  : TOLUNAY
+IMO No  : 9085675
+Cargo    : Bulk Carrier
+Frag      : Cook Islands
+Built      : 1995
+GRT     : 13,865 ton
+DWT     : 21,964 ton
+L x B     : 158 x 25m
+Owner   : Tolunay Ship Management
+Manager : DITTO"></textarea>
+              <span class="text-danger"></span>
+            </div>
+          </div>
+        </div>
+        <!--Line-5-->
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="Picture" class="col-sm-2 control-label">Picture</label>
+            <div class="col-sm-10">
+              <input type="file" class="file" id="Picture" multiple data-preview-file-type="any" data-upload-url="#">
+            </div>
+          </div>
+        </div>
+        <!--Line-6-->
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="WebPage" class="col-sm-2 control-label">Web page</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="WebPage" placeholder="https://www.fleetmon.com/media/maritimenews/murat2.html">
+            </div>
+          </div>
+        </div>
+        <!--Line-7-->
+        <div class="col-md-12">
+          <div class="col-md-offset-4">
+            <button type="button" class="btn btn-blue" id="preBtn" style="width: 120px;margin-left: 20px;margin-right: 20px">Preview</button>
+            <button type="button" class="btn btn-grey" id="submitBtn" style="width: 120px;margin-right: 20px;" onclick="submitChk()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Left-End-->
+  <!--right-Start-->
+  <div class="col-lg-4 col-md-4 col-sm-4 none-padding">
+    <div class="panel panel-default panel-bg-blue">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-2"><h3>Location</h3></div>
+          <div class="col-xs-9 col-xs-offset-1">
+            <div class="form-group">
+              <label for="Port" class="col-sm-2 control-label">Port</label>
+              <div class="col-sm-10">
+                <!-- <input type="text" class="form-control" id="Port" placeholder="OMAEZAKI"> -->
+                <select id="Port" class="form-control">
+                  <option value=""></option>
+                  <option value="KOBE">KOBE</option>
+                  <option value="YOKOHAMA">YOKOHAMA</option>
+                  <option value="OSAKA">OSAKA</option>
+                  <option value="HAKATA">HAKATA</option>
+                  <option value="HITACHI">HITACHI</option>
+                  <option value="HIROSHIMA">HIROSHIMA</option>
+                  <option value="NAGOYA">NAGOYA</option>
+                  <option value="NIIGATA">NIIGATA</option>
+                  <option value="CHIBA">CHIBA</option>
+                  <option value="PUSAN">PUSAN</option>
+                  <option value="DALIAN">DALIAN</option>
+                  <option value="XIAMEN">XIAMEN</option>
+                  <option value="FUZHOU">FUZHOU </option>
+                  <option value="NINGBO">NINGBO </option>
+                  <option value="SHEN ZHEN">SHEN ZHEN</option>
+                  <option value="KEELUNG">KEELUNG</option>
+                  <option value="KAOHSIUNG">KAOHSIUNG </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="Position" class="col-sm-2 control-label">Position</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="Position" placeholder="45-35.8 N    145-56.3 E">
+                <span class="text-danger"></span>
+              </div>
+            </div>
+          </div><!--col-xs-9-->
+        </div>
+        <div class="col-md-12 none-padding text-center bg-white" id="map">
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default panel-bg-yellow">
+      <div class="panel-body">
+        <div class="text-center"><h3 style="margin-top: 0px">Historical Contents</h3></div>
+        <div class="col-md-12 none-padding history-style">
+          <ul class="list-group history-ul-style" id="historyList" style="height: 345px; ">
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/25_15:55:54  Stranding</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/26_02:09:08  Collision</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/29_06:29:56  Freight Damage</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/30_00:35:27  Crew Death</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/02_03:42:13  Machinery Damage</span>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/04_21:45:55  Engine Trouble</span>
+            <span class="list-group-item li-padding hand-mouse active" onclick="selectHistory(this);">2016/11/06_05:35:40  Collision</span>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--right-End-->
+</form>
+</div>
+
+
+  <!-- Bootstrap core JavaScript
+   ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
+  <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
+  <script src="<%=@contents_uri%>/pikaday/js/moment.min.js"></script>
+  <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
+  <script src="<%=@contents_uri%>/js/init.js"></script>
+  <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
+  <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
+  <!--D3-start-->
+  <script src="<%=@contents_uri%>/d3/d3.min.js"></script>
+  <script src="<%=@contents_uri%>/d3/d3.geo.projection.min.js"></script>
+  <script src="<%=@contents_uri%>/d3/topojson.min.js"></script>
+  <script src="<%=@contents_uri%>/d3/app.min.js"></script>
+  <!--D3-End-->
+</body>
+</html>

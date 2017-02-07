@@ -8,7 +8,8 @@ class LoginController < ApplicationController
     if has_error(resp)
       @error_message = resp[:message]
     else
-      user_info = @session[username.to_sym] = resp
+      @session["username"] = username
+      user_info = @session[username] = resp
       user_info[:contents].each{|contents| 
         resp = DoscaAPI.categories(user_info[:client_code], user_info[:mail], contents[:code])
         user_info[:categories] ||= {}
@@ -17,7 +18,11 @@ class LoginController < ApplicationController
         user_info[:ports] ||= {}
         user_info[:ports][contents[:code].to_sym] = resp[:ports] || {}
       }
-      redirect_to Settings._settings[:server][:root_uri] + "/edit"
+
+      default_contents = user_info[:contents].select{|h| h[:no] == "0"}.first
+      forward_action = "news"
+      forward_action = "past" if default_contents[:code].index("PAST")
+      redirect_to @root_uri + "/edit" + "/" + forward_action
     end
   end
 end

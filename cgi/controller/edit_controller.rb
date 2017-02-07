@@ -1,4 +1,11 @@
 class EditController < ApplicationController
-  def index
+  def past
+    username = @session["username"]
+    contents = @session[username]
+  end
+
+  def news
+    username = @session["username"]
+    contents = @session[username]
   end
 end

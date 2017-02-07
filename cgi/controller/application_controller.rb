@@ -5,10 +5,13 @@ require 'cgi/session'
 class ApplicationController
   attr_accessor :cgi, :session, :params, :controller, :action
   attr_accessor :header, :no_render, :error_message
+  attr_accessor :root_uri, :contents_uri
 
   def initialize
     @error_message = nil
     @header = {}
+    @root_uri = Settings._settings[:server][:root_uri]
+    @contents_uri = Settings._settings[:server][:contents_uri]
     @cgi = CGI.new
     find_session
     @params = @cgi.params
@@ -49,6 +52,8 @@ class ApplicationController
       "status"     => status,
       "Location"   => url
     })
+    @session["_prev_action"] = nil
+    @session.close
   end
 
   def render(viewfile=nil)

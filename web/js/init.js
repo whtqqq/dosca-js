@@ -36,7 +36,7 @@ $(document).ready(function() {
       browseOnZoneClick:true,
       previewSettings:{image: {width: "260px", height: "auto"}},
       allowedFileExtensions : ['jpg', 'png', 'gif'],
-      dropZoneTitle:"Picture file Drag & Drop here !"
+      dropZoneTitle:"Picture file（jpeg/jpg/png） Drag & Drop here !"
     });
   } else {
     $('#Picture').fileinput({
@@ -175,7 +175,7 @@ $("#editBtn").on("click", function() {
   if(terminationDate != "-") {
     $("#TerminationDate").val(terminationDate);
   } else {
-    $("#TerminationDate").val("-");
+    $("#noPeriod").click();
   }
   $(".combo-input").removeAttr("disabled");
   $('#Picture').fileinput('enable');
