@@ -2,6 +2,13 @@ server:
   root_uri: /dosca-js
   contents_uri: /dosca-js/contents
 api:
-  login_url: http://localhost/dosca-js/api/get/auth.cgi
-  categories_url: http://localhost/dosca-js/api/get/categories.cgi
-  ports_url: http://localhost/dosca-js/api/get/ports.cgi
+  login_url: http://localhost/dosca-js/api/get/auth_stub.cgi
+  categories_url: http://localhost/dosca-js/api/get/categories_stub.cgi
+  ports_url: http://localhost/dosca-js/api/get/ports_stub.cgi
+  history_list_url: http://localhost/dosca-js/api/get/history_list_stub.cgi
+  history_detail_url: http://localhost/dosca-js/api/get/history_detail_stub.cgi
+  pdf_download_url: http://localhost/dosca-js/api/get/pdf_stub.cgi
+  pdf_upload_url: http://localhost/dosca-js/api/set/pdf_stub.cgi
+  new_url: http://localhost/dosca-js/api/set/new_stub.cgi
+  update_url: http://localhost/dosca-js/api/set/update_stub.cgi
+  remove_url: http://localhost/dosca-js/api/set/remove_stub.cgi
