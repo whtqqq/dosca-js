@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>D3 SVG Geographic Map</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../../webcomponentsjs/webcomponents.min.js"></script>
+	<link rel="import" href="../d3-geomap.html">
+	<link rel="import" href="../../flag-icon/flag-icon.html">
+	<link rel="import" href="project-docs.html">
+	<style>
+		.params {
+			display: inline-block;
+			vertical-align: top;
+			border: 1px solid #333;
+			background-color: PowderBlue;
+			margin: 10px;
+			padding: 10px;
+			border-radius: 3px;
+			vertical-align: top;
+		}
+	</style>
+</head>
+<body is="project-docs" unresolved>
+
+	<h1>Multi-select</h1>
+
+	Enable built in region selection.
+
+	<p>
+
+	<polymer-element name="map-to-kv" attributes="map" noscript>
+		<template>
+			<template repeat="{{s in map | mapToKVArray}}">
+				<span style="padding-right: 10px;"><flag-icon key="{{s.key}}"></flag-icon> {{s.key}}</span>
+			</template>
+		</template>
+	</polymer-element>
+
+	<template id="example" bind>
+		<div class="params">
+			<strong>Selected:</strong> <map-to-kv map="{{selected}}"></map-to-kv>
+		</div>
+		<d3-geomap selected="{{selected}}" multiselect></d3-geomap>
+	</template>
+
+	<p>
+
+	<script>
+
+	var model = {
+		selected: null
+	}
+
+	window.addEventListener('polymer-ready', function(){
+		document.getElementById('example').model = model;
+		PolymerExpressions.prototype.mapToKVArray = function(map) {
+			var arr = [];
+			for (var key in map) {
+				arr.push({key: key, value:map[key]});
+			}
+			return arr;
+		};
+	});
+	</script>
+</body>
+</html>
