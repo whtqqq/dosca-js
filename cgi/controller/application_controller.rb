@@ -23,8 +23,8 @@ class ApplicationController
 
   def find_session
     begin
-      request_cookies = (ENV["HTTP_COOKIE"] || "").split(";").map(&:strip).grep(/^_session_id/)
-      session_id = request_cookies[0].split("=")[1] unless request_cookies.empty?
+      request_cookies = ENV["HTTP_COOKIE"] || ""
+      session_id = request_cookies.match(/_session_id=(.+)/)[1] if request_cookies.index("_session_id")
       option = {"new_session" => false}
       option["session_id"] = session_id if session_id
       @session = CGI::Session.new(@cgi, option)
