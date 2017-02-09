@@ -13,6 +13,32 @@
   <link href="<%=@contents_uri%>/css/combo.select.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/bootstrap-fileinput-master20161101/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
   <style>@import url('<%=@contents_uri%>/css/maps.css');</style>
+  <script src="<%=@contents_uri%>/d3-map/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="<%=@contents_uri%>/d3-map/d3-geomap.html">
+  <style shim-shadowdom>
+    zoom-controller::shadow d3-geomap, d3-geomap {
+      display:inline-block;
+      border:1px solid black;
+      border-radius: 3px;
+    }
+    zoom-controller::shadow .params, .params {
+      display: inline-block;
+      vertical-align: top;
+      border: 1px solid #333;
+      background-color: PowderBlue;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 3px;
+      vertical-align: top;
+    }
+    zoom-controller::shadow .params tr td:nth-of-type(1) { font-weight: bold; }
+    zoom-controller::shadow .params tr td:nth-of-type(2) { text-align: right; }
+    zoom-controller::shadow .params tr td:nth-of-type(3) { text-align: center; width: 100px }
+    zoom-controller::shadow .params tr td:nth-of-type(4) { text-align: right; }
+    zoom-controller::shadow .params tr td:nth-of-type(5) { text-align: right; width: 50px; }
+    zoom-controller::shadow .params input[type=number] { text-align: right; width: 50px; }
+    zoom-controller::shadow .params td { vertical-align: top }
+  </style>
 </head>
 <body>
 <div class="navbar-static-top">
@@ -314,7 +340,183 @@
             </div>
           </div><!--col-xs-9-->
         </div>
-        <div class="col-md-12 none-padding text-center bg-white" id="map">
+        <div class="col-md-12 none-padding text-center bg-white">
+	          <polymer-element name="zoom-controller" attributes="selected data hover hoverType clicked map theme multiselect projection pan zoom hoverTemplate markerHoverTemplate cover marks">
+	          <template id="example">
+	            <d3-geomap style="width:410px; height:285px;" projection="{{projection}}" theme="{{theme}}" zoom="{{zoom}}" pan="{{pan}}" markerHoverTemplate="markerhovertemplate">
+	                <fill name="MINE" color="rgba(255,215,0,0.95)"></fill>
+	                <marker
+	                  name="Grasberg"
+	                  country="Indonesia"
+	                  radius="36"
+	                  reserves="106.231"
+	                  latitude="-4.0310"
+	                  longitude="137.0657"
+	                  fillkey="MINE"
+	                  image="Grasberg_mine.jpg"
+	                ></marker>
+	                <marker
+	                  name="South Deep"
+	                  country="South Africa"
+	                  radius="27"
+	                  reserves="81.413"
+	                  latitude="-26.25"
+	                  longitude="27.40"
+	                  fillkey="MINE"
+	                  image="south_deep_ops.jpg"
+	                ></marker>
+	                <marker
+	                  name="Lihir"
+	                  country="Papua New Guinea"
+	                  radius="21"
+	                  reserves="64.1"
+	                  latitude="-3.0730"
+	                  longitude="152.3830"
+	                  fillkey="MINE"
+	                  image="lihir-gold-mine.jpg"
+	                ></marker>
+	                <marker
+	                  name="Muruntau"
+	                  country="Uzbekistan"
+	                  radius="17"
+	                  reserves="50"
+	                  latitude="41.2954"
+	                  longitude="64.3418"
+	                  fillkey="MINE"
+	                  image="Muruntov_mine.JPG"
+	                ></marker>
+	                <marker
+	                  name="Olympiada"
+	                  country="Russia"
+	                  radius="16"
+	                  reserves="47.5"
+	                  latitude="56.01"
+	                  longitude="93.04"
+	                  fillkey="MINE"
+	                  image="olimpiada-gold-mine.jpg"
+	                ></marker>
+	                <marker
+	                  name="Oyu Tolgoi"
+	                  country="Mongolia"
+	                  radius="15"
+	                  reserves="46.34"
+	                  latitude="43.003"
+	                  longitude="106.5035"
+	                  fillkey="MINE"
+	                  image="oyu-tolgoi-mine.jpg"
+	                ></marker>
+	                <marker
+	                  name="Pueblo Viejo"
+	                  country="Dominican Republic"
+	                  radius="13"
+	                  reserves="40.085"
+	                  latitude="18.24"
+	                  longitude="-70.46"
+	                  fillkey="MINE"
+	                  image="pueblo-viejo-mine.jpg"
+	                ></marker>
+	                <marker
+	                  name="Mponeng"
+	                  country="South Africa"
+	                  radius="13"
+	                  reserves="39.557"
+	                  latitude="-26.261"
+	                  longitude="27.255"
+	                  fillkey="MINE"
+	                  image="mponeng-mine-shaft.jpg"
+	                ></marker>
+	                <marker
+	                  name="Cadia East"
+	                  country="Australia"
+	                  radius="13"
+	                  reserves="37.6"
+	                  latitude="-33.467"
+	                  longitude="148.993"
+	                  fillkey="MINE"
+	                  image="cadia-valley-operations.jpg"
+	                ></marker>
+	                <marker
+	                  name="Obuasi"
+	                  country="Ghana"
+	                  radius="5"
+	                  reserves="29.83"
+	                  latitude="6.12"
+	                  longitude="-1.41"
+	                  fillkey="MINE"
+	                  image="obuasi-gold-mine.png"
+	                ></marker>
+
+	                <template id="markerhovertemplate">
+	                  <div style="
+	                    border-radius: 3px;
+	                    background-color: #FFF;
+	                    box-shadow: 1px 1px 5px #CCC;
+	                    font-size: 12px;
+	                    border: 1px solid #CCC;
+	                    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	                  ">
+	                    <table>
+	                      <tr>
+	                        <td style="vertical-align:top;padding-right:10px;">
+	                          <strong>{{hover.name}}</strong><br>
+	                          {{hover.data.country}}<br>
+	                          <span style="text-decoration:underline">Gold Reserves</span>
+	                        </td>
+	                      </tr>
+	                    </table>
+	                  </div>
+	                </template>
+	            </d3-geomap>
+	          </template>
+	          <script>
+	          Polymer({
+	            zoom: true,
+	            marks: [],
+	            pan: true,
+	            panY: 0,
+	            panX: 0,
+	            zoomScale: 0,
+	            projection: {
+	              x: 0,
+	              y: -10,
+	              scale: 1.3,
+	              zoomIncrement: 0.1,
+	              panY: 0,
+	              panX: 0,
+	              zoomScale: 0
+	            },
+	            theme: {
+	              defaultFill: 'transparent',
+	              borderWidth: 0.5,
+	              borderColor: '#ddd',
+	              backgroundImage: './d3-map/Equirectangular_projection_SW.jpg'
+	            },
+	            toggleZoom: function(e,i,checkbox){
+	              this.zoom = checkbox.checked;
+	            },
+	            togglePan: function(e,i,checkbox){
+	              this.pan = checkbox.checked;
+	            },
+	            toPercent: {
+	              toDOM: function(value) { return value * 100; },
+	              toModel: function(value) { return value / 100; }
+	            },
+	            ready: function(){
+	              var observer = new ObjectObserver(this.projection);
+	              var self = this;
+	              observer.open(function(added, removed, changed, getOldValueFn) {
+	                Object.keys(changed).forEach(function(property) {
+	                  if(property==='panY') self.panY = changed[property];
+	                  if(property==='panX') self.panX = changed[property];
+	                  if(property==='zoomScale') self.zoomScale = changed[property];
+	                });
+	              });
+	            },
+	          });
+	          </script>
+	        </polymer-element>
+
+	        <zoom-controller></zoom-controller>
         </div>
       </div>
     </div>
@@ -350,11 +552,5 @@
   <script src="<%=@contents_uri%>/js/init.js"></script>
   <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
   <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
-  <!--D3-start-->
-  <script src="<%=@contents_uri%>/d3/d3.min.js"></script>
-  <script src="<%=@contents_uri%>/d3/d3.geo.projection.min.js"></script>
-  <script src="<%=@contents_uri%>/d3/topojson.min.js"></script>
-  <script src="<%=@contents_uri%>/d3/app.min.js"></script>
-  <!--D3-End-->
 </body>
 </html>
