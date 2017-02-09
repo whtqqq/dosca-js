@@ -45,8 +45,10 @@
   <div class="col-md-12 padding-top-10">
     <div class="col-md-8 none-padding-left">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#" class="nav-bg-blue">INCIDENT NEWS</a></li>
-        <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')">PAST INCIDENT</a></li>
+        <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
+        <%if @past_contents %>
+          <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')"><%= @past_contents[:name] %></a></li>
+        <% end %>
       </ul>
     </div>
   </div>
@@ -88,16 +90,13 @@
         <div class="col-md-12">
           <div class="form-group">
             <div>
-              <label for="Category" class="col-sm-2 control-label">Category</label>
+              <label for="Category" class="col-sm-2 control-label"><%= @items[:category] %></label>
               <div class="col-sm-4">
                 <select class="form-control" id="Category">
                   <option value=""></option>
-                  <option>Sinking</option>
-                  <option>Aground</option>
-                  <option>Collision</option>
-                  <option>Oil Leak</option>
-                  <option>Water Seepage</option>
-                  <option>Engine Fault</option>
+                  <% @categories.each {|value| %>
+                     <option><%= value %></option>
+                  <% } %>
                 </select>
                 <span class="text-danger" id="CategoryMsg" hidden>Please select the Category.</span>
               </div>
@@ -117,7 +116,7 @@
         <!--Line-3-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Subject" class="col-sm-2 control-label">Subject</label>
+            <label for="Subject" class="col-sm-2 control-label"><%= @items[:subject] %></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="Subject" placeholder="Vessel A sank  in the off Kashima">
               <span class="text-danger"></span>
@@ -127,7 +126,7 @@
         <!--Line-4-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Summary" class="col-sm-2 control-label">Summary</label>
+            <label for="Summary" class="col-sm-2 control-label"><%= @items[:summary] %></label>
             <div class="col-sm-10">
               <textarea cols="120" rows="10" class="form-control" id="Summary" placeholder="The engine room of  M/V MURAT HACIBEKIROGLU II flooded, sank off the coast of Turkey. Entire crew of 10 people in the lifeboat, was rescued in the vicinity of the sailing ship.
 
@@ -149,7 +148,7 @@ Manager : DITTO"></textarea>
         <!--Line-5-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Picture" class="col-sm-2 control-label">Picture</label>
+            <label for="Picture" class="col-sm-2 control-label"><%= @items[:picture] %></label>
             <div class="col-sm-10">
               <input type="file" class="file" id="Picture" multiple data-preview-file-type="any" data-upload-url="#">
             </div>
@@ -158,7 +157,7 @@ Manager : DITTO"></textarea>
         <!--Line-6-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="WebPage" class="col-sm-2 control-label">Web page</label>
+            <label for="WebPage" class="col-sm-2 control-label"><%= @items[:web_page] %></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="WebPage" placeholder="https://www.fleetmon.com/media/maritimenews/murat2.html">
             </div>
@@ -188,23 +187,9 @@ Manager : DITTO"></textarea>
                 <!-- <input type="text" class="form-control" id="Port" placeholder="OMAEZAKI"> -->
                 <select id="Port" class="form-control">
                   <option value=""></option>
-                  <option value="KOBE">KOBE</option>
-                  <option value="YOKOHAMA">YOKOHAMA</option>
-                  <option value="OSAKA">OSAKA</option>
-                  <option value="HAKATA">HAKATA</option>
-                  <option value="HITACHI">HITACHI</option>
-                  <option value="HIROSHIMA">HIROSHIMA</option>
-                  <option value="NAGOYA">NAGOYA</option>
-                  <option value="NIIGATA">NIIGATA</option>
-                  <option value="CHIBA">CHIBA</option>
-                  <option value="PUSAN">PUSAN</option>
-                  <option value="DALIAN">DALIAN</option>
-                  <option value="XIAMEN">XIAMEN</option>
-                  <option value="FUZHOU">FUZHOU </option>
-                  <option value="NINGBO">NINGBO </option>
-                  <option value="SHEN ZHEN">SHEN ZHEN</option>
-                  <option value="KEELUNG">KEELUNG</option>
-                  <option value="KAOHSIUNG">KAOHSIUNG </option>
+                 <% @ports.each {|hash| %>
+                    <option value="<%= hash.keys[0] %>"><%= hash.keys[0] %></option>
+                  <% } %>
                 </select>
               </div>
             </div>

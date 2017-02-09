@@ -18,12 +18,12 @@ puts <<END
     "mail": "cap001@gmail.com",
     "contents": [
         {
-            "no": "1",
+            "no": "0",
             "code": "INCIDENT_NEWS",
             "name": "Incident News"
         },
         {
-            "no": "0",
+            "no": "1",
             "code": "PAST_INCIDENT",
             "name": "Past Incident"
         }
