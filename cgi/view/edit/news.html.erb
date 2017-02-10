@@ -387,13 +387,9 @@ Manager : DITTO"></textarea>
         <div class="text-center"><h3 style="margin-top: 0px">Historical Contents</h3></div>
         <div class="col-md-12 none-padding history-style">
           <ul class="list-group history-ul-style" id="historyList" style="height: 345px; ">
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/25_15:55:54  Stranding</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/26_02:09:08  Collision</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/29_06:29:56  Freight Damage</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/30_00:35:27  Crew Death</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/02_03:42:13  Machinery Damage</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/04_21:45:55  Engine Trouble</span>
-            <span class="list-group-item li-padding hand-mouse active" onclick="selectHistory(this);">2016/11/06_05:35:40  Collision</span>
+            <% @histories.each{|his|%>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);"><%=his[:title]%></span>
+            <% }%>
           </ul>
         </div>
       </div>

@@ -7,7 +7,7 @@ class LoginController < ApplicationController
   def auth
     username = @params[:username]
     resp = DoscaAPI.auth(username, @params[:password], @params[:email])
-    if has_error(resp)
+    if has_error?(resp)
       @error_message = resp[:message]
     else
       @session["username"] = username

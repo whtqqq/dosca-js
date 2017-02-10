@@ -91,7 +91,7 @@ class ApplicationController
     "view/#{@controller}/#{action}.html.erb"
   end
 
-  def has_error(resp) 
+  def has_error?(resp) 
     return false if resp.nil?
     return false if resp[:result].nil?
     return false if resp[:result] == "SUCCESS"
