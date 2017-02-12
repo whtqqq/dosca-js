@@ -58,16 +58,17 @@
 <form class="form-horizontal" role="form">
   <input type="hidden" id="ClientCode" value="">
   <input type="hidden" id="ContentNo" value="">
-  <input type="hidden" id="pageStatus" value="">
+  <input type="hidden" id="pageStatus" value="1">
+  <input type="hidden" id="pageID" value="edit">
   <!--Left-Start-->
   <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
     <div class="panel panel-default left-panel panel-bg-blue">
       <div class="panel-body">
         <div class="col-md-12">
           <div class="row">
-            <a href="./page1.html" id="newBtn" class="btn btn-blue new-Btn">New</a>
+            <a href="<%=@root_uri%>/edit/news" id="newBtn" class="btn btn-blue new-Btn">New</a>
             <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
-            <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" disabled>Edit</button>
+            <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
             <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" disabled>Delete</button>
           </div>
         </div>
@@ -98,7 +99,7 @@
                      <option><%= value %></option>
                   <% } %>
                 </select>
-                <span class="text-danger" id="CategoryMsg" hidden>Please select the Category.</span>
+                <span class="text-danger" id="CategoryMsg" hidden="true">Please select the Category.</span>
               </div>
             </div>
             <div>
@@ -160,14 +161,15 @@ Manager : DITTO"></textarea>
             <label for="WebPage" class="col-sm-2 control-label"><%= @items[:web_page] %></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="WebPage" placeholder="https://www.fleetmon.com/media/maritimenews/murat2.html">
+              <span class="text-danger"></span>
             </div>
           </div>
         </div>
         <!--Line-7-->
         <div class="col-md-12">
           <div class="col-md-offset-4">
-            <button type="button" class="btn btn-blue" id="preBtn" style="width: 120px;margin-left: 20px;margin-right: 20px">Preview</button>
-            <button type="button" class="btn btn-grey" id="submitBtn" style="width: 120px;margin-right: 20px;" onclick="submitChk()">Submit</button>
+            <button type="button" class="btn btn-blue" id="preBtn" style="width: 120px;margin-left: 20px;margin-right: 20px" onclick="submitChk()">Preview</button>
+            <button type="button" class="btn btn-pink" id="submitBtn" style="width: 120px;margin-right: 20px;" onclick="submitChk()">Submit</button>
           </div>
         </div>
       </div>
@@ -202,7 +204,7 @@ Manager : DITTO"></textarea>
             </div>
           </div><!--col-xs-9-->
         </div>
-        <div class="col-md-12 none-padding text-center bg-white">
+        <div class="col-md-12 none-padding text-center bg-white" style="overflow: hidden">
           <polymer-element name="zoom-controller" attributes="selected data hover hoverType clicked map theme multiselect projection pan zoom hoverTemplate markerHoverTemplate cover marks">
             <template id="example">
               <d3-geomap style="width:410px; height:285px;" projection="{{projection}}" theme="{{theme}}" zoom="{{zoom}}" pan="{{pan}}" markerHoverTemplate="markerhovertemplate">
@@ -351,7 +353,7 @@ Manager : DITTO"></textarea>
                 defaultFill: 'transparent',
                 borderWidth: 0.5,
                 borderColor: '#ddd',
-                backgroundImage: './d3-map/Equirectangular_projection_SW.jpg'
+                backgroundImage: '<%=@contents_uri%>/d3-map/Equirectangular_projection_SW.jpg'
               },
               toggleZoom: function(e,i,checkbox){
                 this.zoom = checkbox.checked;
@@ -405,9 +407,11 @@ Manager : DITTO"></textarea>
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
   <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
+  <script src="<%=@contents_uri%>/js/init.js"></script>
+  <script src="<%=@contents_uri%>/js/Check.js"></script>
+  <script src="<%=@contents_uri%>/js/btnAction.js"></script>
   <script src="<%=@contents_uri%>/pikaday/js/moment.min.js"></script>
   <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
-  <script src="<%=@contents_uri%>/js/init.js"></script>
   <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
   <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
 </body>
