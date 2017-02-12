@@ -45,8 +45,10 @@
   <div class="col-md-12 padding-top-10">
     <div class="col-md-8 none-padding-left">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#" class="nav-bg-blue">INCIDENT NEWS</a></li>
-        <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')">PAST INCIDENT</a></li>
+        <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
+        <%if @past_contents %>
+          <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')"><%= @past_contents[:name] %></a></li>
+        <% end %>
       </ul>
     </div>
   </div>
@@ -56,16 +58,17 @@
 <form class="form-horizontal" role="form">
   <input type="hidden" id="ClientCode" value="">
   <input type="hidden" id="ContentNo" value="">
-  <input type="hidden" id="pageStatus" value="">
+  <input type="hidden" id="pageStatus" value="1">
+  <input type="hidden" id="pageID" value="edit">
   <!--Left-Start-->
   <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
     <div class="panel panel-default left-panel panel-bg-blue">
       <div class="panel-body">
         <div class="col-md-12">
           <div class="row">
-            <a href="./page1.html" id="newBtn" class="btn btn-blue new-Btn">New</a>
+            <a href="<%=@root_uri%>/edit/news" id="newBtn" class="btn btn-blue new-Btn">New</a>
             <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
-            <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" disabled>Edit</button>
+            <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
             <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" disabled>Delete</button>
           </div>
         </div>
@@ -88,18 +91,15 @@
         <div class="col-md-12">
           <div class="form-group">
             <div>
-              <label for="Category" class="col-sm-2 control-label">Category</label>
+              <label for="Category" class="col-sm-2 control-label"><%= @items[:category] %></label>
               <div class="col-sm-4">
                 <select class="form-control" id="Category">
                   <option value=""></option>
-                  <option>Sinking</option>
-                  <option>Aground</option>
-                  <option>Collision</option>
-                  <option>Oil Leak</option>
-                  <option>Water Seepage</option>
-                  <option>Engine Fault</option>
+                  <% @categories.each {|value| %>
+                     <option><%= value %></option>
+                  <% } %>
                 </select>
-                <span class="text-danger" id="CategoryMsg" hidden>Please select the Category.</span>
+                <span class="text-danger" id="CategoryMsg" hidden="true">Please select the Category.</span>
               </div>
             </div>
             <div>
@@ -117,7 +117,7 @@
         <!--Line-3-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Subject" class="col-sm-2 control-label">Subject</label>
+            <label for="Subject" class="col-sm-2 control-label"><%= @items[:subject] %></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="Subject" placeholder="Vessel A sank  in the off Kashima">
               <span class="text-danger"></span>
@@ -127,7 +127,7 @@
         <!--Line-4-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Summary" class="col-sm-2 control-label">Summary</label>
+            <label for="Summary" class="col-sm-2 control-label"><%= @items[:summary] %></label>
             <div class="col-sm-10">
               <textarea cols="120" rows="10" class="form-control" id="Summary" placeholder="The engine room of  M/V MURAT HACIBEKIROGLU II flooded, sank off the coast of Turkey. Entire crew of 10 people in the lifeboat, was rescued in the vicinity of the sailing ship.
 
@@ -149,7 +149,7 @@ Manager : DITTO"></textarea>
         <!--Line-5-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="Picture" class="col-sm-2 control-label">Picture</label>
+            <label for="Picture" class="col-sm-2 control-label"><%= @items[:picture] %></label>
             <div class="col-sm-10">
               <input type="file" class="file" id="Picture" multiple data-preview-file-type="any" data-upload-url="#">
             </div>
@@ -158,17 +158,18 @@ Manager : DITTO"></textarea>
         <!--Line-6-->
         <div class="col-md-12">
           <div class="form-group">
-            <label for="WebPage" class="col-sm-2 control-label">Web page</label>
+            <label for="WebPage" class="col-sm-2 control-label"><%= @items[:web_page] %></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="WebPage" placeholder="https://www.fleetmon.com/media/maritimenews/murat2.html">
+              <span class="text-danger"></span>
             </div>
           </div>
         </div>
         <!--Line-7-->
         <div class="col-md-12">
           <div class="col-md-offset-4">
-            <button type="button" class="btn btn-blue" id="preBtn" style="width: 120px;margin-left: 20px;margin-right: 20px">Preview</button>
-            <button type="button" class="btn btn-grey" id="submitBtn" style="width: 120px;margin-right: 20px;" onclick="submitChk()">Submit</button>
+            <button type="button" class="btn btn-blue" id="preBtn" style="width: 120px;margin-left: 20px;margin-right: 20px" onclick="submitChk()">Preview</button>
+            <button type="button" class="btn btn-pink" id="submitBtn" style="width: 120px;margin-right: 20px;" onclick="submitChk()">Submit</button>
           </div>
         </div>
       </div>
@@ -188,23 +189,9 @@ Manager : DITTO"></textarea>
                 <!-- <input type="text" class="form-control" id="Port" placeholder="OMAEZAKI"> -->
                 <select id="Port" class="form-control">
                   <option value=""></option>
-                  <option value="KOBE">KOBE</option>
-                  <option value="YOKOHAMA">YOKOHAMA</option>
-                  <option value="OSAKA">OSAKA</option>
-                  <option value="HAKATA">HAKATA</option>
-                  <option value="HITACHI">HITACHI</option>
-                  <option value="HIROSHIMA">HIROSHIMA</option>
-                  <option value="NAGOYA">NAGOYA</option>
-                  <option value="NIIGATA">NIIGATA</option>
-                  <option value="CHIBA">CHIBA</option>
-                  <option value="PUSAN">PUSAN</option>
-                  <option value="DALIAN">DALIAN</option>
-                  <option value="XIAMEN">XIAMEN</option>
-                  <option value="FUZHOU">FUZHOU </option>
-                  <option value="NINGBO">NINGBO </option>
-                  <option value="SHEN ZHEN">SHEN ZHEN</option>
-                  <option value="KEELUNG">KEELUNG</option>
-                  <option value="KAOHSIUNG">KAOHSIUNG </option>
+                 <% @ports.each {|hash| %>
+                    <option value="<%= hash.keys[0] %>"><%= hash.keys[0] %></option>
+                  <% } %>
                 </select>
               </div>
             </div>
@@ -217,7 +204,7 @@ Manager : DITTO"></textarea>
             </div>
           </div><!--col-xs-9-->
         </div>
-        <div class="col-md-12 none-padding text-center bg-white">
+        <div class="col-md-12 none-padding text-center bg-white" style="overflow: hidden">
           <polymer-element name="zoom-controller" attributes="selected data hover hoverType clicked map theme multiselect projection pan zoom hoverTemplate markerHoverTemplate cover marks">
             <template id="example">
               <d3-geomap style="width:410px; height:285px;" projection="{{projection}}" theme="{{theme}}" zoom="{{zoom}}" pan="{{pan}}" markerHoverTemplate="markerhovertemplate">
@@ -366,7 +353,7 @@ Manager : DITTO"></textarea>
                 defaultFill: 'transparent',
                 borderWidth: 0.5,
                 borderColor: '#ddd',
-                backgroundImage: './d3-map/Equirectangular_projection_SW.jpg'
+                backgroundImage: '<%=@contents_uri%>/d3-map/Equirectangular_projection_SW.jpg'
               },
               toggleZoom: function(e,i,checkbox){
                 this.zoom = checkbox.checked;
@@ -402,13 +389,9 @@ Manager : DITTO"></textarea>
         <div class="text-center"><h3 style="margin-top: 0px">Historical Contents</h3></div>
         <div class="col-md-12 none-padding history-style">
           <ul class="list-group history-ul-style" id="historyList" style="height: 345px; ">
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/25_15:55:54  Stranding</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/26_02:09:08  Collision</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/29_06:29:56  Freight Damage</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/10/30_00:35:27  Crew Death</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/02_03:42:13  Machinery Damage</span>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);">2016/11/04_21:45:55  Engine Trouble</span>
-            <span class="list-group-item li-padding hand-mouse active" onclick="selectHistory(this);">2016/11/06_05:35:40  Collision</span>
+            <% @histories.each{|his|%>
+            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);"><%=his[:title]%></span>
+            <% }%>
           </ul>
         </div>
       </div>
@@ -424,9 +407,11 @@ Manager : DITTO"></textarea>
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
   <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
+  <script src="<%=@contents_uri%>/js/init.js"></script>
+  <script src="<%=@contents_uri%>/js/Check.js"></script>
+  <script src="<%=@contents_uri%>/js/btnAction.js"></script>
   <script src="<%=@contents_uri%>/pikaday/js/moment.min.js"></script>
   <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
-  <script src="<%=@contents_uri%>/js/init.js"></script>
   <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
   <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
 </body>

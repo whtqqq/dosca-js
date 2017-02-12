@@ -14,7 +14,7 @@ end
 def resp_success
 puts <<END
 {
-    "Ports": [
+    "ports": [
         {
             "Tokyo": [
                 "45-35.8 N", 
