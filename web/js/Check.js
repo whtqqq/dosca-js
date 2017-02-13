@@ -227,7 +227,7 @@ function URLChk(e) {
 function afterDateChk() {
   var date = $("#TerminationDate").val();
   var now = new Date().Format("yyyy-MM-dd");
-  if(date != "-") {
+  if(date != " ") {
     var pageDate = new Date(date);
     var nowDate = new Date(now);
     if(nowDate.getTime() > pageDate.getTime()){
@@ -236,6 +236,31 @@ function afterDateChk() {
       return false;
     } else {
       return true;
+    }
+  }
+}
+
+function summaryLineNumChk() {
+  var strs = new Array();
+  strs = $("#Summary").val().split("\n");
+  var lineNum = strs.length;
+
+  if(lineNum > 25) {
+    $("#Summary").parent().parent().attr("class", "form-group has-error");
+    $("#Summary").next().text("Please control Summary's input in 25 lines and every lines input in 120 characters.");
+    $("#Summary").next().show();
+  } else {
+    for(var line in strs) {
+      var tmp = Math.ceil(strs[line].length/120)-1;
+      if(tmp > 0) {
+        lineNum += tmp;
+      }
+      if(lineNum > 25) {
+        $("#Summary").parent().parent().attr("class", "form-group has-error");
+        $("#Summary").next().text("Please control Summary's input in 25 lines and every lines input in 120 characters.");
+        $("#Summary").next().show();
+        break;
+      }
     }
   }
 }

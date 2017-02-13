@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="main-login main-center">
-          <form class="form-horizontal" method="post" action="<%=@root_uri%>/login/auth">
+          <form class="form-horizontal" method="post" action="<%=@root_uri%>/login/auth" onsubmit="return chkSubmit()">
             <div>
                <span class="text-danger"><%= @error_message %></span>
             </div>
@@ -58,8 +58,8 @@
             </div>
 
             <div class="form-group ">
-              <button type="submit" class="btn btn-primary btn-lg btn-block login-button" onclick="chkSubmit();">Login</button>
-              <a href="/dosca-js/login/auth" class="panel-bg-blue" id="success" hidden>PAST INCIDENT</a>
+              <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Login</button>
+              <!-- <a href="/dosca-js/login/auth" class="panel-bg-blue" id="success" hidden>PAST INCIDENT</a> -->
             </div>
           </form>
         </div>
@@ -81,6 +81,9 @@
         } else {
           $("#userNameGroup").attr("class","form-group");
           $("#userNameMsg").hide();
+          if(!usernameChk()){
+            flg++;
+          }
         }
         if(chkEmpty(pwd)) {
           $("#pwdGroup").attr("class","form-group has-error");
@@ -91,6 +94,7 @@
           $("#pwdGroup").attr("class","form-group");
           $("#pwdMsg").hide();
         }
+
         if(!chkEmail()) {
           flg++;
         }
@@ -101,6 +105,22 @@
           return true;
           //location.href = success;
           //$('#success').trigger('click');
+        }
+      }
+
+      function usernameChk() {
+        var input = $("#username").val();
+        var reg = /^[ -~\n]+$/;
+        if(reg.test(input)) {
+          $("#userNameGroup").attr("class","form-group");
+          $("#userNameMsg").text("");
+          $("#userNameMsg").hide();
+          return true;
+        }else{
+          $("#userNameGroup").attr("class","form-group has-error");
+          $("#userNameMsg").text("Illegal characters, please re-fill.");
+          $("#userNameMsg").show();
+          return false;
         }
       }
 
