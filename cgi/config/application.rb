@@ -1,5 +1,5 @@
 class Application
-  ROOT_CONTROLLER = :top
+  ROOT_CONTROLLER = :login
   DEFAULT_ACTION = :index
 
   class << self
