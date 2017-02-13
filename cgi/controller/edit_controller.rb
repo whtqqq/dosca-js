@@ -24,7 +24,7 @@ class EditController < ApplicationController
     status = ""
     status = "EDIT" if contents_no  
     status = "NEW" if  !contents_no && @params[:category] 
-    pdf_file = @params[:pdf_file]
+    pdf_file = @params[:file][0].original_filename
 
     if status == "NEW"
       edit_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
@@ -143,8 +143,20 @@ class EditController < ApplicationController
     return false
   end
  
-  def create_paf(data)
-    news_pictures = []
-    map_picture = data[:map_picture]
+  def create_paf(contents_code, contents_no, data)
+    path = URI.parse(Settings._settings[:server][:temp_pdf_directory])
+    pdf_name = path + "/" + contents_code + "_" + contents_no + ".pdf"
+    map_picture = data[:file][0]
+    news_pictures = data[:file] - data[:file][0]
+
+    pdf = PDFCreator.new(pdf_name, 
+           "", 
+          data[:latitue] + " " + data[:longitude], data[:category],
+          data[:subject],
+          data[:summary],
+          map_picture, news_pictures)
+    pdf.create()
+
+    pdf_name
   end
 end
