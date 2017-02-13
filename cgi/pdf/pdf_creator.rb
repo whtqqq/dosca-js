@@ -9,6 +9,8 @@ require 'color/rgb/metallic'
 #       "chunkybacon.jpg",["chunkybacon.png","chunkybacon.png"])
 #    pdf.create()
 class PDFCreator
+  attr_accessor :pdf
+
   SUMMARY_LINES = 15
   SUMMARY_LINE_WIDTH = 120
 
