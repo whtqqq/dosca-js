@@ -47,7 +47,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
         <%if @past_contents %>
-          <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="return confirm('Now open new page?Current page information will be lost.')"><%= @past_contents[:name] %></a></li>
+          <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm('Now open new page?Current page information will be lost.')}"><%= @past_contents[:name] %></a></li>
         <% end %>
       </ul>
     </div>
@@ -66,7 +66,7 @@
       <div class="panel-body">
         <div class="col-md-12">
           <div class="row">
-            <a href="<%=@root_uri%>/edit/news" id="newBtn" class="btn btn-blue new-Btn">New</a>
+            <a href="<%=@root_uri%>/edit/news" id="newBtn" class="btn btn-blue new-Btn" onclick="if($('#pageStatus').val() == 4) {return confirm('Now open new page?Current page information will be lost.')}">New</a>
             <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
             <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
             <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" disabled>Delete</button>
@@ -91,7 +91,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <div>
-              <label for="Category" class="col-sm-2 control-label"><%= @items[:category] %></label>
+              <label class="col-sm-2 control-label"><%= @items[:category] %></label>
               <div class="col-sm-4">
                 <select class="form-control" id="Category">
                   <option value=""></option>
@@ -103,11 +103,11 @@
               </div>
             </div>
             <div>
-              <label for="TerminationDate" class="col-sm-3 control-label">Termination Date</label>
+              <label class="col-sm-3 control-label">Termination Date</label>
               <div class="col-sm-3">
                 <div class="input-group">
                   <input type="text" class="form-control bg-white" id="TerminationDate" placeholder="2017/01/01" style="cursor:pointer;" readonly>
-                  <span class="input-group-addon hand-mouse" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
+                  <span class="input-group-addon hand-mouse" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
                 <span class="text-danger"></span>
               </div>
@@ -119,7 +119,7 @@
           <div class="form-group">
             <label for="Subject" class="col-sm-2 control-label"><%= @items[:subject] %></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="Subject" placeholder="Vessel A sank  in the off Kashima">
+              <input type="text" class="form-control" id="Subject" placeholder="Vessel A sank  in the off Kashima" maxlength="50">
               <span class="text-danger"></span>
             </div>
           </div>
@@ -129,7 +129,7 @@
           <div class="form-group">
             <label for="Summary" class="col-sm-2 control-label"><%= @items[:summary] %></label>
             <div class="col-sm-10">
-              <textarea cols="120" rows="10" class="form-control" id="Summary" placeholder="The engine room of  M/V MURAT HACIBEKIROGLU II flooded, sank off the coast of Turkey. Entire crew of 10 people in the lifeboat, was rescued in the vicinity of the sailing ship.
+              <textarea cols="120" rows="10" class="form-control" id="Summary" maxlength="3000" placeholder="The engine room of  M/V MURAT HACIBEKIROGLU II flooded, sank off the coast of Turkey. Entire crew of 10 people in the lifeboat, was rescued in the vicinity of the sailing ship.
 
 <Ship Charactoristics>
 Vessel Name  : TOLUNAY
@@ -141,7 +141,7 @@ GRT     : 13,865 ton
 DWT     : 21,964 ton
 L x B     : 158 x 25m
 Owner   : Tolunay Ship Management
-Manager : DITTO"></textarea>
+Manager : DITTO" style="resize: none;"></textarea>
               <span class="text-danger"></span>
             </div>
           </div>
@@ -184,7 +184,7 @@ Manager : DITTO"></textarea>
           <div class="col-xs-2"><h3>Location</h3></div>
           <div class="col-xs-9 col-xs-offset-1">
             <div class="form-group">
-              <label for="Port" class="col-sm-2 control-label">Port</label>
+              <label class="col-sm-2 control-label">Port</label>
               <div class="col-sm-10">
                 <!-- <input type="text" class="form-control" id="Port" placeholder="OMAEZAKI"> -->
                 <select id="Port" class="form-control">

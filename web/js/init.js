@@ -14,8 +14,8 @@ $(document).ready(function() {
     picker2 = new Pikaday({
     field: document.getElementById('incidentDate'),
     firstDay: 1,
-    minDate: new Date(),
-    maxDate: new Date('2030-12-31'),
+    minDate: new Date('1980-01-01'),
+    maxDate: new Date(),
     yearRange: [2017,2030],
     });
   }
@@ -78,6 +78,7 @@ $(document).ready(function() {
   });
   $('#Summary').blur(function () {
     inputBlurChk($('#Summary'));
+    summaryLineNumChk();
   });
   $('#Position').blur(function () {
     inputBlurChk($('#Position'));
@@ -85,10 +86,7 @@ $(document).ready(function() {
   $('#WebPage').blur(function () {
     URLChk($('#WebPage'));
   });
-
 });
-
-
 
 
 //+---------------------------------------------------

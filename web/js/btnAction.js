@@ -1,17 +1,17 @@
 /*##########Termination Date and Period Btn click##########*/
 $("#noPeriod").click(function() {
-  $("#noPeriod").attr("class","btn btn-blue");
-  $("#Period").attr("class","btn btn-grey");
-  $("#TerminationDate").val("-");
-  $("#TerminationDate").attr("readonly","true");
+  $("#noPeriod").attr("class", "btn btn-blue");
+  $("#Period").attr("class", "btn btn-grey");
+  $("#TerminationDate").val(" ");
+  $("#TerminationDate").attr("readonly", "true").attr("style", "cursor:disabled;");
   if(picker != null) {
     picker.destroy();
     picker = null;
   }
 });
 $("#Period").click(function() {
-  $("#Period").attr("class","btn btn-blue");
-  $("#noPeriod").attr("class","btn btn-grey");
+  $("#Period").attr("class", "btn btn-blue");
+  $("#noPeriod").attr("class", "btn btn-grey");
 
   // $("#TerminationDate").removeAttr("readonly");
   if(picker == null) {
@@ -25,6 +25,7 @@ $("#Period").click(function() {
   }
 
   var date = addDay(30);
+  $("#TerminationDate").attr("style", "cursor:pointer;");
   $("#TerminationDate").val(date.Format("yyyy-MM-dd"));
 });
 
@@ -96,7 +97,7 @@ function editBtnAction() {
     maxDate: new Date('2030-12-31'),
     yearRange: [2017,2030],
   });
-  if(terminationDate != "-") {
+  if(terminationDate != " ") {
     $("#TerminationDate").val(terminationDate);
   } else {
     $("#noPeriod").click();
@@ -122,8 +123,8 @@ function editBtnAction() {
     picker2 = new Pikaday({
       field: document.getElementById('incidentDate'),
       firstDay: 1,
-      minDate: new Date(),
-      maxDate: new Date('2030-12-31'),
+      minDate: new Date('1980-01-01'),
+      maxDate: new Date(),
       yearRange: [2017,2030],
     });
   }
