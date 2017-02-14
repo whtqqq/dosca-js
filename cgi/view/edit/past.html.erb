@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
   <title>DOSCA JS Contents</title>
+  <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
+  <script src="<%=@contents_uri%>/js/message.js"></script>
   <!-- Bootstrap core CSS -->
   <link href="<%=@contents_uri%>/css/bootstrap.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -12,6 +14,7 @@
   <link href="<%=@contents_uri%>/pikaday/css/pikaday.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/combo.select.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/bootstrap-fileinput-master20161101/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="<%=@contents_uri%>/confirm/jquery-confirm.min.css" rel="stylesheet">
   <style>@import url('<%=@contents_uri%>/css/maps.css');</style>
   <script src="<%=@contents_uri%>/d3-map/bower_components/webcomponentsjs/webcomponents.min.js"></script>
   <link rel="import" href="<%=@contents_uri%>/d3-map/d3-geomap.html">
@@ -46,8 +49,9 @@
     <div class="col-md-8 none-padding-left">
       <ul class="nav nav-tabs">
        <%if @news_contents %>
-         <li><a href="<%=@root_uri%>/edit/news" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}">
-           <%=@news_contents[:name]%></a></li>
+         <li><a class="nav-border" onclick="if($('#pageStatus').val() == 4) {$('#newBtnY').click();} else {$('#newBtnN')[0].click();}"><%=@news_contents[:name]%></a></li>
+         <li><a href="<%=@root_uri%>/edit/news" id="newBtnY" class="jump nav-border" hidden><%=@news_contents[:name]%></a></li>
+         <li><a href="<%=@root_uri%>/edit/news" id="newBtnN" class="nav-border" hidden><%=@news_contents[:name]%></a></li>
        <%end %>
         <li class="active"><a href="#" class="nav-bg-blue"><%=@past_contents[:name]%></a></li>
       </ul>
@@ -68,9 +72,11 @@
         <div class="col-md-12">
           <div class="row">
             <!-- <button class="btn btn-blue" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
-            <a href="<%=@root_uri%>/edit/past" id="newBtn" class="btn btn-blue new-Btn" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}">New</a>
+            <button type="button" id="newBtn" class="btn btn-blue new-Btn" onclick="if($('#pageStatus').val() == 4) {$('#newJumpY').click();} else {document.getElementById('newJumpN').click();}">New</button>
+            <a href="<%=@root_uri%>/edit/past" id="newJumpY" class="btn btn-blue new-Btn newJump" hidden>New</a>
+            <a href="<%=@root_uri%>/edit/past" id="newJumpN" class="btn btn-blue new-Btn" hidden>New</a>
             <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
-            <button class="btn btn-grey" id="delBtn" style="width: 80px" onclick="if(confirm(MSG_DELITEM)) {alert('del')} else {alert('cal')}" disabled>Delete</button>
+            <button class="btn btn-grey delJump" id="delBtn" style="width: 80px" disabled>Delete</button>
           </div>
         </div>
         <!--Line-1-->
@@ -438,9 +444,7 @@
   <!-- Bootstrap core JavaScript
    ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
   <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
-  <script src="<%=@contents_uri%>/js/message.js"></script>
   <script src="<%=@contents_uri%>/js/init.js"></script>
   <script src="<%=@contents_uri%>/js/Check.js"></script>
   <script src="<%=@contents_uri%>/js/btnAction.js"></script>
@@ -448,5 +452,42 @@
   <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
   <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
   <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
+  <script src="<%=@contents_uri%>/confirm/jquery-confirm.min.js"></script>
+  <script>
+    $('a.jump').confirm({
+      title: 'DOSCA JS Contents',
+      content: MSG_NEWPAGE,
+      buttons: {
+        OK: function () {
+            location.href = this.$target.attr('href');
+        },
+        Cancel: function () {
+        }
+      }
+    });
+    $('a.newJump').confirm({
+      title: 'DOSCA JS Contents',
+      content: MSG_NEWPAGE,
+      buttons: {
+        OK: function () {
+            location.href = this.$target.attr('href');
+        },
+        Cancel: function () {
+        }
+      }
+    });
+    $('button.delJump').confirm({
+      title: 'DOSCA JS Contents',
+      content: MSG_DELITEM,
+      buttons: {
+        OK: function () {
+            $.alert("del");
+        },
+        Cancel: function () {
+          $.alert("cancel");
+        }
+      }
+    });
+  </script>
 </body>
 </html>

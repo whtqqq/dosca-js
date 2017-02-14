@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
   <title>DOSCA JS Contents</title>
+  <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
+  <script src="<%=@contents_uri%>/js/message.js"></script>
+  <link href="<%=@contents_uri%>/confirm/jquery-confirm.min.css" rel="stylesheet">
+  <script src="<%=@contents_uri%>/confirm/jquery-confirm.min.js"></script>
   <!-- Bootstrap core CSS -->
   <link href="<%=@contents_uri%>/css/bootstrap.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -47,7 +51,10 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
         <%if @past_contents %>
-          <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}"><%= @past_contents[:name] %></a></li>
+          <!-- <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}"><%= @past_contents[:name] %></a></li> -->
+          <li><a class="nav-border" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
+          <li><a href="<%=@root_uri%>/edit/past" id="pastBtnY" class="jump nav-border" hidden="hidden"><%= @past_contents[:name] %></a></li>
+          <li><a href="<%=@root_uri%>/edit/past" id="pastBtnN" class="nav-border" hidden="hidden"><%= @past_contents[:name] %></a></li>
         <% end %>
       </ul>
     </div>
@@ -66,10 +73,13 @@
       <div class="panel-body">
         <div class="col-md-12">
           <div class="row">
-            <a href="<%=@root_uri%>/edit/news" id="newBtn" class="btn btn-blue new-Btn" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}">New</a>
+            <button type="button" id="newBtn" class="btn btn-blue new-Btn" onclick="if($('#pageStatus').val() == 4) {$('#newJumpY').click();} else {document.getElementById('newJumpN').click();}">New</button>
+            <a href="<%=@root_uri%>/edit/news" id="newJumpY" class="btn btn-blue new-Btn newJump" hidden>New</a>
+            <a href="<%=@root_uri%>/edit/news" id="newJumpN" class="btn btn-blue new-Btn" hidden>New</a>
             <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
             <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
-            <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" onclick="if(confirm(MSG_DELITEM)) {alert('del')} else {alert('cal')}" disabled>Delete</button>
+            <!-- <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" onclick="if(confirm(MSG_DELITEM)) {alert('del')} else {alert('cal')}" disabled>Delete</button> -->
+            <button type="button" class="btn btn-grey delJump" id="delBtn" style="width: 80px" disabled>Delete</button>
           </div>
         </div>
         <!--Line-1-->
@@ -394,9 +404,7 @@
   <!-- Bootstrap core JavaScript
    ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
   <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
-  <script src="<%=@contents_uri%>/js/message.js"></script>
   <script src="<%=@contents_uri%>/js/init.js"></script>
   <script src="<%=@contents_uri%>/js/Check.js"></script>
   <script src="<%=@contents_uri%>/js/btnAction.js"></script>
@@ -404,5 +412,41 @@
   <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
   <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
   <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
+  <script>
+    $('a.jump').confirm({
+      title: 'DOSCA JS Contents',
+      content: MSG_NEWPAGE,
+      buttons: {
+        OK: function () {
+            location.href = this.$target.attr('href');
+        },
+        Cancel: function () {
+        }
+      }
+    });
+    $('a.newJump').confirm({
+      title: 'DOSCA JS Contents',
+      content: MSG_NEWPAGE,
+      buttons: {
+        OK: function () {
+            location.href = this.$target.attr('href');
+        },
+        Cancel: function () {
+        }
+      }
+    });
+    $('button.delJump').confirm({
+      title: 'DOSCA JS Contents',
+      content: MSG_DELITEM,
+      buttons: {
+        OK: function () {
+            $.alert("del");
+        },
+        Cancel: function () {
+          $.alert("cancel");
+        }
+      }
+    });
+  </script>
 </body>
 </html>
