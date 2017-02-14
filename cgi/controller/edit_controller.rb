@@ -60,13 +60,11 @@ class EditController < ApplicationController
     status = "NEW" if  !contents_no && @params[:category] 
 
     if status == "NEW"
-      pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], contents_no, @params)
-      edit_proc(user_info, @news_contents, contents_data, contents_no)
+      edit_proc(user_info, @news_contents, contents_data, contents_no, nil)
     end
 
     if status == "EDIT"
-      pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], contents_no, @params)
-      edit_proc(user_info, @news_contents, contents_data, contents_no)
+      edit_proc(user_info, @news_contents, contents_data, contents_no, nil)
     end
   end
 
@@ -79,8 +77,13 @@ class EditController < ApplicationController
       return
     end
 
+    if !pdf_file
+      pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], 
+        contents_no, resp[:issue_date], @params)
+    end
+
     resp = DoscaAPI.pdf_upload(user_info[:client_code],
-                      user_info[:mail], contents[:code], contents_no, pdf_file) 
+             user_info[:mail], contents[:code], contents_no, pdf_file) 
     if !has_error?(resp)
       @error_message = "server error"
     end
@@ -91,11 +94,17 @@ class EditController < ApplicationController
       @error_message = "no change"
       return
     end
+
     resp = DoscaAPI.update(user_info[:client_code],
                         user_info[:mail], contents[:code], contents_no, @params) 
     if !has_error?(resp)
       @error_message = "server error"
       return
+    end
+
+    if !pdf_file
+      pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], 
+        contents_no, resp[:issue_date], @params)
     end
       
     resp = DoscaAPI.pdf_upload(user_info[:client_code],
@@ -143,14 +152,14 @@ class EditController < ApplicationController
     return false
   end
  
-  def create_pdf(client_code, contents_code, contents_no, data)
+  def create_pdf(client_code, contents_code, contents_no, issue_date, data)
     path = URI.parse(Settings._settings[:server][:temp_pdf_directory])
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = data[:file][0]
     news_pictures = data[:file] - data[:file][0]
 
     pdf = PDFCreator.new(pdf_name, 
-           "", 
+           issue_date, 
           data[:latitue] + " " + data[:longitude], data[:category],
           data[:subject],
           data[:summary],
