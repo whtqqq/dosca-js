@@ -29,9 +29,9 @@
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username" value="<%= @params[:username] %>"/>
+                  <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username" onchange="$('#userNameGroup').attr('class','form-group');$('#userNameMsg').hide();" value="<%= @params[:username] %>"/>
                 </div>
-                <span class="text-danger" id="userNameMsg" hidden>username or password is incorrect.</span>
+                <span class="text-danger" id="userNameMsg" hidden></span>
               </div>
             </div>
 
@@ -40,9 +40,9 @@
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-flash" aria-hidden="true"></i></span>
-                  <input type="password" class="form-control" name="password" id="password" placeholder="Enter your Password"/>
+                  <input type="password" class="form-control" name="password" id="password" onchange="$('#pwdGroup').attr('class','form-group');$('#pwdMsg').hide();" placeholder="Enter your Password"/>
                 </div>
-                <span class="text-danger" id="pwdMsg" hidden>username or password is incorrect.</span>
+                <span class="text-danger" id="pwdMsg" hidden></span>
               </div>
             </div>
 
@@ -51,7 +51,7 @@
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" value="<%= @params[:email] %>"/>
+                  <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" onchange="$('#emailGroup').attr('class','form-group');$('#emailMsg').hide();" value="<%= @params[:email] %>"/>
                 </div>
                 <span class="text-danger" id="emailMsg" hidden></span>
               </div>
@@ -68,6 +68,7 @@
 
     <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
     <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
+    <script src="<%=@contents_uri%>/js/message.js"></script>
     <script>
       function chkSubmit() {
         var flg = 0;
@@ -75,7 +76,7 @@
         var pwd = $("#password").val();
         if(chkEmpty(username)) {
           $("#userNameGroup").attr("class","form-group has-error");
-          $("#userNameMsg").text("please input your username.");
+          $("#userNameMsg").text(MSG_LOGINNAME);
           $("#userNameMsg").show();
           flg++;
         } else {
@@ -87,7 +88,7 @@
         }
         if(chkEmpty(pwd)) {
           $("#pwdGroup").attr("class","form-group has-error");
-          $("#pwdMsg").text("please input your password.");
+          $("#pwdMsg").text(MSG_LOGINPWD);
           $("#pwdMsg").show();
           flg++;
         } else {
@@ -118,7 +119,7 @@
           return true;
         }else{
           $("#userNameGroup").attr("class","form-group has-error");
-          $("#userNameMsg").text("Illegal characters, please re-fill.");
+          $("#userNameMsg").text(MSG_ILLEGAL);
           $("#userNameMsg").show();
           return false;
         }
@@ -134,13 +135,13 @@
             return true;
           }else{
             $("#emailGroup").attr("class","form-group has-error");
-            $("#emailMsg").text("Mailbox format is incorrect, please re-fill.");
+            $("#emailMsg").text(MSG_LOGINEMAILILLEGAL);
             $("#emailMsg").show();
             return false;
           }
         } else {
           $("#emailGroup").attr("class","form-group has-error");
-          $("#emailMsg").text("please input your email.");
+          $("#emailMsg").text(MSG_LOGINEMAIL);
           $("#emailMsg").show();
           return false;
         }

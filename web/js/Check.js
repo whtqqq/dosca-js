@@ -1,20 +1,23 @@
 /*##########Submit Chk##########*/
 function submitChk(){
   var flg = 0;
-  var category        = $("#Category").val();
-  var subject         = $("#Subject").val();
-  var summary         = $("#Summary").val();
-  var position        = $("#Position").val();
-  var terminationDate = $("#TerminationDate").val();
-  var vessel          = $("#Vessel").val();
-  var cargo           = $("#Cargo").val();
+  var category         = $("#Category").val();
+  var subject          = $("#Subject").val();
+  var summary          = $("#Summary").val();
+  var position         = $("#Position").val();
+  var terminationDate  = $("#TerminationDate").val();
+  var vessel           = $("#Vessel").val();
+  var cargo            = $("#Cargo").val();
+  var incidentDate     = $("#incidentDate").val();
+  var incidentDateHour = $("#incidentDateHour").val();
+  var incidentDateMin  = $("#incidentDateMin").val();
+
 
   if(category.length == 0) {
     $("#Category").parent().parent().parent().attr("class", "has-error");
-    $("#Category").nextAll("input").attr("style", "border:1px solid red;");
+    $("#Category").nextAll("input").attr("style", "border:1px solid #a94442;");
     $("#Category").parent().attr("style", "margin-bottom: 0px;");
-    $("#CategoryMsg").removeAttr("hidden");
-    $("#CategoryMsg").show();
+    $("#CategoryMsg").removeAttr("hidden").text(MSG_REQUIRE).show();
     flg++;
   } else {
     $("#Category").parent().parent().parent().attr("class","");
@@ -22,9 +25,9 @@ function submitChk(){
     $("#CategoryMsg").attr("hidden", "true");
   }
 
-  if(subject != undefined && subject != null && subject.length == 0) {
+  if(subject != undefined && subject != null && subject.trim().length == 0) {
     $("#Subject").parent().parent().attr("class", "form-group has-error");
-    $("#Subject").next().text("Please input the Item.");
+    $("#Subject").next().text(MSG_REQUIRE);
     flg++;
   } else {
     $("#Subject").parent().parent().attr("class", "form-group");
@@ -33,9 +36,9 @@ function submitChk(){
       flg++;
     }
   }
-  if(summary != undefined && summary != null && summary.length == 0) {
+  if(summary != undefined && summary != null && summary.trim().length == 0) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
-    $("#Summary").next().text("Please input the Item.");
+    $("#Summary").next().text(MSG_REQUIRE);
     flg++;
   } else {
     $("#Summary").parent().parent().attr("class", "form-group");
@@ -44,9 +47,9 @@ function submitChk(){
       flg++;
     }
   }
-  if(position != undefined && position != null && position.length == 0) {
+  if(position != undefined && position != null && position.trim().length == 0) {
     $("#Position").parent().parent().attr("class", "form-group has-error");
-    $("#Position").next().text("Please input the Item.");
+    $("#Position").next().text(MSG_REQUIRE);
     flg++;
   } else {
     $("#Position").parent().parent().attr("class", "form-group");
@@ -58,45 +61,70 @@ function submitChk(){
 
   if(terminationDate != undefined && terminationDate != null && terminationDate.length == 0) {
     $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
-    $("#TerminationDate").parent().next().text("Please select the Termination Date.");
+    $("#TerminationDate").parent().next().text(MSG_REQUIRE);
     flg++;
   } else {
     $("#TerminationDate").parent().parent().parent().attr("class", "");
     $("#TerminationDate").parent().next().text("");
   }
 
-  if(vessel != undefined && vessel != null && vessel.length == 0) {
+  if(vessel != undefined && vessel != null && vessel.trim().length == 0) {
     $("#Vessel").parent().parent().attr("class", "form-group has-error");
-    $("#Vessel").next().text("Please input the Item.");
+    $("#Vessel").next().text(MSG_REQUIRE);
     flg++;
   } else {
     $("#Vessel").parent().parent().attr("class", "form-group");
     $("#Vessel").next().text("");
   }
 
-  if(cargo != undefined && cargo != null && cargo.length == 0) {
+  if(cargo != undefined && cargo != null && cargo.trim().length == 0) {
     $("#Cargo").parent().parent().attr("class", "form-group has-error");
-    $("#Cargo").next().text("Please input the Item.");
+    $("#Cargo").next().text(MSG_REQUIRE);
     flg++;
   } else {
     $("#Cargo").parent().parent().attr("class", "form-group");
     $("#Cargo").next().text("");
   }
 
-  if(subject != undefined && subject != null && subject.length != 0) {
+  if((incidentDate != undefined && incidentDate != null && incidentDate.length == 0) ||
+    (incidentDateHour != undefined && incidentDateHour != null && incidentDateHour.length == 0) ||
+    (incidentDateMin != undefined && incidentDateMin != null && incidentDateMin.length == 0)
+  ) {
+    $("#incidentGroup").attr("class", "form-group has-error");
+    $("#incidentMsg").text(MSG_REQUIRE);
+    flg++;
+  } else {
+    $("#incidentGroup").attr("class", "form-group");
+    $("#incidentMsg").text("");
+  }
+
+  if(subject != undefined && subject != null && subject.trim().length != 0) {
     if(!inputChk($("#Subject"))){
       flg ++;
     }
   }
 
-  if(summary != undefined && summary != null && summary.length != 0) {
+  if(summary != undefined && summary != null && summary.trim().length != 0) {
     if(!inputChk($("#Summary"))){
+      flg ++;
+    }
+    summaryLineNumChk(flg);
+  }
+
+  if(position != undefined && position != null && position.trim().length != 0) {
+    if(!inputChk($("#Position"))){
       flg ++;
     }
   }
 
-  if(position != undefined && position != null && position.length != 0) {
-    if(!inputChk($("#Position"))){
+  if(vessel != undefined && vessel != null && vessel.trim().length != 0) {
+    if(!inputChk($("#Vessel"))){
+      flg ++;
+    }
+  }
+
+  if(cargo != undefined && cargo != null && cargo.trim().length != 0) {
+    if(!inputChk($("#Cargo"))){
       flg ++;
     }
   }
@@ -105,6 +133,10 @@ function submitChk(){
     if(!afterDateChk()) {
       flg ++;
     }
+  }
+
+  if(!URLChk($('#WebPage'))) {
+    flg ++;
   }
 
   if(flg != 0) {
@@ -186,7 +218,7 @@ function inputChk(e) {
     return true;
   }else{
     $(e).parent().parent().attr("class","form-group has-error");
-    $(e).next().text("Illegal characters, please re-fill.");
+    $(e).next().text(MSG_ILLEGAL);
     $(e).next().show();
     return false;
   }
@@ -197,7 +229,7 @@ function inputBlurChk(e) {
   if($("#pageStatus").val() == "4") {
     if(value != undefined && value != null && value.length == 0) {
       $(e).parent().parent().attr("class", "form-group has-error");
-      $(e).next().text("Please input the Item.").show();
+      $(e).next().text(MSG_REQUIRE).show();
     } else {
       $(e).parent().parent().attr("class", "form-group");
       $(e).next().text("").hide();
@@ -213,14 +245,17 @@ function URLChk(e) {
     if(reg.test(url)) {
       $(e).parent().parent().attr("class","form-group");
       $(e).next().hide();
+      return true;
     } else {
       $(e).parent().parent().attr("class","form-group has-error");
-      $(e).next().text("Illegal characters, please re-fill. (Example: http://www.google.com)");
+      $(e).next().text(MSG_URL);
       $(e).next().show();
+      return false;
     }
   } else {
     $(e).parent().parent().attr("class","form-group");
     $(e).next().hide();
+    return true;
   }
 }
 
@@ -232,7 +267,7 @@ function afterDateChk() {
     var nowDate = new Date(now);
     if(nowDate.getTime() > pageDate.getTime()){
       $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
-      $("#TerminationDate").parent().next().text("Please since today select the Termination Date.");
+      $("#TerminationDate").parent().next().text(MSG_TERMINATIONSTART);
       return false;
     } else {
       return true;
@@ -240,15 +275,16 @@ function afterDateChk() {
   }
 }
 
-function summaryLineNumChk() {
+function summaryLineNumChk(flg) {
   var strs = new Array();
   strs = $("#Summary").val().split("\n");
   var lineNum = strs.length;
 
   if(lineNum > 25) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
-    $("#Summary").next().text("Please control Summary's input in 25 lines and every lines input in 120 characters.");
+    $("#Summary").next().text(MSG_SUMMARYLINE);
     $("#Summary").next().show();
+    flg++;
   } else {
     for(var line in strs) {
       var tmp = Math.ceil(strs[line].length/120)-1;
@@ -257,8 +293,9 @@ function summaryLineNumChk() {
       }
       if(lineNum > 25) {
         $("#Summary").parent().parent().attr("class", "form-group has-error");
-        $("#Summary").next().text("Please control Summary's input in 25 lines and every lines input in 120 characters.");
+        $("#Summary").next().text(MSG_SUMMARYLINE);
         $("#Summary").next().show();
+        flg++
         break;
       }
     }

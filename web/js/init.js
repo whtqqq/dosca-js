@@ -25,7 +25,7 @@ $(document).ready(function() {
     $('#Picture').fileinput({
       uploadUrl: '#',
       overwriteInitial: false,
-      maxFileSize: 300,
+      // maxFileSize: 300,
       minFileCount: 1,
       maxFileCount: 4,
       showBrowse:false,
@@ -73,21 +73,21 @@ $(document).ready(function() {
     submitBtnActive();
   });
 /*##########Add submitBtn active listener##########*/
-  $('#Subject').blur(function () {
-    inputBlurChk($('#Subject'));
-  });
-  $('#Summary').blur(function () {
-    inputBlurChk($('#Summary'));
-    summaryLineNumChk();
-  });
-  $('#Position').blur(function () {
-    inputBlurChk($('#Position'));
-  });
-  $('#WebPage').blur(function () {
-    URLChk($('#WebPage'));
-  });
-});
+  // $('#Subject').blur(function () {
+  //   inputBlurChk($('#Subject'));
+  // });
+  // $('#Summary').blur(function () {
+  //   inputBlurChk($('#Summary'));
+  //   summaryLineNumChk();
+  // });
+  // $('#Position').blur(function () {
+  //   inputBlurChk($('#Position'));
+  // });
+  // $('#WebPage').blur(function () {
+  //   URLChk($('#WebPage'));
+  // });
 
+});
 
 //+---------------------------------------------------
 //| 日期計算
