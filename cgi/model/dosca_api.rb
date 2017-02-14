@@ -3,56 +3,6 @@ require 'uri'
 require 'json'
 
 class DoscaAPI
-  def DoscaAPI.request_common(url, client_code, mail, contents_code, contents_no=nil)
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-     
-    req = Net::HTTP::Post.new(uri.request_uri)
-     
-    req["Content-Type"] = "application/json"
-    req.body = {
-         "client_code" => client_code,
-         "mail" => mail,
-         "contents_code" => contents_code
-    }.to_json
-
-    req.body[:contents_no] = contents_no if contents_no
-
-    resp = http.request(req)
-    Application.symbolize_keys(JSON.parse(resp.body)) 
-  end
-
-  def DoscaAPI.update_common(url, client_code, mail, contents_code, contents_no, submit_data)
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-     
-    req = Net::HTTP::Post.new(uri.request_uri)
-     
-    req["Content-Type"] = "application/json"
-    req.body = {
-         "client_code" => client_code,
-         "mail" => mail,
-         "contents_code" => contents_code
-    }.to_json
-
-    req.body[:contents_no] = contents_no if contents_no
-
-    #add submit data
-    req.body[:subject] = submit_data[:subject] if submit_data[:subject]
-    req.body[:category] = submit_data[:category] if submit_data[:category]
-    req.body[:summary] = submit_data[:summary] if submit_data[:summary]
-    req.body[:web_page] = submit_data[:web_page] if submit_data[:web_page]
-    req.body[:termination_date] = submit_data[:termination_date] if submit_data[:termination_date]
-    req.body[:longitude] = submit_data[:longitude] if submit_data[:longitude]
-    req.body[:latitude] = submit_data[:latitude] if submit_data[:latitude]
-    req.body[:date_time] = submit_data[:date_time] if submit_data[:date_time]
-    req.body[:cargo] = submit_data[:cargo] if submit_data[:cargo]
-    req.body[:vessel_name] = submit_data[:vessel_name] if submit_data[:vessel_name]
-
-    resp = http.request(req)
-    Application.symbolize_keys(JSON.parse(resp.body)) 
-  end
-
   def DoscaAPI.auth(username, password, mail)
     uri = URI.parse(Settings._settings[:api][:login_url])
     http = Net::HTTP.new(uri.host, uri.port)
@@ -113,14 +63,14 @@ class DoscaAPI
     filename
   end
 
-  def DoscaAPI.new(client_code, mail, contents_code, submit_data)
+  def DoscaAPI.new(client_code, mail, contents_code, pdf_file, submit_data)
     update_common(Settings._settings[:api][:new_url],
-               client_code, mail, contents_code, nil, submit_data)
+               client_code, mail, contents_code, nil, pdf_file, submit_data)
   end
 
   def DoscaAPI.update(client_code, mail, contents_code, contents_no, submit_data)
     update_common(Settings._settings[:api][:update_url],
-               client_code, mail, contents_code, contents_no, submit_data)
+               client_code, mail, contents_code, contents_no, pdf_file, submit_data)
   end
 
   def DoscaAPI.remove(client_code, mail, contents_code, contents_no, submit_data)
@@ -128,20 +78,54 @@ class DoscaAPI
                 client_code, mail, contents_code, contents_no)
   end
 
-  def DoscaAPI.pdf_upload(client_code, mail, contents_code, contents_no, pdf_file)
-    uri = URI.parse(Settings._settings[:api][:pdf_upload])
-    http = Net::HTTP.new(uri.host, uri.port)
-    my_boundary = "AaB03x0lsmtxm2"
+  private
 
+  def DoscaAPI.request_common(url, client_code, mail, contents_code, contents_no=nil)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+     
+    req = Net::HTTP::Post.new(uri.request_uri)
+     
+    req["Content-Type"] = "application/json"
+    req.body = {
+         "client_code" => client_code,
+         "mail" => mail,
+         "contents_code" => contents_code
+    }.to_json
+
+    req.body[:contents_no] = contents_no if contents_no
+
+    resp = http.request(req)
+    Application.symbolize_keys(JSON.parse(resp.body)) 
+  end
+
+  def DoscaAPI.update_common(client_code, mail, contents_code, contents_no, pdf_file, submit_data)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+
+    my_boundary = "AaB03x0lsmtxm2"
     header = {"type"=> "multipart/form-data, boundary=#{my_boundary}"}
     req = Net::HTTP::Post.new(uri.request_uri, header)
 
     json  = {
          "client_code" => client_code,
          "mail" => mail,
-         "contents_code" => contents_code,
-         "contents_no" => contents_no
+         "contents_code" => contents_code
     }.to_json
+    json["contents_no"] = contents_no if contents_no
+
+    #add submit data
+    json["subject"] = submit_data[:subject] || ""
+    json["category"] = submit_data[:category] || ""
+    json["summary"] = submit_data[:summary] || ""
+    json["web_page"] = submit_data[:web_page] || ""
+    json["termination_date"] = submit_data[:termination_date] || ""
+    json["longitude"] = submit_data[:longitude] || ""
+    json["latitude"] = submit_data[:latitude] || ""
+    json["date_time"] = submit_data[:date_time] || ""
+    json["cargo"] = submit_data[:cargo] || ""
+    json["vessel_name"] = submit_data[:vessel_name] || ""
+
 
     post_body = []
 

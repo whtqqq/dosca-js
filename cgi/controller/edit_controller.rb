@@ -24,13 +24,14 @@ class EditController < ApplicationController
     status = ""
     status = "EDIT" if contents_no  
     status = "NEW" if  !contents_no && @params[:category] 
-    pdf_file = @params[:file][0].original_filename
 
     if status == "NEW"
+      pdf_file = @params[:file][0].original_filename
       edit_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
     end
 
     if status == "EDIT"
+      pdf_file = @params[:file][0].original_filename
       edit_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
     end
   end
@@ -69,23 +70,18 @@ class EditController < ApplicationController
   end
 
   private
-  def new_proc(user_info, contents, contents_data, contents_no, pdf_file)
-    resp = DoscaAPI.new(user_info[:client_code],
-                      user_info[:mail], contents[:code],  @params) 
-    if !has_error?(resp)
-      @error_message = "server error"
-      return
-    end
 
+  def new_proc(user_info, contents, contents_data, contents_no, pdf_file)
     if !pdf_file
       pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], 
         contents_no, resp[:issue_date], @params)
     end
 
-    resp = DoscaAPI.pdf_upload(user_info[:client_code],
-             user_info[:mail], contents[:code], contents_no, pdf_file) 
+    resp = DoscaAPI.new(user_info[:client_code],
+                      user_info[:mail], contents[:code],  pdf_file, @params) 
     if !has_error?(resp)
       @error_message = "server error"
+      return
     end
   end
 
@@ -95,22 +91,16 @@ class EditController < ApplicationController
       return
     end
 
-    resp = DoscaAPI.update(user_info[:client_code],
-                        user_info[:mail], contents[:code], contents_no, @params) 
-    if !has_error?(resp)
-      @error_message = "server error"
-      return
-    end
-
     if !pdf_file
       pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], 
         contents_no, resp[:issue_date], @params)
     end
-      
-    resp = DoscaAPI.pdf_upload(user_info[:client_code],
-                      user_info[:mail], contents[:code], contents_no, pdf_file) 
+
+    resp = DoscaAPI.update(user_info[:client_code],
+                        user_info[:mail], contents[:code], contents_no, pdf_file, @params) 
     if !has_error?(resp)
       @error_message = "server error"
+      return
     end
   end
 
