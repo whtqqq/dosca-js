@@ -58,33 +58,18 @@ class PDFCreator
 
   def str_to_arr(str)
     arr = []
-    s = []
-    j = 0
 
-    str.each(separator=$/) { |substr| str_arr = substr
+    str.each_line { |substr|
 
-      str1 = ""
-      i = 0
-      str_arr.chomp!
-      j = j + 1
-      if str_arr.count(str_arr) > SUMMARY_LINE_WIDTH
+      substr.chomp!
+      length = substr.length
 
-        str_arr.each_byte { |x| s<<"%c"%x
-
-          if i ==  SUMMARY_LINE_WIDTH
-            i = 0
-            j = j + 1
-            str1 = ""
-          end
-
-          str1 = str1 + s.to_s
-          arr[j] = str1
-          i = i + 1
-          s = []
-        }
-
+      if length <= SUMMARY_LINE_WIDTH
+        arr << substr
       else
-        arr[j] = str_arr
+        remain = length % SUMMARY_LINE_WIDTH
+        substr.scan(/.{#{SUMMARY_LINE_WIDTH}}/).each {|sline| arr << sline}
+        arr << substr[(length - remain)...length] if remain > 0
       end
     }
     arr
@@ -94,44 +79,7 @@ class PDFCreator
     @pdf.line(20, @pdf.margin_height - height, @pdf.margin_width - 180, @pdf.margin_height - height).stroke
   end
 
-  def create()
-    @pdf.move_pointer(-50)
-    #Title
-    create_table(30, "                " + "#{@title_name}", 311, @pdf.margin_width, :all, :shaded)
-
-    #Information
-    #issue_date
-    @pdf.move_pointer(9)
-    create_table(10, "Issue Date:" + "#{@issue_date}", 221, @pdf.margin_width - 180, :none, :none)
-    create_line(60)
-
-    #location
-    @pdf.move_pointer(9)
-    create_table(10, "Location:" + "#{@location}", 221, @pdf.margin_width - 180, :none, :none)
-    create_line(85)
-
-    #category
-    @pdf.move_pointer(9)
-    create_table(10, "Category:" + "#{@category}", 221, @pdf.margin_width - 180, :none, :none)
-    create_line(110)
-
-    #subject
-    @pdf.move_pointer(9)
-    create_table(10, "Subject:" + "#{@subject}", 221, @pdf.margin_width - 180, :none, :none)
-
-    #Map image
-    put_image(@map_image, @pdf.margin_width - 180, @pdf.margin_height - 133, nil, 96)
-
-    #Summary
-    arr = str_to_arr(@str_list)
-    @pdf.move_pointer(2)
-    create_table(15, "                                                         Summary", 311, @pdf.margin_width, :all, :shaded)
-    @pdf.move_pointer(2)
-    (1..SUMMARY_LINES).each { |i| 
-      create_table(8.5, "#{arr[i]}", 311, @pdf.margin_width, :none, :none)
-    }
-
-    #Write news images
+  def put_news_picture()
     create_table(15, "                                                         Picture", 311, @pdf.margin_width, :all, :shaded)
     #One picture
     if @news_images && @news_images.size == 1
@@ -155,9 +103,59 @@ class PDFCreator
       put_image(@news_images[2], 100, 13, nil, 115)
       put_image(@news_images[3], 385, 13, nil, 115)
     end
+  end
+
+  def put_information()
+    #issue_date
+    @pdf.move_pointer(9)
+    create_table(10, "Issue Date:" + "#{@issue_date}", 221, @pdf.margin_width - 180, :none, :none)
+    create_line(60)
+
+    #location
+    @pdf.move_pointer(9)
+    create_table(10, "Location:" + "#{@location}", 221, @pdf.margin_width - 180, :none, :none)
+    create_line(85)
+
+    #category
+    @pdf.move_pointer(9)
+    create_table(10, "Category:" + "#{@category}", 221, @pdf.margin_width - 180, :none, :none)
+    create_line(110)
+
+    #subject
+    @pdf.move_pointer(9)
+    create_table(10, "Subject:" + "#{@subject}", 221, @pdf.margin_width - 180, :none, :none)
+  end
+
+  def put_summary()
+    arr = str_to_arr(@str_list)
+    @pdf.move_pointer(2)
+    create_table(15, "                                                         Summary", 311, @pdf.margin_width, :all, :shaded)
+    @pdf.move_pointer(2)
+    (0..SUMMARY_LINES - 1).each { |i| 
+      create_table(8.5, "#{arr[i]}", 311, @pdf.margin_width, :none, :none)
+    }
+  end
+
+  def create()
+    #Move pointer
+    @pdf.move_pointer(-50)
+
+    #Title
+    create_table(30, "                " + "#{@title_name}", 311, @pdf.margin_width, :all, :shaded)
+
+    #Information
+    put_information()
+
+    #Map image
+    put_image(@map_image, @pdf.margin_width - 180, @pdf.margin_height - 133, nil, 96)
+
+    #Write Summary
+    put_summary()
+
+    #Write news images
+    put_news_picture()
 
     #Save pdf file
-    #File.delete(@pdf_name) if File.exists(@pdf_name)
     @pdf.save_as(@pdf_name)
   end
 end
