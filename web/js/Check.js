@@ -12,12 +12,11 @@ function submitChk(){
   var incidentDateHour = $("#incidentDateHour").val();
   var incidentDateMin  = $("#incidentDateMin").val();
 
-
   if(category.length == 0) {
     $("#Category").parent().parent().parent().attr("class", "has-error");
     $("#Category").nextAll("input").attr("style", "border:1px solid #a94442;");
     $("#Category").parent().attr("style", "margin-bottom: 0px;");
-    $("#CategoryMsg").removeAttr("hidden").text(MSG_REQUIRE).show();
+    $("#CategoryMsg").removeAttr("hidden").text(getMsg("MSG_REQUIRE")).show();
     flg++;
   } else {
     $("#Category").parent().parent().parent().attr("class","");
@@ -27,7 +26,7 @@ function submitChk(){
 
   if(subject != undefined && subject != null && subject.trim().length == 0) {
     $("#Subject").parent().parent().attr("class", "form-group has-error");
-    $("#Subject").next().text(MSG_REQUIRE);
+    $("#Subject").next().text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#Subject").parent().parent().attr("class", "form-group");
@@ -38,7 +37,7 @@ function submitChk(){
   }
   if(summary != undefined && summary != null && summary.trim().length == 0) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
-    $("#Summary").next().text(MSG_REQUIRE);
+    $("#Summary").next().text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#Summary").parent().parent().attr("class", "form-group");
@@ -49,7 +48,7 @@ function submitChk(){
   }
   if(position != undefined && position != null && position.trim().length == 0) {
     $("#Position").parent().parent().attr("class", "form-group has-error");
-    $("#Position").next().text(MSG_REQUIRE);
+    $("#Position").next().text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#Position").parent().parent().attr("class", "form-group");
@@ -61,7 +60,7 @@ function submitChk(){
 
   if(terminationDate != undefined && terminationDate != null && terminationDate.length == 0) {
     $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
-    $("#TerminationDate").parent().next().text(MSG_REQUIRE);
+    $("#TerminationDate").parent().next().text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#TerminationDate").parent().parent().parent().attr("class", "");
@@ -70,7 +69,7 @@ function submitChk(){
 
   if(vessel != undefined && vessel != null && vessel.trim().length == 0) {
     $("#Vessel").parent().parent().attr("class", "form-group has-error");
-    $("#Vessel").next().text(MSG_REQUIRE);
+    $("#Vessel").next().text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#Vessel").parent().parent().attr("class", "form-group");
@@ -79,7 +78,7 @@ function submitChk(){
 
   if(cargo != undefined && cargo != null && cargo.trim().length == 0) {
     $("#Cargo").parent().parent().attr("class", "form-group has-error");
-    $("#Cargo").next().text(MSG_REQUIRE);
+    $("#Cargo").next().text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#Cargo").parent().parent().attr("class", "form-group");
@@ -91,7 +90,7 @@ function submitChk(){
     (incidentDateMin != undefined && incidentDateMin != null && incidentDateMin.length == 0)
   ) {
     $("#incidentGroup").attr("class", "form-group has-error");
-    $("#incidentMsg").text(MSG_REQUIRE);
+    $("#incidentMsg").text(getMsg("MSG_REQUIRE"));
     flg++;
   } else {
     $("#incidentGroup").attr("class", "form-group");
@@ -113,6 +112,9 @@ function submitChk(){
 
   if(position != undefined && position != null && position.trim().length != 0) {
     if(!inputChk($("#Position"))){
+      flg ++;
+    }
+    if(!pointChk()){
       flg ++;
     }
   }
@@ -142,6 +144,9 @@ function submitChk(){
   if(flg != 0) {
     return false;
   } else {
+    svgAsPngUri($('svg')[0], {}, function(uri) {
+	     $("#d3Map").val(uri);
+    });
     //Todo submit
     alert("submit");
     return true;
@@ -218,7 +223,7 @@ function inputChk(e) {
     return true;
   }else{
     $(e).parent().parent().attr("class","form-group has-error");
-    $(e).next().text(MSG_ILLEGAL);
+    $(e).next().text(getMsg("MSG_ILLEGAL"));
     $(e).next().show();
     return false;
   }
@@ -229,7 +234,7 @@ function inputBlurChk(e) {
   if($("#pageStatus").val() == "4") {
     if(value != undefined && value != null && value.length == 0) {
       $(e).parent().parent().attr("class", "form-group has-error");
-      $(e).next().text(MSG_REQUIRE).show();
+      $(e).next().text(getMsg("MSG_REQUIRE")).show();
     } else {
       $(e).parent().parent().attr("class", "form-group");
       $(e).next().text("").hide();
@@ -248,7 +253,7 @@ function URLChk(e) {
       return true;
     } else {
       $(e).parent().parent().attr("class","form-group has-error");
-      $(e).next().text(MSG_URL);
+      $(e).next().text(getMsg("MSG_URL"));
       $(e).next().show();
       return false;
     }
@@ -256,6 +261,23 @@ function URLChk(e) {
     $(e).parent().parent().attr("class","form-group");
     $(e).next().hide();
     return true;
+  }
+}
+
+
+function pointChk() {
+  var input = $('#Position').val();
+  var reg = /^(([1-9]\d?)(\.\d{1,5})?|(1[0-7]\d)(\.\d{1,5})?|180(\.0{1,5})?|0(\.\d{1,5})?)[EW]\,(([1-9])(\.\d{1,5})?|([1-8]\d)(\.\d{1,5})?|90(\.0{1,5})?)[SN]$/;
+
+  if(reg.test(input)) {
+    $('#Position').parent().parent().attr("class","form-group");
+    $('#Position').next().hide();
+    return true;
+  }else{
+    $('#Position').parent().parent().attr("class","form-group has-error");
+    $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
+    $('#Position').next().show();
+    return false;
   }
 }
 
@@ -267,7 +289,7 @@ function afterDateChk() {
     var nowDate = new Date(now);
     if(nowDate.getTime() > pageDate.getTime()){
       $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
-      $("#TerminationDate").parent().next().text(MSG_TERMINATIONSTART);
+      $("#TerminationDate").parent().next().text(getMsg("MSG_TERMINATIONSTART"));
       return false;
     } else {
       return true;
@@ -282,7 +304,7 @@ function summaryLineNumChk(flg) {
 
   if(lineNum > 25) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
-    $("#Summary").next().text(MSG_SUMMARYLINE);
+    $("#Summary").next().text(getMsg("MSG_SUMMARYLINE"));
     $("#Summary").next().show();
     flg++;
   } else {
@@ -293,7 +315,7 @@ function summaryLineNumChk(flg) {
       }
       if(lineNum > 25) {
         $("#Summary").parent().parent().attr("class", "form-group has-error");
-        $("#Summary").next().text(MSG_SUMMARYLINE);
+        $("#Summary").next().text(getMsg("MSG_SUMMARYLINE"));
         $("#Summary").next().show();
         flg++
         break;

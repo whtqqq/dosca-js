@@ -1,15 +1,15 @@
 {
-	"newPage":"Now open new page?Current page information will be lost.",
-	"delItem":"Are you sure delete the contents.",
-	"inputRequired":"Please input the Item.",
-	"inputIllegal":"Illegal characters, please re-fill.",
-	"URL":"Illegal characters, please re-fill. (Example: http://www.google.com)",
-	"terminationStart":"Please since today select the Termination Date.",
-	"summaryLine":"Please control Summary's input in 25 lines and every lines input in 120 characters.",
-	"loginError":"username or password is incorrect.",
-	"loginName":"please input your username.",
-	"loginPWD":"please input your password.",
-	"loginEmail":"please input your email.",
-	"loginMailIllegal":"Mailbox format is incorrect, please re-fill."
-
+	"MSG_NEWPAGE":"Now open new page?Current page information will be lost.",
+	"MSG_DELITEM":"Are you sure delete the contents.",
+	"MSG_REQUIRE":"Please input the Item.",
+	"MSG_ILLEGAL":"Illegal characters, please re-fill.",
+	"MSG_URL":"Illegal characters, please re-fill. (Example: http://www.google.com)",
+	"MSG_TERMINATIONSTART":"Please since today select the Termination Date.",
+	"MSG_SUMMARYLINE":"Please control Summary's input in 25 lines and every lines input in 120 characters.",
+	"MSG_LOGINERROR":"username or password is incorrect.",
+	"MSG_LOGINNAME":"please input your username.",
+	"MSG_LOGINPWD":"please input your password.",
+	"MSG_LOGINEMAIL":"please input your email.",
+	"MSG_LOGINEMAILILLEGAL":"Mailbox format is incorrect, please re-fill.",
+	"MSG_POSITIONILLEGAL":"Illegal format.Please don't input any space.Example: 0~180E,0~90N "
 }

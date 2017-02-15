@@ -16,32 +16,19 @@
   <link href="<%=@contents_uri%>/pikaday/css/pikaday.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/combo.select.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/bootstrap-fileinput-master20161101/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
-  <style>@import url('<%=@contents_uri%>/css/maps.css');</style>
-  <script src="<%=@contents_uri%>/d3-map/bower_components/webcomponentsjs/webcomponents.min.js"></script>
-  <link rel="import" href="<%=@contents_uri%>/d3-map/d3-geomap.html">
-  <style shim-shadowdom>
-    zoom-controller::shadow d3-geomap, d3-geomap {
-      display:inline-block;
-      border:1px solid black;
-      border-radius: 3px;
+  <style>
+    .background {
+        fill: white;
+        pointer-events: all;
+      }
+    #country-borders {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 0.5px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      pointer-events: none;
     }
-    zoom-controller::shadow .params, .params {
-      display: inline-block;
-      vertical-align: top;
-      border: 1px solid #333;
-      background-color: PowderBlue;
-      margin: 10px;
-      padding: 10px;
-      border-radius: 3px;
-      vertical-align: top;
-    }
-    zoom-controller::shadow .params tr td:nth-of-type(1) { font-weight: bold; }
-    zoom-controller::shadow .params tr td:nth-of-type(2) { text-align: right; }
-    zoom-controller::shadow .params tr td:nth-of-type(3) { text-align: center; width: 100px }
-    zoom-controller::shadow .params tr td:nth-of-type(4) { text-align: right; }
-    zoom-controller::shadow .params tr td:nth-of-type(5) { text-align: right; width: 50px; }
-    zoom-controller::shadow .params input[type=number] { text-align: right; width: 50px; }
-    zoom-controller::shadow .params td { vertical-align: top }
   </style>
 </head>
 <body>
@@ -53,8 +40,8 @@
         <%if @past_contents %>
           <!-- <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}"><%= @past_contents[:name] %></a></li> -->
           <li><a class="nav-border" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
-          <li><a href="<%=@root_uri%>/edit/past" id="pastBtnY" class="jump nav-border" hidden="hidden"><%= @past_contents[:name] %></a></li>
-          <li><a href="<%=@root_uri%>/edit/past" id="pastBtnN" class="nav-border" hidden="hidden"><%= @past_contents[:name] %></a></li>
+          <li><a href="<%=@root_uri%>/edit/past" id="pastBtnY" class="jump nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
+          <li><a href="<%=@root_uri%>/edit/past" id="pastBtnN" class="nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
         <% end %>
       </ul>
     </div>
@@ -67,6 +54,7 @@
   <input type="hidden" id="ContentNo" value="">
   <input type="hidden" id="pageStatus" value="1">
   <input type="hidden" id="pageID" value="edit">
+  <input type="hidden" id="d3Map" value="">
   <!--Left-Start-->
   <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
     <div class="panel panel-default left-panel panel-bg-blue">
@@ -74,8 +62,8 @@
         <div class="col-md-12">
           <div class="row">
             <button type="button" id="newBtn" class="btn btn-blue new-Btn" onclick="if($('#pageStatus').val() == 4) {$('#newJumpY').click();} else {document.getElementById('newJumpN').click();}">New</button>
-            <a href="<%=@root_uri%>/edit/news" id="newJumpY" class="btn btn-blue new-Btn newJump" hidden>New</a>
-            <a href="<%=@root_uri%>/edit/news" id="newJumpN" class="btn btn-blue new-Btn" hidden>New</a>
+            <a href="<%=@root_uri%>/edit/news" id="newJumpY" class="btn btn-blue new-Btn newJump" style="display: none">New</a>
+            <a href="<%=@root_uri%>/edit/news" id="newJumpN" class="btn btn-blue new-Btn" style="display: none">New</a>
             <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
             <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
             <!-- <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" onclick="if(confirm(MSG_DELITEM)) {alert('del')} else {alert('cal')}" disabled>Delete</button> -->
@@ -181,7 +169,7 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-xs-2"><h3>Location</h3></div>
-          <div class="col-xs-9 col-xs-offset-1">
+          <div class="col-xs-9 col-xs-offset-1" style="padding-left: 3px;">
             <div class="form-group">
               <label class="col-sm-2 control-label">Port</label>
               <div class="col-sm-10">
@@ -197,189 +185,13 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+                <input type="text" class="form-control" id="Position" onchange="inputPoint(this.value);$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
                 <span class="text-danger"></span>
               </div>
             </div>
           </div><!--col-xs-9-->
         </div>
-        <div class="col-md-12 none-padding text-center bg-white" style="overflow: hidden">
-          <polymer-element name="zoom-controller" attributes="selected data hover hoverType clicked map theme multiselect projection pan zoom hoverTemplate markerHoverTemplate cover marks">
-            <template id="example">
-              <d3-geomap style="width:410px; height:285px;" projection="{{projection}}" theme="{{theme}}" zoom="{{zoom}}" pan="{{pan}}" markerHoverTemplate="markerhovertemplate">
-                  <fill name="MINE" color="rgba(255,215,0,0.95)"></fill>
-                  <marker
-                    name="Grasberg"
-                    country="Indonesia"
-                    radius="36"
-                    reserves="106.231"
-                    latitude="-4.0310"
-                    longitude="137.0657"
-                    fillkey="MINE"
-                    image="Grasberg_mine.jpg"
-                  ></marker>
-                  <marker
-                    name="South Deep"
-                    country="South Africa"
-                    radius="27"
-                    reserves="81.413"
-                    latitude="-26.25"
-                    longitude="27.40"
-                    fillkey="MINE"
-                    image="south_deep_ops.jpg"
-                  ></marker>
-                  <marker
-                    name="Lihir"
-                    country="Papua New Guinea"
-                    radius="21"
-                    reserves="64.1"
-                    latitude="-3.0730"
-                    longitude="152.3830"
-                    fillkey="MINE"
-                    image="lihir-gold-mine.jpg"
-                  ></marker>
-                  <marker
-                    name="Muruntau"
-                    country="Uzbekistan"
-                    radius="17"
-                    reserves="50"
-                    latitude="41.2954"
-                    longitude="64.3418"
-                    fillkey="MINE"
-                    image="Muruntov_mine.JPG"
-                  ></marker>
-                  <marker
-                    name="Olympiada"
-                    country="Russia"
-                    radius="16"
-                    reserves="47.5"
-                    latitude="56.01"
-                    longitude="93.04"
-                    fillkey="MINE"
-                    image="olimpiada-gold-mine.jpg"
-                  ></marker>
-                  <marker
-                    name="Oyu Tolgoi"
-                    country="Mongolia"
-                    radius="15"
-                    reserves="46.34"
-                    latitude="43.003"
-                    longitude="106.5035"
-                    fillkey="MINE"
-                    image="oyu-tolgoi-mine.jpg"
-                  ></marker>
-                  <marker
-                    name="Pueblo Viejo"
-                    country="Dominican Republic"
-                    radius="13"
-                    reserves="40.085"
-                    latitude="18.24"
-                    longitude="-70.46"
-                    fillkey="MINE"
-                    image="pueblo-viejo-mine.jpg"
-                  ></marker>
-                  <marker
-                    name="Mponeng"
-                    country="South Africa"
-                    radius="13"
-                    reserves="39.557"
-                    latitude="-26.261"
-                    longitude="27.255"
-                    fillkey="MINE"
-                    image="mponeng-mine-shaft.jpg"
-                  ></marker>
-                  <marker
-                    name="Cadia East"
-                    country="Australia"
-                    radius="13"
-                    reserves="37.6"
-                    latitude="-33.467"
-                    longitude="148.993"
-                    fillkey="MINE"
-                    image="cadia-valley-operations.jpg"
-                  ></marker>
-                  <marker
-                    name="Obuasi"
-                    country="Ghana"
-                    radius="5"
-                    reserves="29.83"
-                    latitude="6.12"
-                    longitude="-1.41"
-                    fillkey="MINE"
-                    image="obuasi-gold-mine.png"
-                  ></marker>
-
-                  <template id="markerhovertemplate">
-                    <div style="
-                      border-radius: 3px;
-                      background-color: #FFF;
-                      box-shadow: 1px 1px 5px #CCC;
-                      font-size: 12px;
-                      border: 1px solid #CCC;
-                      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                    ">
-                      <table>
-                        <tr>
-                          <td style="vertical-align:top;padding-right:10px;">
-                            <strong>{{hover.name}}</strong><br>
-                            {{hover.data.country}}<br>
-                            <span style="text-decoration:underline">Gold Reserves</span>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </template>
-              </d3-geomap>
-            </template>
-            <script>
-            Polymer({
-              zoom: true,
-              marks: [],
-              pan: true,
-              panY: 0,
-              panX: 0,
-              zoomScale: 0,
-              projection: {
-                x: 0,
-                y: -10,
-                scale: 1.3,
-                zoomIncrement: 0.1,
-                panY: 0,
-                panX: 0,
-                zoomScale: 0
-              },
-              theme: {
-                defaultFill: 'transparent',
-                borderWidth: 0.5,
-                borderColor: '#ddd',
-                backgroundImage: '<%=@contents_uri%>/d3-map/Equirectangular_projection_SW.jpg'
-              },
-              toggleZoom: function(e,i,checkbox){
-                this.zoom = checkbox.checked;
-              },
-              togglePan: function(e,i,checkbox){
-                this.pan = checkbox.checked;
-              },
-              toPercent: {
-                toDOM: function(value) { return value * 100; },
-                toModel: function(value) { return value / 100; }
-              },
-              ready: function(){
-                var observer = new ObjectObserver(this.projection);
-                var self = this;
-                observer.open(function(added, removed, changed, getOldValueFn) {
-                  Object.keys(changed).forEach(function(property) {
-                    if(property==='panY') self.panY = changed[property];
-                    if(property==='panX') self.panX = changed[property];
-                    if(property==='zoomScale') self.zoomScale = changed[property];
-                  });
-                });
-              },
-            });
-            </script>
-          </polymer-element>
-
-          <zoom-controller></zoom-controller>
+        <div class="col-md-12 none-padding text-center bg-white" id="map" style="overflow: hidden">
         </div>
       </div>
     </div>
@@ -400,7 +212,6 @@
 </form>
 </div>
 
-
   <!-- Bootstrap core JavaScript
    ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -412,10 +223,141 @@
   <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
   <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
   <script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
+  <script src="<%=@contents_uri%>/js/d3.v3.min.js"></script>
+  <script src="<%=@contents_uri%>/js/topojson.v1.min.js"></script>
+  <script src="<%=@contents_uri%>/js/saveSvgAsPng.js"></script>
   <script>
+    var clientWidth = document.documentElement.clientWidth;
+    var clientHeight = document.documentElement.clientHeight;
+
+    var oldMark =null;
+
+    var width = clientWidth / 3;
+    var height = clientHeight / 2;
+    var icon_size = 20;
+    var projection = d3.geo.mercator()
+        .scale(60)
+        .translate([width / 2.2, height/1.8]);
+    var path = d3.geo.path()
+        .projection(projection);
+
+    var zoom = d3.behavior.zoom()
+        .translate(projection.translate())
+        .scale(projection.scale())
+        .scaleExtent([height / 8, 4 * height])
+        .on("zoom", zoomed);
+
+    var svg = d3.select("#map").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var g = svg.append("g")
+        .call(zoom);
+
+    var color = d3.scale.ordinal()
+        .range(["#98abc5", "#fff"]);
+
+    g.append("rect")
+        .attr("class", "background")
+        .attr("width", width)
+        .attr("height", height);
+
+    d3.json("<%=@contents_uri%>/worldmap-high.json", function(error, topology) {
+      if (error) throw error;
+
+      g.append("g")
+          .attr("id", "countries")
+        .selectAll("path")
+          .data(topojson.feature(topology, topology.objects.countries).features)
+        .enter().append("path")
+          .attr("d", path)
+          .style("fill", color(0));
+
+      g.append("path")
+          .datum(topojson.mesh(topology, topology.objects.countries, function(a, b) { return a !== b; }))
+          .attr("id", "country-borders")
+          .style("stroke", color(1))
+          .attr("d", path);
+    });
+
+    function dblclicked() {
+    	var data = projection.invert(d3.mouse(this));
+      if(data[0] <= 180 && data[0] >= -180 && data[1] <= 90 && data[1] >= -90) {
+      	oldMark = data;
+        var show = new Array();
+        if(data[0] < 0) {
+          var tmp = String(data[0].toFixed(5));
+          show[0] = tmp.substr(1, tmp.length-1) + "W";
+        } else {
+          show[0] = data[0].toFixed(5) + "E";
+        }
+        if(data[1] < 0) {
+          var tmp = String(data[1].toFixed(5));
+          show[1] = tmp.substr(1, tmp.length-1) + "S";
+        } else {
+          show[1] = data[1].toFixed(5) + "N";
+        }
+        $('#Position').val(show[0] + "," + show[1]);
+        drawVessel(data);
+      }
+    }
+
+    function inputPoint(point) {
+      var data = point.split(",");
+      if(data[0].charAt(data[0].length - 1) == "W") {
+        data[0] = parseFloat("-" + data[0].substr(0,data[0].length - 1));
+      } else {
+        data[0] = parseFloat("+" + data[0].substr(0,data[0].length - 1));
+      }
+      if(data[1].charAt(data[1].length - 1) == "S") {
+        data[1] = parseFloat("-" + data[1].substr(0,data[1].length - 1));
+      } else {
+        data[1] = parseFloat("+" + data[1].substr(0,data[1].length - 1));
+      }
+      drawVessel(data);
+    }
+
+    function drawVessel(data) {
+        d3.select("#map").select("svg").selectAll("image").remove();
+    // Draw SVG Icon
+        d3.select("#map").select("svg").selectAll()
+          .data(data)
+          .enter()
+          .append('image')
+          .attr('class', 'vessel')
+          .attr('width', icon_size )
+          .attr('height', icon_size )
+          .attr('x', icon_size/2*(-1))
+          .attr('y', icon_size/2*(-1))
+          .attr('xlink:href', "<%=@contents_uri%>/ship.jpg")
+          .attr('transform', function(){
+            var lon = data[0];
+            var lat = data[1];
+            var pos = projection([lon, lat]);
+            if( pos[0] == pos[0] && pos[1] == pos[1] ){
+              return "translate(" + pos + "), rotate(0 ,0 ,0)";
+            } else {
+              return "";
+            }
+          });
+    }
+
+    function zoomed() {
+      projection.translate(d3.event.translate).scale(d3.event.scale);
+      g.selectAll("path").attr("d", path);
+      if( oldMark != null) {
+        drawVessel(oldMark);
+      }
+    }
+
+    d3.select("svg").on("dblclick", dblclicked);
+
+  </script>
+  <script>
+  $(document).ready(function() {
     $('a.jump').confirm({
       title: 'DOSCA JS Contents',
-      content: MSG_NEWPAGE,
+      content: getMsg("MSG_NEWPAGE"),
       buttons: {
         OK: function () {
             location.href = this.$target.attr('href');
@@ -426,7 +368,7 @@
     });
     $('a.newJump').confirm({
       title: 'DOSCA JS Contents',
-      content: MSG_NEWPAGE,
+      content: getMsg("MSG_NEWPAGE"),
       buttons: {
         OK: function () {
             location.href = this.$target.attr('href');
@@ -437,7 +379,7 @@
     });
     $('button.delJump').confirm({
       title: 'DOSCA JS Contents',
-      content: MSG_DELITEM,
+      content: getMsg("MSG_DELITEM"),
       buttons: {
         OK: function () {
             $.alert("del");
@@ -447,6 +389,7 @@
         }
       }
     });
+  });
   </script>
 </body>
 </html>
