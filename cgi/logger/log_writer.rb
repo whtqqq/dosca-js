@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'fileutils'
 
 # Example
@@ -53,15 +55,18 @@ class LogWriter
     controller = Application.get_controller_and_action_name[:controller]
     log_uri = Settings._settings[:server][:log_directory]
 
-    if(log_uri == nil)
-      log_uri = File.basename(__FILE__) + ".log"
+    if !File.exist?( log_uri )
+      FileUtils.mkdir( log_uri )
     end
 
     tm_str = Time.now.utc.strftime( "%Y%m%d" )
-    logfile_dir = "#{log_uri}/#{controller}.#{tm_str}.log"
+    logfile = "#{log_uri}/#{controller}.#{tm_str}.log"
 
-    LogWriter.logfile_rename(logfile_dir, 2, 10000000)
-    log = open(logfile_dir, "a")
+    if(logfile == nil)
+      logfile = File.basename(__FILE__) + ".log"
+    end
+    LogWriter.logfile_rename(logfile, 2, 10000000)
+    log = open(logfile, "a")
     return log
   end
 
