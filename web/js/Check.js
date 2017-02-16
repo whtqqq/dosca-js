@@ -97,6 +97,7 @@ function submitChk(){
   } else {
     $("#incidentGroup").attr("class", "form-group");
     $("#incidentMsg").text("");
+    $("#dateTime").val(incidentDate + " " + incidentDateHour + ":" + incidentDateMin);
   }
 
   if(subject != undefined && subject != null && subject.trim().length != 0) {
