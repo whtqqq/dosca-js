@@ -1,6 +1,10 @@
 require 'base64'
 
 class EditController < ApplicationController
+  STATUS_NEW = 1
+  STATUS_SHOW = 2
+  STATUS_EDIT = 4
+  
   def past
     user_info = user_info_from_session
 
@@ -15,7 +19,6 @@ class EditController < ApplicationController
     end
 
     @histories = fetch_histories(user_info,  @past_contents[:code])
-
     contents_no = @params[:contents_no]
     @values = {} 
     @values = fetch_history_detail(
@@ -24,14 +27,20 @@ class EditController < ApplicationController
                       @past_contents[:code], 
                       contents_no) if contents_no
 
-    status = @params[:status]
-    if status.bank?
-      status = "EDIT" if !contents_no.blank?  
-      status = "NEW" if  contents_no.blank? && !@params[:category].blank? 
-      status = "SHOW" if !contents_no.blank? && @params[:category].blank?   
+
+    @values[:contents_code] =  user_info[:contents_code]
+    @values[:contents_no] = "" 
+    gui_status = @params[:status]
+    status = ""
+
+    if empty?(gui_status)
+      status = STATUS_SHOW unless empty?(contents_no)
+    else
+      status = STATUS_EDIT unless empty?(contents_no)  
+      status = STATUS_NEW if  empty?(contents_no) && !empty?(@params[:category]) 
     end
     
-    if status == "NEW"
+    if status == STATUS_NEW
       pdf_file = save_temp_file(@cgi.params["files"][0])
       new_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
@@ -39,7 +48,7 @@ class EditController < ApplicationController
       end
     end
 
-    if status == "EDIT"
+    if status == STATUS_EDIT
       pdf_file = save_temp_file(@cgi.params["files"][0])
       edit_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
@@ -47,15 +56,10 @@ class EditController < ApplicationController
       end
     end
     
-    if status == "SHOW"
-      @values[:pdf_file] =  DoscaAPI.pdf_downolad(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
-    end
-
-    if status == "DELETE"
-       resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
-      if !has_error?(resp)
-        @error_message = resp[:message]
-      end
+    if status == STATUS_SHOW
+      @values[:contents_no] = contents_no  
+      @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
+                              user_info[:mail], contents_code, contents_no) 
     end
   end
 
@@ -80,37 +84,69 @@ class EditController < ApplicationController
                       @news_contents[:code], 
                       contents_no) if contents_no
 
-    status = @params[:status]
-    if status.bank?
-      status = "EDIT" if !contents_no.blank?  
-      status = "NEW" if  contents_no.blank? && !@params[:category].blank? 
-      status = "SHOW" if !contents_no.blank? && @params[:category].blank?   
+    @values[:contents_code] =  user_info[:contents_code]
+    @values[:contents_no] = "" 
+    gui_status = @params[:status]
+    status = ""
+
+    if empty?(gui_status)
+      status = STATUS_SHOW unless empty?(contents_no)
+    else
+      status = STATUS_EDIT unless empty?(contents_no)  
+      status = STATUS_NEW if  empty?(contents_no) && !empty(@params[:category]) 
     end
 
-    if status == "NEW"
+    if status == STATUS_NEW
       new_proc(user_info, @news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
       end
     end
 
-    if status == "EDIT"
+    if status == STATUS_EDIT
       edit_proc(user_info, @news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
       end
     end
 
-    if status == "SHOW"
-      @values[:pdf_file] =  DoscaAPI.pdf_downolad(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
+    if status == STATUS_SHOW
+      @values[:contents_no] = contents_no  
+      @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
+                              user_info[:mail], user_info[:contents_code], contents_no) 
     end
+  end
 
-    if status == "DELETE"
-       resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
-      if !has_error?(resp)
-        @error_message = resp[:message]
+  def delete 
+    resp = DoscaAPI.remove(@params[:client_code], @params[:mail], @params[:contents_code], @params[:contents_no])
+    @no_render = true
+    @cgi.out("type" => "application/json") {
+      resp.to_s
+    }
+  end
+
+  def preview
+    pdf_file = create_pdf(@params[:client_code], @params[:contents_code], 
+     @params[:contents_no], utc_time, @params)
+    @no_render = true
+    open(pdf_file) do |fp|
+      basename = File.basename(pdf_file)
+      header = {
+        "type" => "application/pdf",
+        "length" => fp.stat.size,
+        "Content-Disposition"=>"download;filename=\"#{basename}\""}
+      @cgi.out(header) do
+        fp.read
       end
     end
+    rescue => e
+      json = {
+         "resulet" => "ERROR",
+         "message" =>  e.to_s
+      }.to_json
+      @cgi.out("type" => "application/json")  {
+        json
+      }
   end
 
   private
@@ -118,7 +154,7 @@ class EditController < ApplicationController
   def new_proc(user_info, contents, values, contents_no, pdf_file)
     if !pdf_file
       pdf_file = create_pdf(user_info[:client_code], contents[:code], 
-        contents_no, resp[:issue_date], @params)
+        contents_no, utc_time, @params)
     end
 
     resp = DoscaAPI.new(user_info[:client_code],
@@ -138,7 +174,7 @@ class EditController < ApplicationController
 
     if !pdf_file
       pdf_file = create_pdf(user_info[:client_code], contents[:code], 
-        contents_no, resp[:issue_date], @params)
+        contents_no, utc_time, @params)
     end
 
     resp = DoscaAPI.update(user_info[:client_code],
@@ -194,7 +230,7 @@ class EditController < ApplicationController
     news_pictures = @cgi.params["files"]
 
     pdf = PDFCreator.new(pdf_name, 
-           issue_date, 
+          issue_date, 
           data[:latitue] + " " + data[:longitude], data[:category],
           data[:subject],
           data[:summary],
@@ -215,5 +251,15 @@ class EditController < ApplicationController
     path = [Settings._settings[:server][:temp_directory], file.original_filename].join("/") 
     File.open(path, "w") { |f| f.write file.read }
     path
+  end
+
+  def utc_time
+    Time.now.utc.to_s
+  end
+
+  def empty?(obj) 
+    return true if obj.nil?
+    return true if obj.empty?
+    return false 
   end
 end
