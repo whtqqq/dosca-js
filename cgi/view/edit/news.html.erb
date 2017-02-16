@@ -56,7 +56,7 @@
   <input type="hidden" id="pageID" value="edit">
   <input type="hidden" id="d3Map" value="">
   <!--Left-Start-->
-  <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
+  <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left" id="leftPanel">
     <div class="panel panel-default left-panel panel-bg-blue">
       <div class="panel-body">
         <div class="col-md-12">
@@ -165,7 +165,7 @@
   <!--Left-End-->
   <!--right-Start-->
   <div class="col-lg-4 col-md-4 col-sm-4 none-padding">
-    <div class="panel panel-default panel-bg-blue">
+    <div class="panel panel-default panel-bg-blue" id="locationPanel">
       <div class="panel-body">
         <div class="row">
           <div class="col-xs-2"><h3>Location</h3></div>
@@ -185,7 +185,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" onchange="inputPoint(this.value);$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+                <input type="text" class="form-control" id="Position" onchange="inputPoint(this.value);$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();">
                 <span class="text-danger"></span>
               </div>
             </div>
@@ -227,13 +227,15 @@
   <script src="<%=@contents_uri%>/js/topojson.v1.min.js"></script>
   <script src="<%=@contents_uri%>/js/saveSvgAsPng.js"></script>
   <script>
-    var clientWidth = document.documentElement.clientWidth;
+    // var clientWidth = document.documentElement.clientWidth;
+    // var clientHeight = document.documentElement.clientHeight;
+    var clientWidth = $("#map").width();
     var clientHeight = document.documentElement.clientHeight;
 
     var oldMark =null;
 
-    var width = clientWidth / 3;
-    var height = clientHeight / 2;
+    var width = clientWidth;
+    var height = clientWidth / 1.91666;
     var icon_size = 20;
     var projection = d3.geo.mercator()
         .scale(60)

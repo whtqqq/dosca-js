@@ -3,6 +3,10 @@ $(document).ready(function() {
   /*IssueDate init*/
   // $("#IssueDate").val(new Date().Format("yyyy-MM-dd hh:mm:ss"));
 /*##########Termination Date datepicker init##########*/
+  var historyH = $("#leftPanel").height() - $("#locationPanel").height() - 50;
+  var historyH_str = "height: " + historyH +"px";
+  $("#historyList").attr("style", historyH_str);
+
   picker = new Pikaday({
   field: document.getElementById('TerminationDate'),
   firstDay: 1,
