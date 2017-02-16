@@ -56,7 +56,7 @@ class DoscaAPI
     original_name = nil
     http.request(req) do |resp|
       original_name =  resp.header["Content-Disposition"].match(/filename=\"(.+)\"/)[1]
-      file_name = Settings._settings[:server][:temp_pdf_directory]+ "/" + original_name
+      file_name = Settings._settings[:server][:temp_directory]+ "/" + original_name
       File.open(file_name, "w") do |f|
         resp.read_body{ |seg|
           f << seg
@@ -102,9 +102,12 @@ class DoscaAPI
     req.body = body.to_json
 
     resp = http.request(req)
+
+    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + req.body.to_s)
     unless no_log
-      LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + req.body.to_s)
       LogWriter.info(mail, File.basename(uri.to_s) + " response:" + resp.body.to_s)
+    else
+      LogWriter.info(mail, File.basename(uri.to_s) + " response: OK")
     end
     Application.symbolize_keys(JSON.parse(resp.body)) 
   end
