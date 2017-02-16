@@ -171,4 +171,7 @@ function reSetForm() {
 
     $("#Cargo").parent().parent().attr("class", "form-group");
     $("#Cargo").next().text("");
+
+    $("#incidentGroup").attr("class", "form-group");
+    $("#incidentMsg").text("");
 }

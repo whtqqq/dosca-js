@@ -3,6 +3,10 @@ $(document).ready(function() {
   /*IssueDate init*/
   // $("#IssueDate").val(new Date().Format("yyyy-MM-dd hh:mm:ss"));
 /*##########Termination Date datepicker init##########*/
+  var historyH = $("#leftPanel").height() - $("#locationPanel").height() - 50;
+  var historyH_str = "height: " + historyH +"px";
+  $("#historyList").attr("style", historyH_str);
+
   picker = new Pikaday({
   field: document.getElementById('TerminationDate'),
   firstDay: 1,
@@ -25,7 +29,7 @@ $(document).ready(function() {
     $('#Picture').fileinput({
       uploadUrl: '#',
       overwriteInitial: false,
-      maxFileSize: 300,
+      // maxFileSize: 300,
       minFileCount: 1,
       maxFileCount: 4,
       showBrowse:false,
@@ -73,21 +77,21 @@ $(document).ready(function() {
     submitBtnActive();
   });
 /*##########Add submitBtn active listener##########*/
-  $('#Subject').blur(function () {
-    inputBlurChk($('#Subject'));
-  });
-  $('#Summary').blur(function () {
-    inputBlurChk($('#Summary'));
-    summaryLineNumChk();
-  });
-  $('#Position').blur(function () {
-    inputBlurChk($('#Position'));
-  });
-  $('#WebPage').blur(function () {
-    URLChk($('#WebPage'));
-  });
-});
+  // $('#Subject').blur(function () {
+  //   inputBlurChk($('#Subject'));
+  // });
+  // $('#Summary').blur(function () {
+  //   inputBlurChk($('#Summary'));
+  //   summaryLineNumChk();
+  // });
+  // $('#Position').blur(function () {
+  //   inputBlurChk($('#Position'));
+  // });
+  // $('#WebPage').blur(function () {
+  //   URLChk($('#WebPage'));
+  // });
 
+});
 
 //+---------------------------------------------------
 //| 日期計算
