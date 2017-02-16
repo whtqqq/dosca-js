@@ -29,7 +29,7 @@ class EditController < ApplicationController
 
     if status == "NEW"
       pdf_file = save_temp_file(@session["files"][0])
-      edit_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
+      new_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
     end
 
     if status == "EDIT"
