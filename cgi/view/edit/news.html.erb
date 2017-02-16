@@ -51,12 +51,14 @@
 </div>
 
 <div class="col-md-12">
-<form class="form-horizontal" role="form" method="post" action="">
-  <input type="hidden" id="ClientCode" value="">
-  <input type="hidden" id="ContentNo" value="">
-  <input type="hidden" id="pageStatus" value="1">
-  <input type="hidden" id="pageID" value="edit">
+<form class="form-horizontal" role="form" method="post" action="/dosca-js/edit/news">
+  <input type="hidden" id="ClientCode" name="client_code" value="">
+  <input type="hidden" id="ContentCode" name="contents_code" value="">
+  <input type="hidden" id="ContentNo" name="contents_no" value="">
+  <input type="hidden" id="pageStatus" name="page_status" value="1">
   <input type="hidden" id="d3Map" name="map_picture" value="">
+  <input type="hidden" id="pageID" value="edit">
+
   <!--Left-Start-->
   <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left" id="leftPanel">
     <div class="panel panel-default left-panel panel-bg-blue">
@@ -93,7 +95,7 @@
             <div>
               <label class="col-sm-2 control-label"><%= @items[:category] %></label>
               <div class="col-sm-4">
-                <select class="" id="Category" onchange="$('.combo-input').attr('style', '');$('#Category').parent().parent().parent().attr('class','');$('#CategoryMsg').attr('hidden', 'true');">
+                <select class="" id="Category" name="category" onchange="$('.combo-input').attr('style', '');$('#Category').parent().parent().parent().attr('class','');$('#CategoryMsg').attr('hidden', 'true');">
                   <option value=""></option>
                   <% @categories.each {|value| %>
                      <option><%= value %></option>
@@ -106,7 +108,7 @@
               <label class="col-sm-3 control-label">Termination Date</label>
               <div class="col-sm-3">
                 <div class="input-group">
-                  <input type="text" class="form-control bg-white" id="TerminationDate" style="cursor:pointer;" onchange="$('#TerminationDate').parent().parent().parent().attr('class', '');
+                  <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" style="cursor:pointer;" onchange="$('#TerminationDate').parent().parent().parent().attr('class', '');
                       $('#TerminationDate').parent().next().text('');" readonly>
                   <span class="input-group-addon hand-mouse" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
@@ -120,7 +122,7 @@
           <div class="form-group">
             <label for="Subject" class="col-sm-2 control-label"><%= @items[:subject] %></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="Subject" maxlength="50" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+              <input type="text" class="form-control" id="Subject" name="subject" maxlength="50" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
               <span class="text-danger"></span>
             </div>
           </div>
@@ -130,7 +132,7 @@
           <div class="form-group">
             <label for="Summary" class="col-sm-2 control-label"><%= @items[:summary] %></label>
             <div class="col-sm-10">
-              <textarea cols="120" rows="10" class="form-control" id="Summary" maxlength="3000" style="resize: none;" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');"></textarea>
+              <textarea cols="120" rows="10" class="form-control" id="Summary" name="summary" maxlength="3000" style="resize: none;" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');"></textarea>
               <span class="text-danger"></span>
             </div>
           </div>
@@ -149,7 +151,7 @@
           <div class="form-group">
             <label for="WebPage" class="col-sm-2 control-label"><%= @items[:web_page] %></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="WebPage" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+              <input type="text" class="form-control" id="WebPage" name="web_page" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
               <span class="text-danger"></span>
             </div>
           </div>
@@ -176,7 +178,7 @@
               <label class="col-sm-2 control-label">Port</label>
               <div class="col-sm-10">
                 <!-- <input type="text" class="form-control" id="Port" placeholder="OMAEZAKI"> -->
-                <select id="Port" class="">
+                <select id="Port" name="ports">
                   <option value=""></option>
                  <% @ports.each {|hash| %>
                     <option value="<%= hash.keys[0] %>"><%= hash.keys[0] %></option>
@@ -187,7 +189,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -234,8 +236,6 @@
   <script src="<%=@contents_uri%>/js/topojson.v1.min.js"></script>
   <script src="<%=@contents_uri%>/js/saveSvgAsPng.js"></script>
   <script>
-    // var clientWidth = document.documentElement.clientWidth;
-    // var clientHeight = document.documentElement.clientHeight;
     var clientWidth = $("#map").width();
     var clientHeight = document.documentElement.clientHeight;
 
@@ -398,7 +398,7 @@
       content: getMsg("MSG_DELITEM"),
       buttons: {
         OK: function () {
-            $.alert("del");
+          $.alert("del");
         },
         Cancel: function () {
           $.alert("cancel");

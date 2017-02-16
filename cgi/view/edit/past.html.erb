@@ -50,9 +50,10 @@
 
 <div class="col-md-12">
 <form class="form-horizontal" role="form" method="post" action="">
-  <input type="hidden" id="ClientCode" value="">
-  <input type="hidden" id="ContentNo" value="">
-  <input type="hidden" id="pageStatus" value="1">
+  <input type="hidden" id="ClientCode" name="client_code" value="">
+  <input type="hidden" id="ContentCode" name="contents_code" value="">
+  <input type="hidden" id="ContentNo" name="contents_no" value="">
+  <input type="hidden" id="pageStatus" name="page_status" value="1">
   <input type="hidden" id="pageID" value="past">
   <input type="hidden" id="d3Map" name="map_picture" value="">
 
@@ -93,7 +94,7 @@
                 <label class=" col-sm-6 control-label">Termination Date</label>
                 <div class="col-sm-6">
                   <div class="input-group">
-                    <input type="text" class="form-control bg-white" id="TerminationDate" placeholder="2017/01/01" style="cursor:pointer;" readonly>
+                    <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" placeholder="2017/01/01" style="cursor:pointer;" readonly>
                     <span class="input-group-addon" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                   </div>
                   <span class="text-danger"></span>
@@ -118,7 +119,7 @@
                   <div>
                     <label class="col-sm-6 control-label" style="text-align: left;"><%= @items[:category] %></label>
                     <div class="col-sm-6 pull-right">
-                      <select class="" id="Category" onchange="$('.combo-input').attr('style', '');$('#Category').parent().parent().parent().attr('class','');$('#CategoryMsg').attr('hidden', 'true');">
+                      <select class="" id="Category" name="category" onchange="$('.combo-input').attr('style', '');$('#Category').parent().parent().parent().attr('class','');$('#CategoryMsg').attr('hidden', 'true');">
                         <option value=""></option>
                         <% @categories.each {|value| %>
                         <option><%= value %></option>
@@ -162,6 +163,7 @@
                         </div>
                       </div>
                     </div>
+                    <input type="hidden" id="dateTime" name="date_time" value="">
                     <div id="incidentMsg" class="text-danger"></div>
                   </div>
                 </div>
@@ -170,7 +172,7 @@
                 <div class="form-group">
                   <label for="VESSELNAME" class="col-sm-6 control-label" style="text-align: left;"><%= @items[:vessel_name] %></label>
                   <div class="col-sm-6 pull-right">
-                    <input type="text" class="form-control" id="Vessel" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+                    <input type="text" class="form-control" id="Vessel" name="vessel_name" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
                     <span class="text-danger"></span>
                   </div>
                 </div>
@@ -179,7 +181,7 @@
                 <div class="form-group">
                   <label for="CARGO" class="col-sm-6 control-label" style="text-align: left;"><%= @items[:cargo] %></label>
                   <div class="col-sm-6 pull-right">
-                    <input type="text" class="form-control" id="Cargo" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+                    <input type="text" class="form-control" id="Cargo" name="cargo" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
                     <span class="text-danger"></span>
                   </div>
                 </div>
@@ -228,7 +230,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
