@@ -212,12 +212,12 @@ class EditController < ApplicationController
     if !has_error?(resp)
       @error_message = resp[:message]
     end
-    #File.delete pdf_file if File.exist?(pdf_file)
+    File.delete pdf_file if File.exist?(pdf_file)
   end
 
   def edit_proc(contents, values, contents_no, pdf_file)
     if !dirty?(values, @params)
-      @error_message = "no change"
+      @error_message = "No change happended."
       return
     end
 
@@ -273,8 +273,11 @@ class EditController < ApplicationController
   end
  
   def create_pdf(contents_code, contents_no, title, issue_date, data)
-    path = Settings._settings[:server][:temp_pdf_directory]
+    path = Settings._settings[:server][:temp_directory]
     pdf_name = path + "/" + [@client_code, contents_code, contents_no].join("_") + ".pdf"
+    if contents_no.nil? || contents_no.empty?
+      pdf_name = path + "/" + [@client_code, contents_code, "new"].join("_") + ".pdf"
+    end
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
     news_pictures = []
     news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil? || @session["files"].empty?
@@ -287,6 +290,11 @@ class EditController < ApplicationController
           data[:summary],
           map_picture, news_pictures)
     pdf.create()
+
+    news_pictures.each do |file|
+      File.delete file if File.exist?(file)
+    end
+    File.delete map_picture if File.exist?(map_picture)
 
     pdf_name
   end
