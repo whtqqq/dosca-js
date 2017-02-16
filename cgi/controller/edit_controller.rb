@@ -118,7 +118,9 @@ class EditController < ApplicationController
   end
 
   def delete 
-    resp = DoscaAPI.remove(@params[:client_code], @params[:mail], @params[:contents_code], @params[:contents_no])
+    user_info = user_info_from_session
+    resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], 
+              @params[:contents_code], @params[:contents_no])
     @no_render = true
     @cgi.out("type" => "application/json") {
       resp.to_s
@@ -126,8 +128,18 @@ class EditController < ApplicationController
   end
 
   def preview
-    pdf_file = create_pdf(@params[:client_code], @params[:contents_code], 
-     @params[:contents_no], utc_time, @params)
+    user_info = user_info_from_session
+    past_contents = extract_contents(user_info, "PAST_INCIDENT")
+    news_contents = extract_contents(user_info, "INCIDENT_NEWS")
+    if past_contents && past_contents[:code] == @params[:contents_code]
+      title = past_contents[:name]
+    end
+    if news_contents && news_contents[:code] == @params[:contents_code]
+      title = news_contents[:name]
+    end
+
+    pdf_file = create_pdf(user_info[:client_code], @params[:contents_code], @params[:contents_no], 
+                        title, utc_time, @params)
     @no_render = true
     open(pdf_file) do |fp|
       basename = File.basename(pdf_file)
@@ -154,7 +166,7 @@ class EditController < ApplicationController
   def new_proc(user_info, contents, values, contents_no, pdf_file)
     if !pdf_file
       pdf_file = create_pdf(user_info[:client_code], contents[:code], 
-        contents_no, utc_time, @params)
+        contents_no, contents[:name], utc_time, @params)
     end
 
     resp = DoscaAPI.new(user_info[:client_code],
@@ -174,7 +186,7 @@ class EditController < ApplicationController
 
     if !pdf_file
       pdf_file = create_pdf(user_info[:client_code], contents[:code], 
-        contents_no, utc_time, @params)
+        contents_no, contents[:name], utc_time, @params)
     end
 
     resp = DoscaAPI.update(user_info[:client_code],
@@ -223,13 +235,14 @@ class EditController < ApplicationController
     return false
   end
  
-  def create_pdf(client_code, contents_code, contents_no, issue_date, data)
+  def create_pdf(client_code, contents_code, contents_no, title, issue_date, data)
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@params[:map_picture], path)
     news_pictures = @cgi.params["files"]
 
     pdf = PDFCreator.new(pdf_name, 
+          title,
           issue_date, 
           data[:latitue] + " " + data[:longitude], data[:category],
           data[:subject],

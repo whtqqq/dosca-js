@@ -4,9 +4,10 @@ class Application
 
   class << self
     def get_controller_and_action_name
-      url_split = ENV['REQUEST_URI'].split('/').delete_if{|element| element.empty? || element.match(/\?/) != nil}
+      url_split = ENV["REQUEST_URI"].split("/").delete_if{|element| element.empty?}
       controller = url_split[1] || ROOT_CONTROLLER
       action = url_split[2] || DEFAULT_ACTION
+      action = action.scan(/(.+)\?/) unless action.index("?").nil?
       {:controller => controller, :action => action}
     end
 
