@@ -27,6 +27,7 @@ function submitChk(){
   if(subject != undefined && subject != null && subject.trim().length == 0) {
     $("#Subject").parent().parent().attr("class", "form-group has-error");
     $("#Subject").next().text(getMsg("MSG_REQUIRE"));
+    $("#Subject").show();
     flg++;
   } else {
     $("#Subject").parent().parent().attr("class", "form-group");
@@ -38,6 +39,7 @@ function submitChk(){
   if(summary != undefined && summary != null && summary.trim().length == 0) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
     $("#Summary").next().text(getMsg("MSG_REQUIRE"));
+    $("#Summary").show();
     flg++;
   } else {
     $("#Summary").parent().parent().attr("class", "form-group");
@@ -267,17 +269,19 @@ function URLChk(e) {
 
 function pointChk() {
   var input = $('#Position').val();
-  var reg = /^(([1-9]\d?)(\.\d{1,5})?|(1[0-7]\d)(\.\d{1,5})?|180(\.0{1,5})?|0(\.\d{1,5})?)[EW]\,(([1-9])(\.\d{1,5})?|([1-8]\d)(\.\d{1,5})?|90(\.0{1,5})?)[SN]$/;
+  if(input != null && input.length > 0) {
+    var reg = /^(([1-9]\d?)(\.\d{1,5})?|(1[0-7]\d)(\.\d{1,5})?|180(\.0{1,5})?|0(\.\d{1,5})?)[EW]\,(([1-9])(\.\d{1,5})?|([1-8]\d)(\.\d{1,5})?|90(\.0{1,5})?)[SN]$/;
 
-  if(reg.test(input)) {
-    $('#Position').parent().parent().attr("class","form-group");
-    $('#Position').next().hide();
-    return true;
-  }else{
-    $('#Position').parent().parent().attr("class","form-group has-error");
-    $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
-    $('#Position').next().show();
-    return false;
+    if(reg.test(input)) {
+      $('#Position').parent().parent().attr("class","form-group");
+      $('#Position').next().hide();
+      return true;
+    }else{
+      $('#Position').parent().parent().attr("class","form-group has-error");
+      $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
+      $('#Position').next().show();
+      return false;
+    }
   }
 }
 

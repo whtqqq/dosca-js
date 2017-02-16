@@ -14,6 +14,8 @@
   <link href="<%=@contents_uri%>/pikaday/css/pikaday.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/combo.select.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/bootstrap-fileinput-master20161101/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="<%=@contents_uri%>/bootstrap-fileinput-master/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="<%=@contents_uri%>/bootstrap-fileinput-master/themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css" />
   <link href="<%=@contents_uri%>/confirm/jquery-confirm.min.css" rel="stylesheet">
   <style>
     .background {
@@ -47,12 +49,12 @@
 </div>
 
 <div class="col-md-12">
-<form class="form-horizontal" role="form">
+<form class="form-horizontal" role="form" method="post" action="">
   <input type="hidden" id="ClientCode" value="">
   <input type="hidden" id="ContentNo" value="">
   <input type="hidden" id="pageStatus" value="1">
   <input type="hidden" id="pageID" value="past">
-  <input type="hidden" id="d3Map" value="">
+  <input type="hidden" id="d3Map" name="map_picture" value="">
 
   <!--Left-Start-->
   <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
@@ -189,7 +191,7 @@
         <div class="col-md-12 ">
           <div class="form-group">
             <div class="col-sm-12">
-              <input id="Picture" class="file" type="file" multiple data-preview-file-type="any" data-upload-url="#">
+              <input id="Picture" class="file" type="file" name="files[]" multiple data-preview-file-type="any" data-upload-url="dosca-js/edit/upload">
             </div>
           </div>
         </div>
@@ -226,8 +228,8 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" onchange="inputPoint(this.value);$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();">
-                <span class="text-danger"></span>
+                <input type="text" class="form-control" id="Position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
+                <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
           </div><!--col-xs-9-->
@@ -265,7 +267,11 @@
 <script src="<%=@contents_uri%>/pikaday/js/moment.min.js"></script>
 <script src="<%=@contents_uri%>/pikaday/js/pikaday.js"></script>
 <script src="<%=@contents_uri%>/js/jquery.combo.select.js"></script>
-<script src="<%=@contents_uri%>/bootstrap-fileinput-master20161101/js/fileinput.js"></script>
+<script src="<%=@contents_uri%>/bootstrap-fileinput-master/js/plugins/canvas-to-blob.js"></script>
+<script src="<%=@contents_uri%>/bootstrap-fileinput-master/js/plugins/purify.js"></script>
+<script src="<%=@contents_uri%>/bootstrap-fileinput-master/js/plugins/sortable.js"></script>
+<script src="<%=@contents_uri%>/bootstrap-fileinput-master/js/fileinput.js"></script>
+<script src="<%=@contents_uri%>/bootstrap-fileinput-master/themes/explorer/theme.js"></script>
 <script src="<%=@contents_uri%>/confirm/jquery-confirm.min.js"></script>
 <script src="<%=@contents_uri%>/js/d3.v3.min.js"></script>
 <script src="<%=@contents_uri%>/js/topojson.v1.min.js"></script>
@@ -342,23 +348,30 @@
         show[1] = data[1].toFixed(5) + "N";
       }
       $('#Position').val(show[0] + "," + show[1]);
+      $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
       drawVessel(data);
     }
   }
 
   function inputPoint(point) {
-    var data = point.split(",");
-    if(data[0].charAt(data[0].length - 1) == "W") {
-      data[0] = parseFloat("-" + data[0].substr(0,data[0].length - 1));
-    } else {
-      data[0] = parseFloat("+" + data[0].substr(0,data[0].length - 1));
+    if(point != null) {
+      if(pointChk()){
+        var data = point.split(",");
+        if(data[0].charAt(data[0].length - 1) == "W") {
+          data[0] = parseFloat("-" + data[0].substr(0,data[0].length - 1));
+        } else {
+          data[0] = parseFloat("+" + data[0].substr(0,data[0].length - 1));
+        }
+        if(data[1].charAt(data[1].length - 1) == "S") {
+          data[1] = parseFloat("-" + data[1].substr(0,data[1].length - 1));
+        } else {
+          data[1] = parseFloat("+" + data[1].substr(0,data[1].length - 1));
+        }
+        oldMark = data;
+        $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
+        drawVessel(data);
+      }
     }
-    if(data[1].charAt(data[1].length - 1) == "S") {
-      data[1] = parseFloat("-" + data[1].substr(0,data[1].length - 1));
-    } else {
-      data[1] = parseFloat("+" + data[1].substr(0,data[1].length - 1));
-    }
-    drawVessel(data);
   }
 
   function drawVessel(data) {
