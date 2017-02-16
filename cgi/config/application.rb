@@ -7,7 +7,8 @@ class Application
       url_split = ENV["REQUEST_URI"].split("/").delete_if{|element| element.empty?}
       controller = url_split[1] || ROOT_CONTROLLER
       action = url_split[2] || DEFAULT_ACTION
-      action = action.scan(/(.+)\?/) unless action.index("?").nil?
+      $stderr.puts action
+      action = action.split("?")[0] unless action.index("?").nil?
       {:controller => controller, :action => action}
     end
 
