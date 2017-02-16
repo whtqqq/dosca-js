@@ -1,3 +1,5 @@
+require 'base64'
+
 class EditController < ApplicationController
   def past
     user_info = user_info_from_session
@@ -26,12 +28,12 @@ class EditController < ApplicationController
     status = "NEW" if  !contents_no && @params[:category] 
 
     if status == "NEW"
-      pdf_file = @params[:file][0].original_filename
+      pdf_file = save_temp_file(@session["files"][0])
       edit_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
     end
 
     if status == "EDIT"
-      pdf_file = @params[:file][0].original_filename
+      pdf_file = save_temp_file(@session["files"][0])
       edit_proc(user_info, @past_contents, contents_data, contents_no, pdf_file)
     end
   end
@@ -61,12 +63,16 @@ class EditController < ApplicationController
     status = "NEW" if  !contents_no && @params[:category] 
 
     if status == "NEW"
-      edit_proc(user_info, @news_contents, contents_data, contents_no, nil)
+      new_proc(user_info, @news_contents, contents_data, contents_no, nil)
     end
 
     if status == "EDIT"
       edit_proc(user_info, @news_contents, contents_data, contents_no, nil)
     end
+  end
+
+  def upload
+    @session[:files] =  @cgi.params["files"]
   end
 
   private
@@ -79,10 +85,11 @@ class EditController < ApplicationController
 
     resp = DoscaAPI.new(user_info[:client_code],
                       user_info[:mail], contents[:code],  pdf_file, @params) 
+
     if !has_error?(resp)
       @error_message = "server error"
-      return
     end
+    File.delete pdf_file if File.exist?(pdf_file)
   end
 
   def edit_proc(user_info, contents, contents_data, contents_no, pdf_file)
@@ -100,8 +107,8 @@ class EditController < ApplicationController
                         user_info[:mail], contents[:code], contents_no, pdf_file, @params) 
     if !has_error?(resp)
       @error_message = "server error"
-      return
     end
+    File.delete pdf_file if File.exist?(pdf_file)
   end
 
   def extract_contents(user_info, keyword)
@@ -145,8 +152,8 @@ class EditController < ApplicationController
   def create_pdf(client_code, contents_code, contents_no, issue_date, data)
     path = URI.parse(Settings._settings[:server][:temp_pdf_directory])
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
-    map_picture = data[:file][0]
-    news_pictures = data[:file] - data[:file][0]
+    map_picture = save_base64_picture(@params[:map_picture], path)
+    news_pictures = @session[:files]
 
     pdf = PDFCreator.new(pdf_name, 
            issue_date, 
@@ -157,5 +164,20 @@ class EditController < ApplicationController
     pdf.create()
 
     pdf_name
+  end
+
+  def save_base64_picture(data_url, path)
+    png  = Base64.decode64(data_url['data:image/png;base64,'.length .. -1])
+    file_name = path + '/chart.png'
+    File.open(file, 'wb') { |f| f.write(png) }
+    file_name
+  end
+  
+  def save_temp_file(file) 
+    path = [Settings._settings[:server][:temp_directory], file.original_filename].join("/") 
+    File.open(path), "w") do |f|
+      f.write file.read
+    end 
+    path
   end
 end
