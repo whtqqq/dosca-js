@@ -46,4 +46,4 @@ puts "Content-Type: application/json\n"
 
 puts ""
 
-resp_success
+resp_news
