@@ -3,10 +3,8 @@ $(document).ready(function() {
   /*IssueDate init*/
   // $("#IssueDate").val(new Date().Format("yyyy-MM-dd hh:mm:ss"));
 /*##########Termination Date datepicker init##########*/
-  var historyH = $("#leftPanel").height() - $("#locationPanel").height() - 50;
-  var historyH_str = "height: " + historyH +"px";
-  $("#historyList").attr("style", historyH_str);
 
+  changeLayout();
   picker = new Pikaday({
   field: document.getElementById('TerminationDate'),
   firstDay: 1,
@@ -27,29 +25,45 @@ $(document).ready(function() {
   $('#Category').comboSelect();
   if(document.getElementById('incidentDate') == null) {
     $('#Picture').fileinput({
-      uploadUrl: '#',
+      theme: "explorer",
+      uploadAsync:false,
+      // uploadUrl: '#',
       overwriteInitial: false,
       // maxFileSize: 300,
       minFileCount: 1,
       maxFileCount: 4,
       showBrowse:false,
       showCaption:false,
+      showUpload:false,
       browseOnZoneClick:true,
-      previewSettings:{image: {width: "260px", height: "auto"}},
+      resizeImage: true,
+      maxImageWidth: 200,
+      maxImageHeight: 200,
+      resizePreference: 'width',
+      fileActionSettings:{showUpload:false},
+      // previewSettings:{image: {width: "260px", height: "auto"}},
       allowedFileExtensions : ['jpg', 'png', 'gif'],
       dropZoneTitle:"Picture file（jpeg/jpg/png） Drag & Drop here !"
     });
   } else {
     $('#Picture').fileinput({
-        uploadUrl: '#',
+        theme: "explorer",
+        // uploadUrl: '#',
+        uploadAsync:false,
         overwriteInitial: false,
         maxFileSize: 100,
         minFileCount: 1,
         maxFileCount: 2,
         showBrowse:false,
         showCaption:false,
+        showUpload:false,
         browseOnZoneClick:true,
-        previewSettings:{image: {width: "400px", height: "auto"}},
+        resizeImage: true,
+        maxImageWidth: 200,
+        maxImageHeight: 200,
+        resizePreference: 'width',
+        fileActionSettings:{showUpload:false},
+        // previewSettings:{image: {width: "400px", height: "auto"}},
         allowedFileExtensions : ['pdf'],
         dropZoneTitle:"PDF file Drag & Drop here !"
     });
@@ -135,4 +149,10 @@ function addDay(dayNumber, date) {
     var ms = dayNumber * (1000 * 60 * 60 * 24)
     var newDate = new Date(date.getTime() + ms);
     return newDate;
+}
+
+function changeLayout() {
+  var historyH = $("#leftPanel").height() - $("#locationPanel").height() - 50;
+  var historyH_str = "height: " + historyH +"px";
+  $("#historyList").attr("style", historyH_str);
 }
