@@ -60,7 +60,7 @@ class EditController < ApplicationController
       @values[:contents_no] = contents_no  
       @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @past_contents[:code], contents_no) 
-      if @values[:termination_date].nil ||  @values[:termination_date].empty
+      if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
         @values[:period]  = "period"
@@ -119,7 +119,7 @@ class EditController < ApplicationController
       @values[:contents_no] = contents_no  
       @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @news_contents[:code], contents_no) 
-      if @values[:termination_date].nil ||  @values[:termination_date].empty
+      if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
         @values[:period]  = "period"
