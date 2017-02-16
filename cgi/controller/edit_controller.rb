@@ -23,13 +23,16 @@ class EditController < ApplicationController
                       user_info[:mail], 
                       @past_contents[:code], 
                       contents_no) if contents_no
-    status = ""
-    status = "EDIT" if contents_no  
-    status = "NEW" if  !contents_no && @params[:category] 
-    status = "SHOW" if contents_no && !@params[:category]   
+
+    status = @params[:status]
+    if status.bank?
+      status = "EDIT" if !contents_no.blank?  
+      status = "NEW" if  contents_no.blank? && !@params[:category].blank? 
+      status = "SHOW" if !contents_no.blank? && @params[:category].blank?   
+    end
     
     if status == "NEW"
-      pdf_file = save_temp_file(@session["files"][0])
+      pdf_file = save_temp_file(@cgi.params["files"][0])
       new_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
         @value = @params.dup
@@ -37,7 +40,7 @@ class EditController < ApplicationController
     end
 
     if status == "EDIT"
-      pdf_file = save_temp_file(@session["files"][0])
+      pdf_file = save_temp_file(@cgi.params["files"][0])
       edit_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
         @value = @params.dup
@@ -46,6 +49,13 @@ class EditController < ApplicationController
     
     if status == "SHOW"
       @values[:pdf_file] =  DoscaAPI.pdf_downolad(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
+    end
+
+    if status == "DELETE"
+       resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
+      if !has_error?(resp)
+        @error_message = resp[:message]
+      end
     end
   end
 
@@ -69,10 +79,13 @@ class EditController < ApplicationController
                       user_info[:mail], 
                       @news_contents[:code], 
                       contents_no) if contents_no
-    status = ""
-    status = "EDIT" if contents_no  
-    status = "NEW" if  !contents_no && @params[:category] 
-    status = "SHOW" if contents_no && !@params[:category]   
+
+    status = @params[:status]
+    if status.bank?
+      status = "EDIT" if !contents_no.blank?  
+      status = "NEW" if  contents_no.blank? && !@params[:category].blank? 
+      status = "SHOW" if !contents_no.blank? && @params[:category].blank?   
+    end
 
     if status == "NEW"
       new_proc(user_info, @news_contents, @values, contents_no, nil)
@@ -91,10 +104,13 @@ class EditController < ApplicationController
     if status == "SHOW"
       @values[:pdf_file] =  DoscaAPI.pdf_downolad(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
     end
-  end
 
-  def upload
-    @session[:files] =  @cgi.params["files"]
+    if status == "DELETE"
+       resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
+      if !has_error?(resp)
+        @error_message = resp[:message]
+      end
+    end
   end
 
   private
@@ -109,7 +125,7 @@ class EditController < ApplicationController
                       user_info[:mail], contents[:code],  pdf_file, @params) 
 
     if !has_error?(resp)
-      @error_message = "server error"
+      @error_message = resp[:message]
     end
     File.delete pdf_file if File.exist?(pdf_file)
   end
@@ -128,7 +144,7 @@ class EditController < ApplicationController
     resp = DoscaAPI.update(user_info[:client_code],
                         user_info[:mail], contents[:code], contents_no, pdf_file, @params) 
     if !has_error?(resp)
-      @error_message = "server error"
+      @error_message = resp[:message]
     end
     File.delete pdf_file if File.exist?(pdf_file)
   end
@@ -175,7 +191,7 @@ class EditController < ApplicationController
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@params[:map_picture], path)
-    news_pictures = @session[:files]
+    news_pictures = @cgi.params["files"]
 
     pdf = PDFCreator.new(pdf_name, 
            issue_date, 

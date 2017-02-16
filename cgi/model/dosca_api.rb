@@ -73,7 +73,7 @@ class DoscaAPI
                client_code, mail, contents_code, contents_no, pdf_file, submit_data)
   end
 
-  def DoscaAPI.remove(client_code, mail, contents_code, contents_no, submit_data)
+  def DoscaAPI.remove(client_code, mail, contents_code, contents_no)
     request_common(Settings._settings[:api][:remove_url],
                 client_code, mail, contents_code, contents_no)
   end
@@ -120,11 +120,15 @@ class DoscaAPI
     json["summary"] = submit_data[:summary] || ""
     json["web_page"] = submit_data[:web_page] || ""
     json["termination_date"] = submit_data[:termination_date] || ""
-    json["longitude"] = submit_data[:longitude] || ""
-    json["latitude"] = submit_data[:latitude] || ""
     json["date_time"] = submit_data[:date_time] || ""
     json["cargo"] = submit_data[:cargo] || ""
     json["vessel_name"] = submit_data[:vessel_name] || ""
+
+    if !submit_data[:location].blank?
+      localtion = submit_data[:latitude].split(",")
+      json["longitude"] = location[0]
+      json["latitude"] = location[1]
+    end
 
 
     post_body = []
