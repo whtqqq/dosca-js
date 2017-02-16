@@ -79,7 +79,7 @@ class EditController < ApplicationController
 
   def new_proc(user_info, contents, contents_data, contents_no, pdf_file)
     if !pdf_file
-      pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], 
+      pdf_file = create_pdf(user_info[:client_code], contents[:code], 
         contents_no, resp[:issue_date], @params)
     end
 
@@ -99,7 +99,7 @@ class EditController < ApplicationController
     end
 
     if !pdf_file
-      pdf_file = create_pdf(user_info[:client_code], @news_contents[:code], 
+      pdf_file = create_pdf(user_info[:client_code], contents[:code], 
         contents_no, resp[:issue_date], @params)
     end
 
@@ -175,9 +175,7 @@ class EditController < ApplicationController
   
   def save_temp_file(file) 
     path = [Settings._settings[:server][:temp_directory], file.original_filename].join("/") 
-    File.open(path), "w") do |f|
-      f.write file.read
-    end 
+    File.open(path), "w") { |f| f.write file.read }
     path
   end
 end
