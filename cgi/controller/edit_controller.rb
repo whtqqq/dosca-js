@@ -1,4 +1,4 @@
-r_equire 'base64'
+require 'base64'
 
 class EditController < ApplicationController
   def past
