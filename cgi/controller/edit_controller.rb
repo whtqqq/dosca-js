@@ -7,6 +7,8 @@ class EditController < ApplicationController
   
   def past
     user_info = user_info_from_session
+    @mail = user_info[:mail]
+    @client_code = user_info[:client_code]
 
     @past_contents = extract_contents(user_info, "PAST_INCIDENT")
 
@@ -18,11 +20,10 @@ class EditController < ApplicationController
       @news_contents = extract_contents(user_info, "INCIDENT_NEWS")
     end
 
-    @histories = fetch_histories(user_info,  @past_contents[:code])
+    @histories = fetch_histories( @past_contents[:code])
     contents_no = @params[:contents_no]
     @values = {} 
     @values = fetch_history_detail(
-                      user_info, 
                       @past_contents[:code], 
                       contents_no) unless contents_no.nil? || contents_no.empty?  
 
@@ -42,7 +43,7 @@ class EditController < ApplicationController
     
     if status == STATUS_NEW
       files = JSON.parse(@session["files"])
-      new_proc(user_info, @past_contents, @values, contents_no, files[0])
+      new_proc(@past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
       end
@@ -51,7 +52,7 @@ class EditController < ApplicationController
 
     if status == STATUS_EDIT
       files = JSON.parse(@session["files"])
-      edit_proc(user_info, @past_contents, @values, contents_no, files[0])
+      edit_proc(@past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
       end
@@ -59,11 +60,12 @@ class EditController < ApplicationController
     end
     
     if status == STATUS_SHOW
+      pdf_file =  DoscaAPI.pdf_download(@client_code, 
+                              @mail, @past_contents[:code], contents_no) 
+
+      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       @values[:contents_code] = @past_contents[:code]
       @values[:contents_no] = contents_no  
-      pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
-                              user_info[:mail], @past_contents[:code], contents_no) 
-      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -74,6 +76,9 @@ class EditController < ApplicationController
 
   def news
     user_info = user_info_from_session
+    @mail = user_info[:mail]
+    @client_code = user_info[:client_code]
+
     @news_contents = extract_contents(user_info, "INCIDENT_NEWS")
     if user_info[:contents].size > 1
       @past_contents = extract_contents(user_info, "PAST_INCIDENT")
@@ -83,11 +88,10 @@ class EditController < ApplicationController
     @categories = user_info[:categories][@news_contents[:code].to_sym]
     @ports = user_info[:ports][@news_contents[:code].to_sym]
 
-    @histories = fetch_histories(user_info,  @news_contents[:code])
+    @histories = fetch_histories(@news_contents[:code])
     contents_no = @params[:contents_no]
     @values = {} 
     @values = fetch_history_detail(
-                      user_info, 
                       @news_contents[:code], 
                       contents_no) unless contents_no.nil? || contents_no.empty?  
 
@@ -105,7 +109,7 @@ class EditController < ApplicationController
     @values[:status] = status
 
     if status == STATUS_NEW
-      new_proc(user_info, @news_contents, @values, contents_no, nil)
+      new_proc(@news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
       end
@@ -113,7 +117,7 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
-      edit_proc(user_info, @news_contents, @values, contents_no, nil)
+      edit_proc(@news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
       end
@@ -121,11 +125,12 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_SHOW
+      pdf_file =  DoscaAPI.pdf_download(@client_code, 
+                              @mail, @news_contents[:code], contents_no) 
+
+      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       @values[:contents_code] = @news_contents[:code]
       @values[:contents_no] = contents_no  
-      pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
-                              user_info[:mail], @news_contents[:code], contents_no) 
-      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -137,7 +142,10 @@ class EditController < ApplicationController
   def delete 
     @no_render = true
     user_info = user_info_from_session
-    resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], 
+    @mail = user_info[:mail]
+    @client_code = user_info[:client_code]
+
+    resp = DoscaAPI.remove(@client_code, @mail, 
               @params[:contents_code], @params[:contents_no])
     @cgi.out("type" => "application/json") {
       resp.to_json
@@ -149,9 +157,13 @@ class EditController < ApplicationController
   def preview
     @no_render = true
     user_info = user_info_from_session
+    @mail = user_info[:mail]
+    @client_code = user_info[:client_code]
+
     news_contents = extract_contents(user_info, "INCIDENT_NEWS")
-    pdf_file = create_pdf(user_info[:client_code], @params[:contents_code], @params[:contents_no], 
+    pdf_file = create_pdf(@params[:contents_code], @params[:contents_no], 
                         news_contents[:name], utc_time, @params)
+
     open(pdf_file) do |fp|
       basename = File.basename(pdf_file)
       header = {
@@ -162,11 +174,10 @@ class EditController < ApplicationController
         fp.read
       end
     end
+
     @session["files"] = nil
   rescue => e
     api_response("ERROR", e.to_s)
-  ensure
-    @session["files"] =  nil
   end
 
   def upload
@@ -189,14 +200,14 @@ class EditController < ApplicationController
 
   private
 
-  def new_proc(user_info, contents, values, contents_no, pdf_file)
+  def new_proc(contents, values, contents_no, pdf_file)
     if !pdf_file
-      pdf_file = create_pdf(user_info[:client_code], contents[:code], 
+      pdf_file = create_pdf(contents[:code], 
         contents_no, contents[:name], utc_time, @params)
     end
 
-    resp = DoscaAPI.new(user_info[:client_code],
-                      user_info[:mail], contents[:code],  pdf_file, @params) 
+    resp = DoscaAPI.new(@client_code,
+                      @mail, contents[:code],  pdf_file, @params) 
 
     if !has_error?(resp)
       @error_message = resp[:message]
@@ -204,18 +215,18 @@ class EditController < ApplicationController
     #File.delete pdf_file if File.exist?(pdf_file)
   end
 
-  def edit_proc(user_info, contents, values, contents_no, pdf_file)
+  def edit_proc(contents, values, contents_no, pdf_file)
     if !dirty?(values, @params)
       @error_message = "no change"
       return
     end
 
     if !pdf_file
-      pdf_file = create_pdf(user_info[:client_code], contents[:code], 
+      pdf_file = create_pdf(contents[:code], 
         contents_no, contents[:name], utc_time, @params)
     end
 
-    resp = DoscaAPI.update(user_info[:client_code],
+    resp = DoscaAPI.update(@client_code,
                         user_info[:mail], contents[:code], contents_no, pdf_file, @params) 
     if !has_error?(resp)
       @error_message = resp[:message]
@@ -233,8 +244,8 @@ class EditController < ApplicationController
     Application.symbolize_keys(JSON.parse(user_info_json))
   end
 
-  def fetch_histories(user_info, contents_code)
-    resp = DoscaAPI.history_list(user_info[:client_code], user_info[:mail], contents_code)
+  def fetch_histories(contents_code)
+    resp = DoscaAPI.history_list(@client_code, @mail, contents_code)
     his = []
     if !has_error?(resp)
       his = resp[:histories]
@@ -244,8 +255,8 @@ class EditController < ApplicationController
     his.sort_by{|item| item[:no]} if his.size > 1
   end
 
-  def fetch_history_detail(user_info, contents_code, contents_no)
-    resp = DoscaAPI.history_detail(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
+  def fetch_history_detail(contents_code, contents_no)
+    resp = DoscaAPI.history_detail(@client_code, @mail, contents_code, contents_no) 
     if has_error?(resp)
       {}
     else
@@ -261,12 +272,12 @@ class EditController < ApplicationController
     return false
   end
  
-  def create_pdf(client_code, contents_code, contents_no, title, issue_date, data)
+  def create_pdf(contents_code, contents_no, title, issue_date, data)
     path = Settings._settings[:server][:temp_pdf_directory]
-    pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
+    pdf_name = path + "/" + [@client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
     news_pictures = []
-    news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil?
+    news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil? || @session["files"].empty?
 
     pdf = PDFCreator.new(pdf_name, 
           title,

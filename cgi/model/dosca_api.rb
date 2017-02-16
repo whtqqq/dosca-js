@@ -15,16 +15,19 @@ class DoscaAPI
          "password" => password,
          "mail" => mail 
     }.to_json
+
     resp = http.request(req)
+    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + req.body.to_s)
+    LogWriter.info(mail, File.basename(uri.to_s) + " response:" + resp.body.to_s)
     Application.symbolize_keys(JSON.parse(resp.body)) 
   end
 
   def DoscaAPI.categories(client_code, mail, contents_code)
-    request_common Settings._settings[:api][:categories_url], client_code, mail, contents_code
+    request_common Settings._settings[:api][:categories_url], client_code, mail, contents_code, nil, true
   end
 
   def DoscaAPI.ports(client_code, mail, contents_code)
-    request_common Settings._settings[:api][:ports_url], client_code, mail, contents_code
+    request_common Settings._settings[:api][:ports_url], client_code, mail, contents_code, nil, true
   end
 
   def DoscaAPI.history_list(client_code, mail, contents_code)
@@ -60,6 +63,9 @@ class DoscaAPI
         }
       end
     end
+
+    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + req.body.to_s)
+    LogWriter.info(mail, File.basename(uri.to_s) + " response:" + original_name)
     original_name
   end
 
@@ -80,7 +86,7 @@ class DoscaAPI
 
   private
 
-  def DoscaAPI.request_common(url, client_code, mail, contents_code, contents_no=nil)
+  def DoscaAPI.request_common(url, client_code, mail, contents_code, contents_no=nil, no_log=false)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
      
@@ -96,6 +102,10 @@ class DoscaAPI
     req.body = body.to_json
 
     resp = http.request(req)
+    unless no_log
+      LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + req.body.to_s)
+      LogWriter.info(mail, File.basename(uri.to_s) + " response:" + resp.body.to_s)
+    end
     Application.symbolize_keys(JSON.parse(resp.body)) 
   end
 
@@ -150,6 +160,8 @@ class DoscaAPI
     req.body = post_body.join
 
     resp = http.request(req)
+    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + data.to_s)
+    LogWriter.info(mail, File.basename(uri.to_s) + " response:" + resp.body.to_s)
     Application.symbolize_keys(JSON.parse(resp.body)) 
   end
 end
