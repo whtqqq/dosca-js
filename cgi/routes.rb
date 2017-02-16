@@ -10,6 +10,7 @@ begin
   require './config/settings'
   require './controller/application_controller'
   require './pdf/pdf_creator'
+  require './logger/log_writer'
   LOAD_DIR = %w(model controller)
   LOAD_DIR.each do |dir|
     Dir.glob("./#{dir}/*.rb").each do |file|

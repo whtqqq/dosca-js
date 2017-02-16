@@ -69,7 +69,7 @@ class PDFCreator
       else
         remain = length % SUMMARY_LINE_WIDTH
         substr.scan(/.{#{SUMMARY_LINE_WIDTH}}/).each {|sline| arr << sline}
-        arr << substr[(length - remain)...length]
+        arr << substr[(length - remain)...length] if remain > 0
       end
     }
     arr

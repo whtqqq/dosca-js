@@ -3,6 +3,7 @@ server:
   contents_uri: /dosca-js/contents
   temp_pdf_directory: /host-dir/web/pdf
   temp_directory: /host-dir/log
+  log_directory: /host-dir/log
 api:
   login_url: http://localhost/dosca-js/api/get/auth_stub.cgi
   categories_url: http://localhost/dosca-js/api/get/categories_stub.cgi
