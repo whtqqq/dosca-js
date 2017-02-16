@@ -22,13 +22,12 @@ class EditController < ApplicationController
     contents_no = @params[:contents_no]
     @values = {} 
     @values = fetch_history_detail(
-                      user_info[:client_code], 
-                      user_info[:mail], 
+                      user_info, 
                       @past_contents[:code], 
-                      contents_no) if contents_no
+                      contents_no) unless contents_no.nil? || contents_no.empty?  
 
 
-    @values[:contents_code] =  user_info[:contents_code]
+    @values[:contents_code] =  @past_contents[:code]
     @values[:contents_no] = "" 
     gui_status = @params[:status]
     status = ""
@@ -57,9 +56,15 @@ class EditController < ApplicationController
     end
     
     if status == STATUS_SHOW
+      @values[:contents_code] = @past_contents[:code]
       @values[:contents_no] = contents_no  
       @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
-                              user_info[:mail], contents_code, contents_no) 
+                              user_info[:mail], @past_contents[:code], contents_no) 
+      if @values[:termination_date].nil ||  @values[:termination_date].empty
+        @values[:period]  = nil 
+      else 
+        @values[:period]  = "period"
+      end
     end
   end
 
@@ -79,12 +84,11 @@ class EditController < ApplicationController
     contents_no = @params[:contents_no]
     @values = {} 
     @values = fetch_history_detail(
-                      user_info[:client_code], 
-                      user_info[:mail], 
+                      user_info, 
                       @news_contents[:code], 
-                      contents_no) if contents_no
+                      contents_no) unless contents_no.nil? || contents_no.empty?  
 
-    @values[:contents_code] =  user_info[:contents_code]
+    @values[:contents_code] =  @news_contents[:code]
     @values[:contents_no] = "" 
     gui_status = @params[:status]
     status = ""
@@ -111,9 +115,15 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_SHOW
+      @values[:contents_code] = @news_contents[:code]
       @values[:contents_no] = contents_no  
       @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
-                              user_info[:mail], user_info[:contents_code], contents_no) 
+                              user_info[:mail], @news_contents[:code], contents_no) 
+      if @values[:termination_date].nil ||  @values[:termination_date].empty
+        @values[:period]  = nil 
+      else 
+        @values[:period]  = "period"
+      end
     end
   end
 
@@ -218,7 +228,7 @@ class EditController < ApplicationController
     his.sort_by{|item| item[:no]} if his.size > 1
   end
 
-  def fetch_history_detail(user_info, contents_code, conents_no)
+  def fetch_history_detail(user_info, contents_code, contents_no)
     resp = DoscaAPI.history_detail(user_info[:client_code], user_info[:mail], contents_code, contents_no) 
     if has_error?(resp)
       {}

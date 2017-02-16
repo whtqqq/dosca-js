@@ -44,6 +44,16 @@ class ApplicationController
        end.flatten(1)
     end
     @params = Hash[*form_array]
+    @params ||= {}
+    
+    uri = ENV["REQUEST_URI"]
+    unless uri.index("?").nil?
+      params = uri.match(/\?(.+)/)[1]
+      params.split("&").each do |pair| 
+        ar = pair.split("=")
+        @params[ar[0].to_sym] = ar[1] 
+      end
+    end
   end
 
   def redirect_to(url, status="REDIRECT")

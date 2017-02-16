@@ -50,10 +50,9 @@
 
 <div class="col-md-12">
 <form class="form-horizontal" role="form" method="post" action="">
-  <input type="hidden" id="ClientCode" name="client_code" value="">
-  <input type="hidden" id="ContentCode" name="contents_code" value="">
-  <input type="hidden" id="ContentNo" name="contents_no" value="">
-  <input type="hidden" id="pageStatus" name="page_status" value="1">
+  <input type="hidden" id="ContentCode" name="contents_code" value="<%=@values[:contents_code]%>">
+  <input type="hidden" id="ContentNo" name="contents_no" value="<%=@values[:contents_no]%>">
+  <input type="hidden" id="pageStatus" name="status" value="1">
   <input type="hidden" id="pageID" value="past">
   <input type="hidden" id="d3Map" name="map_picture" value="">
 
@@ -80,8 +79,8 @@
             </div>
             <div class="pull-right">
               <div class="btn-group">
-                <button type="button" class="btn btn-grey" id="noPeriod" style="width: 110px;">No Period</button>
-                <button type="button" class="btn btn-blue" id="Period" style="width: 110px;margin-right: 17px">Period</button>
+                <button type="button" class="btn <%='btn-grey' unless @values[:period].nil?%> <%='btn-blue' if @values[:period].nil?%>" id="noPeriod" style="width: 110px;">No Period</button>
+                <button type="button" class="btn <%='btn-blue' unless @values[:period].nil?%> <%='btn-grey' if @values[:period].nil?%>" id="Period" style="width: 110px;margin-right: 17px">Period</button>
               </div>
             </div>
           </div>
@@ -94,7 +93,7 @@
                 <label class=" col-sm-6 control-label">Termination Date</label>
                 <div class="col-sm-6">
                   <div class="input-group">
-                    <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" placeholder="2017/01/01" style="cursor:pointer;" readonly>
+                    <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" placeholder="2017/01/01" style="cursor:pointer;" readonly vlue="<%=@values[:termination_date]%>">
                     <span class="input-group-addon" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                   </div>
                   <span class="text-danger"></span>
@@ -122,7 +121,7 @@
                       <select class="" id="Category" name="category" onchange="$('.combo-input').attr('style', '');$('#Category').parent().parent().parent().attr('class','');$('#CategoryMsg').attr('hidden', 'true');">
                         <option value=""></option>
                         <% @categories.each {|value| %>
-                        <option><%= value %></option>
+                        <option <%="selected" if @values[:category] and value==@values[:category]%>><%= value %></option>
                         <% } %>
                       </select>
                       <span class="text-danger" id="CategoryMsg" hidden="true">Please select the Category.</span>
@@ -133,11 +132,13 @@
               <div class="col-md-12">
                 <div class="form-group" id="incidentGroup">
                   <label class="col-sm-6 control-label" style="text-align: left;"><%= @items[:date_time] %></label>
+                  <% date_arr = nil %>
+                  <% date_arr = @values[:date_time].split(" ") unless @values[:date_time].nil? ||  @values[:date_time].empty?%>
                   <div class="col-sm-6 pull-right">
                     <div class="row">
                       <div class="col-md-6" style="padding-right: 5px;">
                         <input type="text" class="form-control bg-white" id="incidentDate" style="cursor:pointer;" onchange="$('#incidentGroup').attr('class', 'form-group');
-                            $('#incidentMsg').text('');" readonly>
+                            $('#incidentMsg').text('');" readonly value="<%=date_arr[0] if date_arr%>">
                       </div>
                       <div class="col-md-6 none-padding">
                         <div class="col-md-5 none-padding">
@@ -145,7 +146,7 @@
                               $('#incidentMsg').text('');">
                             <option value=""></option>
                             <% (0..23).each {|num| %>
-                              <option value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
+                              <option <%="selected" if date_arr && date_arr[1].to_i == num%> value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
                             <% } %>
                           </select>
                         </div>
@@ -157,7 +158,7 @@
                               $('#incidentMsg').text('');">
                             <option value=""></option>
                             <% (0..59).each {|num| %>
-                              <option value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
+                              <option <%="selected" if date_arr && date_arr[2].to_i == num%> value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
                             <% } %>
                           </select>
                         </div>
@@ -172,7 +173,7 @@
                 <div class="form-group">
                   <label for="VESSELNAME" class="col-sm-6 control-label" style="text-align: left;"><%= @items[:vessel_name] %></label>
                   <div class="col-sm-6 pull-right">
-                    <input type="text" class="form-control" id="Vessel" name="vessel_name" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+                    <input type="text" class="form-control" id="Vessel" name="vessel_name" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');" value="<%=@values[:vessel_name]%>">
                     <span class="text-danger"></span>
                   </div>
                 </div>
@@ -181,7 +182,7 @@
                 <div class="form-group">
                   <label for="CARGO" class="col-sm-6 control-label" style="text-align: left;"><%= @items[:cargo] %></label>
                   <div class="col-sm-6 pull-right">
-                    <input type="text" class="form-control" id="Cargo" name="cargo" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+                    <input type="text" class="form-control" id="Cargo" name="cargo" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');" value="<%=@values[:cargo]%>">
                     <span class="text-danger"></span>
                   </div>
                 </div>
@@ -230,7 +231,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -247,7 +248,7 @@
         <div class="col-md-12 none-padding history-style">
           <ul class="list-group history-ul-style" id="historyList" style="height: 318px;">
             <% @histories.each{|his|%>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);"><%=his[:title]%></span>
+            <span class="list-group-item li-padding hand-mouse" onclick="loadHistory(<%=@values[:contents_no]%>);"><%=his[:title]%></span>
             <% }%>
           </ul>
         </div>
@@ -411,6 +412,9 @@
 
   d3.select("svg").on("dblclick", dblclicked);
 
+ function loadHistory(contents_no) {
+    window.location.href = '/dosca-js/edit/past?contents_no=' + contents_no;
+  }
 </script>
 <script>
 $(document).ready(function() {
@@ -447,6 +451,9 @@ $(document).ready(function() {
         $.alert("cancel");
       }
     }
+  });
+  $('#Port').change(function(){
+    $('#Position').val($(this).val());
   });
 });
 </script>

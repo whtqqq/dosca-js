@@ -49,18 +49,17 @@ class DoscaAPI
          "contents_no" => contents_no
     }.to_json
 
-    resp = http.request(req)
-    return Application.symbolize_keys(JSON.parse(resp.body)) if resp.header.index("application/json")
-
-    filename = Settings._settings[:server][:temp_pdf_directory] + "/"
-             + resp.header["Content-Disposition"].match(/filename=\"(.+)\"/)[1]
-    File.open(filename,"w"){ |f|
-      resp.read_body{ |seg|
-        f << seg
-        sleep 0.005 
-      }
-    }
-    filename
+    file_name = nil
+    http.request(req) do |resp|
+      original_name =  resp.header["Content-Disposition"].match(/filename=\"(.+)\"/)[1]
+      file_name = Settings._settings[:server][:temp_pdf_directory]+ "/" + original_name
+      File.open(file_name, "w") do |f|
+        resp.read_body{ |seg|
+          f << seg
+        }
+      end
+    end
+    file_name
   end
 
   def DoscaAPI.new(client_code, mail, contents_code, pdf_file, submit_data)
@@ -87,13 +86,13 @@ class DoscaAPI
     req = Net::HTTP::Post.new(uri.request_uri)
      
     req["Content-Type"] = "application/json"
-    req.body = {
+    body = {
          "client_code" => client_code,
          "mail" => mail,
          "contents_code" => contents_code
-    }.to_json
-
-    req.body[:contents_no] = contents_no if contents_no
+    }
+    body["contents_no"] = contents_no unless contents_no.nil? || contents_no.empty?
+    req.body = body.to_json
 
     resp = http.request(req)
     Application.symbolize_keys(JSON.parse(resp.body)) 
@@ -107,27 +106,27 @@ class DoscaAPI
     header = {"type"=> "multipart/form-data, boundary=#{my_boundary}"}
     req = Net::HTTP::Post.new(uri.request_uri, header)
 
-    json  = {
+    data  = {
          "client_code" => client_code,
          "mail" => mail,
          "contents_code" => contents_code
-    }.to_json
-    json["contents_no"] = contents_no if contents_no
+    }
+    data["contents_no"] = contents_no unless contents_no.nil? || contents_no.empty?
 
     #add submit data
-    json["subject"] = submit_data[:subject] || ""
-    json["category"] = submit_data[:category] || ""
-    json["summary"] = submit_data[:summary] || ""
-    json["web_page"] = submit_data[:web_page] || ""
-    json["termination_date"] = submit_data[:termination_date] || ""
-    json["date_time"] = submit_data[:date_time] || ""
-    json["cargo"] = submit_data[:cargo] || ""
-    json["vessel_name"] = submit_data[:vessel_name] || ""
+    data["subject"] = submit_data[:subject] || ""
+    data["category"] = submit_data[:category] || ""
+    data["summary"] = submit_data[:summary] || ""
+    data["web_page"] = submit_data[:web_page] || ""
+    data["termination_date"] = submit_data[:termination_date] || ""
+    data["date_time"] = submit_data[:date_time] || ""
+    data["cargo"] = submit_data[:cargo] || ""
+    data["vessel_name"] = submit_data[:vessel_name] || ""
 
     if !submit_data[:location].blank?
       localtion = submit_data[:latitude].split(",")
-      json["longitude"] = location[0]
-      json["latitude"] = location[1]
+      data["longitude"] = location[0]
+      data["latitude"] = location[1]
     end
 
 
@@ -137,7 +136,7 @@ class DoscaAPI
     post_body << "--#{my_boundary}\r\n"
     post_body << "Content-Disposition: form-data; name=\"contents_key[]\"\r\n\r\n"
     post_body << "Content-Type: application/json\r\n\r\n"
-    post_body << json
+    post_body << data.to_json
     post_body << "\r\n\r\n--#{my_boundary}--\r\n"
 
     # add file data

@@ -83,8 +83,8 @@
             </div>
             <div class="pull-right">
               <div class="btn-group">
-                <button type="button" class="btn btn-grey" id="noPeriod" style="width: 110px;">No Period</button>
-                <button type="button" class="btn btn-blue" id="Period" style="width: 110px;margin-right: 17px">Period</button>
+                <button type="button" class="btn <%='btn-grey' unless @values[:period].nil?%> <%='btn-blue' if @values[:period].nil?%>" id="noPeriod" style="width: 110px;">No Period</button>
+                <button type="button" class="btn <%='btn-blue' unless @values[:period].nil?%> <%='btn-grey' if @values[:period].nil? %>" id="Period" style="width: 110px;margin-right: 17px">Period</button>
               </div>
             </div>
           </div>
@@ -98,7 +98,7 @@
                 <select class="" id="Category" name="category" onchange="$('.combo-input').attr('style', '');$('#Category').parent().parent().parent().attr('class','');$('#CategoryMsg').attr('hidden', 'true');">
                   <option value=""></option>
                   <% @categories.each {|value| %>
-                     <option><%= value %></option>
+                     <option <%="selected" if @values[:category] and value==@values[:category]%>><%= value %></option>
                   <% } %>
                 </select>
                 <span class="text-danger" id="CategoryMsg" hidden="true"></span>
@@ -109,7 +109,7 @@
               <div class="col-sm-3">
                 <div class="input-group">
                   <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" style="cursor:pointer;" onchange="$('#TerminationDate').parent().parent().parent().attr('class', '');
-                      $('#TerminationDate').parent().next().text('');" readonly>
+                      $('#TerminationDate').parent().next().text('');" readonly value="<%=@values[:termination_date]%>">
                   <span class="input-group-addon hand-mouse" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
                 <span class="text-danger"></span>
@@ -122,7 +122,7 @@
           <div class="form-group">
             <label for="Subject" class="col-sm-2 control-label"><%= @items[:subject] %></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="Subject" name="subject" maxlength="50" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+              <input type="text" class="form-control" id="Subject" name="subject" maxlength="50" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');" value="<%=@values[:subject]%>">
               <span class="text-danger"></span>
             </div>
           </div>
@@ -132,7 +132,7 @@
           <div class="form-group">
             <label for="Summary" class="col-sm-2 control-label"><%= @items[:summary] %></label>
             <div class="col-sm-10">
-              <textarea cols="120" rows="10" class="form-control" id="Summary" name="summary" maxlength="3000" style="resize: none;" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');"></textarea>
+              <textarea cols="120" rows="10" class="form-control" id="Summary" name="summary" maxlength="3000" style="resize: none;" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');"><%=@values[:summary]%></textarea>
               <span class="text-danger"></span>
             </div>
           </div>
@@ -151,7 +151,7 @@
           <div class="form-group">
             <label for="WebPage" class="col-sm-2 control-label"><%= @items[:web_page] %></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="WebPage" name="web_page" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');">
+              <input type="text" class="form-control" id="WebPage" name="web_page" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');" value="<%=@values[:web_page]%>">
               <span class="text-danger"></span>
             </div>
           </div>
@@ -181,7 +181,7 @@
                 <select id="Port" name="ports">
                   <option value=""></option>
                  <% @ports.each {|hash| %>
-                    <option value="<%= hash.keys[0] %>"><%= hash.keys[0] %></option>
+                    <option value="<%= hash.values[0] %>"><%= hash.keys[0] %></option>
                   <% } %>
                 </select>
               </div>
@@ -189,7 +189,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -205,7 +205,7 @@
         <div class="col-md-12 none-padding history-style">
           <ul class="list-group history-ul-style" id="historyList" style="height: 345px; ">
             <% @histories.each{|his|%>
-            <span class="list-group-item li-padding hand-mouse" onclick="selectHistory(this);"><%=his[:title]%></span>
+            <span class="list-group-item li-padding hand-mouse" onclick="loadHistory('<%=his[:contents_no]%>');"><%=his[:title]%></span>
             <% }%>
           </ul>
         </div>
@@ -368,6 +368,10 @@
 
     d3.select("svg").on("dblclick", dblclicked);
 
+    function loadHistory(contents_no) {
+      window.location.href = '/dosca-js/edit/news?contents_no=' + contents_no;
+    }
+
   </script>
   <script>
   $(document).ready(function() {
@@ -404,6 +408,9 @@
           $.alert("cancel");
         }
       }
+    });
+    $('#Port').change(function(){
+      $('#Position').val($(this).val()); 
     });
   });
   </script>
