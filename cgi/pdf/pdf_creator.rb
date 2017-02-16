@@ -4,19 +4,20 @@ require 'color/rgb/metallic'
 
 # Example
 ############################################################
-#    pdf = PDFCreator.new("my.pdf","1993/10/25", "Off port of Kashima", 
+#    pdf = PDFCreator.new("my.pdf","title_name", "1993/10/25", "Off port of Kashima", 
 #      "Collision", "Vessel A sank in the off Kashima ", "Any long string here",
 #       "chunkybacon.jpg",["chunkybacon.png","chunkybacon.png"])
 #    pdf.create()
 class PDFCreator
   attr_accessor :pdf
 
-  SUMMARY_LINES = 15
+  SUMMARY_LINES = 25
   SUMMARY_LINE_WIDTH = 120
 
-  def initialize(pdf_name, issue_date, location, category, subject, str_list,
+  def initialize(pdf_name, title_name, issue_date, location, category, subject, str_list,
      map_image, news_images)
     @pdf_name = pdf_name
+    @title_name = title_name
     @issue_date = issue_date
     @location = location
     @category = category
@@ -28,21 +29,22 @@ class PDFCreator
     @pdf = PDF::Writer.new("A4")
     @pdf.select_font("Helvetica")
     @pdf.stroke_color    Color::RGB::Black
-    @pdf.rectangle(25, 25, @pdf.margin_width + 25, @pdf.margin_height).stroke
+    @pdf.margins_pt(10, 10, 10, 10)
+    @pdf.rectangle(20, 10, @pdf.margin_width - 15, @pdf.margin_height - 10).stroke
   end
 
-  def create_table(font_size, title_name, show_lines, shaded_rows)
-      PDF::SimpleTable.new do |tab|
+  def create_table(font_size, title_name,position, width, show_lines, shaded_rows)
+    PDF::SimpleTable.new do |tab|
       tab.column_order.push(*%w(colname))
       tab.columns["colname"] = PDF::SimpleTable::Column.new("colname") { |col|
         col.heading = "colname"
       }
       tab.show_lines    = show_lines
-      tab.show_headings = false 
+      tab.show_headings = false
       tab.orientation   = :center
-      tab.position      = 313
+      tab.position      = position + 2.5
       tab.font_size     = font_size
-      tab.width         = @pdf.margin_width + 25
+      tab.width         = width - 15
       tab.shade_rows    = shaded_rows
       data = [{ "colname" => "     " + title_name}]
       tab.data.replace data
@@ -50,34 +52,8 @@ class PDFCreator
     end
   end
 
-  def print_brief_info(info, line_no, offset_height) 
-    @pdf.move_pointer(16)
-    @pdf.text "#{info}", :font_size => 10, :justification => :left
-    @pdf.move_pointer(8)
-    height = line_no * 35 + offset_height
-    @pdf.line(25, @pdf.margin_height - height, @pdf.margin_width - 180, @pdf.margin_height - height).stroke
-  end
-
-  def create_line()
-    @pdf.move_pointer(6)
-    text = "Issue Date:" + "#{@issue_date}"
-    print_brief_info(text, 1, 30)
-
-    #location
-    text = "Location:" + "#{@location}"
-    print_brief_info(text, 2, 30)
-
-    #category
-    text = "Category:" + "#{@category}"
-    print_brief_info(text, 3, 30)
-
-    #subject
-    text = "Subject:" + "#{@subject}"
-    print_brief_info(text, 4, 30)
-  end
-
-  def put_image(image, x, y, h)
-    @pdf.add_image_from_file("#{image}", x, y, @pdf.margin_width - 275, h)
+  def put_image(image, x, y, w, h)
+    @pdf.add_image_from_file("#{image}", x, y, w, h)
   end
 
   def str_to_arr(str)
@@ -95,7 +71,7 @@ class PDFCreator
 
         str_arr.each_byte { |x| s<<"%c"%x
 
-          if i == NO
+          if i ==  SUMMARY_LINE_WIDTH
             i = 0
             j = j + 1
             str1 = ""
@@ -114,32 +90,74 @@ class PDFCreator
     arr
   end
 
-  def create()
-    #Title
-    create_table(40, "  MOL Incident News", :all, :shaded)
+  def create_line(height)
+    @pdf.line(20, @pdf.margin_height - height, @pdf.margin_width - 180, @pdf.margin_height - height).stroke
+  end
 
-    #Information 
-    create_line()
+  def create()
+    @pdf.move_pointer(-50)
+    #Title
+    create_table(30, "                " + "#{@title_name}", 311, @pdf.margin_width, :all, :shaded)
+
+    #Information
+    #issue_date
+    @pdf.move_pointer(9)
+    create_table(10, "Issue Date:" + "#{@issue_date}", 221, @pdf.margin_width - 180, :none, :none)
+    create_line(60)
+
+    #location
+    @pdf.move_pointer(9)
+    create_table(10, "Location:" + "#{@location}", 221, @pdf.margin_width - 180, :none, :none)
+    create_line(85)
+
+    #category
+    @pdf.move_pointer(9)
+    create_table(10, "Category:" + "#{@category}", 221, @pdf.margin_width - 180, :none, :none)
+    create_line(110)
+
+    #subject
+    @pdf.move_pointer(9)
+    create_table(10, "Subject:" + "#{@subject}", 221, @pdf.margin_width - 180, :none, :none)
 
     #Map image
-    put_image(@map_image, @pdf.margin_width - 215, @pdf.margin_height - 171,150)
+    put_image(@map_image, @pdf.margin_width - 180, @pdf.margin_height - 133, nil, 96)
 
     #Summary
     arr = str_to_arr(@str_list)
-    create_table(25, "                       Summary", :all, :shaded)
+    @pdf.move_pointer(2)
+    create_table(15, "                                                         Summary", 311, @pdf.margin_width, :all, :shaded)
+    @pdf.move_pointer(2)
     (1..SUMMARY_LINES).each { |i| 
-      create_table(8,  "#{arr[i]}", :none, :none)
+      create_table(8.5, "#{arr[i]}", 311, @pdf.margin_width, :none, :none)
     }
 
     #Write news images
-    create_table(25, "                       Picture",:all,:shaded)
-    put_image(@news_image[0], 40, 25, 130) if @news_image && @news_image.size > 0 
-    put_image(@news_image[1], 315, 25, 130) if @news_image && @news_image.size > 1
-    put_image(@news_image[2], 40, 160, 130) if @news_image && @news_image.size > 2
-    put_image(@news_image[3], 315, 160, 130) if @news_image && @news_image.size > 3
+    create_table(15, "                                                         Picture", 311, @pdf.margin_width, :all, :shaded)
+    #One picture
+    if @news_images && @news_images.size == 1
+      put_image(@news_images[0], 160, 13, nil, 230)
+    end
+    #Two pircture
+    if @news_images && @news_images.size == 2
+      put_image(@news_images[0], 45, 33, nil, 180)
+      put_image(@news_images[1], 320, 33, nil, 180)
+    end
+    #Three picture
+    if @news_images && @news_images.size == 3
+      put_image(@news_images[0], 100, 130, nil, 115)
+      put_image(@news_images[1], 385, 130, nil, 115)
+      put_image(@news_images[2], 100, 13, nil, 115)
+    end
+    #Four picture
+    if @news_images && @news_images.size == 4
+      put_image(@news_images[0], 100, 130, nil, 115)
+      put_image(@news_images[1], 385, 130, nil, 115)
+      put_image(@news_images[2], 100, 13, nil, 115)
+      put_image(@news_images[3], 385, 13, nil, 115)
+    end
 
     #Save pdf file
-    File.delete(@pdf_name) if File.exists(@pdf_name)
+    #File.delete(@pdf_name) if File.exists(@pdf_name)
     @pdf.save_as(@pdf_name)
   end
 end
