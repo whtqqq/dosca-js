@@ -105,8 +105,8 @@ $(document).ready(function() {
   //   URLChk($('#WebPage'));
   // });
 
-  if($("#pageStatus").val() == 2 && $("#pageID").val == "past") {
-    
+  if($("#pageStatus").val() == 2 && $("#pageID").val() == "past") {
+    $("#PictureDownload").attr("style", "display:block;");
   }
 
 });

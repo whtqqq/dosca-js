@@ -144,12 +144,18 @@ function submitChk(){
     flg ++;
   }
 
+  // if($('#Picture').fileinput('getFilesCount') == 0 ) {
+  //   $.alert("Upload file is require.")
+  //   flg ++;
+  // }
+
   if(flg != 0) {
     return false;
   } else {
     svgAsPngUri($('svg')[0], {}, function(uri) {
 	     $("#d3Map").val(uri);
     });
+    $('#Picture').fileinput('upload');
     //Todo submit
     alert("submit");
     return true;
