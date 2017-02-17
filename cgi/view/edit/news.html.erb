@@ -41,7 +41,7 @@
         <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
         <%if @past_contents %>
           <!-- <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}"><%= @past_contents[:name] %></a></li> -->
-          <li><a class="nav-border" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
+          <li><a class="nav-border hand-mouse" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
           <li><a href="<%=@root_uri%>/edit/past" id="pastBtnY" class="jump nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
           <li><a href="<%=@root_uri%>/edit/past" id="pastBtnN" class="nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
         <% end %>
