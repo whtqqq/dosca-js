@@ -41,7 +41,7 @@ class EditController < ApplicationController
     @values[:status] = status
     
     if status == STATUS_NEW
-      pdf_file = save_temp_file(@cgi.params["files"][0])
+      pdf_file = save_temp_file(@session["files"][0])
       new_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
         @value = @params.dup
@@ -49,7 +49,7 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
-      pdf_file = save_temp_file(@cgi.params["files"][0])
+      pdf_file = save_temp_file(@session["files"][0])
       edit_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
         @value = @params.dup
@@ -61,7 +61,7 @@ class EditController < ApplicationController
       @values[:contents_no] = contents_no  
       pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @past_contents[:code], contents_no) 
-      @values[:pdf_file] = (Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file).to_s
+      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       $stderr.puts @values[:pdf_file]
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
@@ -121,8 +121,9 @@ class EditController < ApplicationController
     if status == STATUS_SHOW
       @values[:contents_code] = @news_contents[:code]
       @values[:contents_no] = contents_no  
-      @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
+      pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @news_contents[:code], contents_no) 
+      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -173,6 +174,20 @@ class EditController < ApplicationController
       @cgi.out("type" => "application/json")  {
         json
       }
+  end
+
+  def upload
+    @session[:files] =  @params["files[]"]
+    @no_render = true
+
+    json = {
+       "resulet" => "SUCCESS",
+       "message" => ""
+    }.to_json
+
+    @cgi.out("type" => "application/json")  {
+       json
+    }
   end
 
   private
@@ -253,7 +268,7 @@ class EditController < ApplicationController
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@params[:map_picture], path)
-    news_pictures = @cgi.params["files"]
+    news_pictures = @session["files"]
 
     pdf = PDFCreator.new(pdf_name, 
           title,

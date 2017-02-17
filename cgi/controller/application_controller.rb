@@ -34,18 +34,11 @@ class ApplicationController
   end
 
   def params_parse
-    if @params != nil
-      form_array = @params.map do |key, value|
-        if value.size == 1 && value.kind_of?(Array)
-          [key.to_sym, value.first]
-        else
-          [key.to_sym, value]
-        end
-       end.flatten(1)
+    unless @params.nil?
+       @params = Application.symbolize_keys(@params)
     end
-    @params = Hash[*form_array]
     @params ||= {}
-    
+
     uri = ENV["REQUEST_URI"]
     unless uri.index("?").nil?
       params = uri.match(/\?(.+)/)[1]

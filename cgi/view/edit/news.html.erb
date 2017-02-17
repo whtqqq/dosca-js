@@ -51,7 +51,7 @@
 </div>
 
 <div class="col-md-12">
-<form class="form-horizontal" role="form" method="post" action="/dosca-js/edit/news">
+<form class="form-horizontal" id="editForm" role="form" method="post" action="/dosca-js/edit/news">
   <input type="hidden" id="ClientCode" name="client_code" value="">
   <input type="hidden" id="ContentCode" name="contents_code" value="">
   <input type="hidden" id="ContentNo" name="contents_no" value="">
@@ -142,7 +142,7 @@
           <div class="form-group">
             <label for="Picture" class="col-sm-2 control-label"><%= @items[:picture] %></label>
             <div class="col-sm-10">
-              <input type="file" class="file" id="Picture" name="files[]" multiple data-preview-file-type="any" data-upload-url="dosca-js/edit/upload">
+              <input type="file" class="file" id="Picture" name="files[]" multiple data-preview-file-type="any" data-upload-url="/dosca-js/edit/upload">
             </div>
           </div>
         </div>
