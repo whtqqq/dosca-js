@@ -116,7 +116,6 @@ puts ""
 
 json = cgi.params
 
-$stderr.puts json
 json = JSON.parse(json.to_s)
 
 unless json["client_code"].index("NYK").nil?

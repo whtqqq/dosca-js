@@ -38,7 +38,7 @@
     <div class="col-md-8 none-padding-left">
       <ul class="nav nav-tabs">
        <%if @news_contents %>
-         <li><a class="nav-border" onclick="if($('#pageStatus').val() == 4) {$('#newBtnY').click();} else {$('#newBtnN')[0].click();}"><%=@news_contents[:name]%></a></li>
+         <li><a class="nav-border hand-mouse" onclick="if($('#pageStatus').val() == 4) {$('#newBtnY').click();} else {$('#newBtnN')[0].click();}"><%=@news_contents[:name]%></a></li>
          <li><a href="<%=@root_uri%>/edit/news" id="newBtnY" class="jump nav-border" style="display: none"><%=@news_contents[:name]%></a></li>
          <li><a href="<%=@root_uri%>/edit/news" id="newBtnN" class="nav-border" style="display: none"><%=@news_contents[:name]%></a></li>
        <%end %>
@@ -57,8 +57,8 @@
   <input type="hidden" id="d3Map" name="map_picture" value="">
 
   <!--Left-Start-->
-  <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left">
-    <div class="panel panel-default left-panel panel-bg-blue" id="leftPanel">
+  <div class="col-lg-8 col-md-8 col-sm-8 none-padding-left" id="leftPanel">
+    <div class="panel panel-default left-panel panel-bg-blue">
       <div class="panel-body">
         <div class="col-md-12">
           <div class="row">
