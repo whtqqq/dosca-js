@@ -134,11 +134,11 @@ function submitChk(){
     }
   }
 
-  if($("#pageID").val() == "edit") {
-    if(!afterDateChk()) {
-      flg ++;
-    }
-  }
+  // if($("#pageID").val() == "edit") {
+  //   if(!afterDateChk()) {
+  //     flg ++;
+  //   }
+  // }
 
   if(!URLChk($('#WebPage'))) {
     flg ++;
@@ -206,52 +206,6 @@ function submitBtnActive() {
     $("#preBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
   }
 }
-// function submitBtnActive() {
-//   var flg = 0;
-//   var category        = $("#Category").val();
-//   var subject         = $("#Subject").val();
-//   var summary         = $("#Summary").val();
-//   var position        = $("#Position").val();
-//   var terminationDate = $("#TerminationDate").val();
-//   var vessel          = $("#Vessel").val();
-//   var cargo           = $("#Cargo").val();
-//
-//   if(category.length == 0) {
-//     console.log("**category**");
-//     flg++;
-//   }
-//   if(subject != undefined && subject != null && subject.length == 0) {
-//     console.log("**subject**");
-//     flg++;
-//   }
-//   if(summary != undefined && summary != null && summary.length == 0) {
-//     flg++;
-//     console.log("**summary**");
-//   }
-//   if(position != undefined && position != null && position.length == 0) {
-//     console.log("**position**");
-//     flg++;
-//   }
-//   if(terminationDate != undefined && terminationDate != null && terminationDate.length == 0) {
-//     console.log("**terminationDate**");
-//     flg++;
-//   }
-//   if(vessel != undefined && vessel != null && vessel.length == 0) {
-//     console.log("**vessel**");
-//     flg++;
-//   }
-//   if(cargo != undefined && cargo != null && cargo.length == 0) {
-//     console.log("**cargo**");
-//     flg++;
-//   }
-//
-//   if(flg == 0) {
-//     $("#submitBtn").attr("class", "btn btn-pink").removeAttr("disabled");
-//   } else {
-//     $("#submitBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
-//   }
-//
-// }
 
 /*##########input chk##########*/
 function inputChk(e) {
@@ -309,7 +263,7 @@ function URLChk(e) {
 function pointChk() {
   var input = $('#Position').val();
   if(input != null && input.length > 0) {
-    var reg = /^(([1-9]\d?)(\.\d{1,5})?|(1[0-7]\d)(\.\d{1,5})?|180(\.0{1,5})?|0(\.\d{1,5})?)[EW]\,(([1-9])(\.\d{1,5})?|([1-8]\d)(\.\d{1,5})?|90(\.0{1,5})?)[SN]$/;
+    var reg = /^(([1-9])(\.\d{1,5})?|([1-8]\d)(\.\d{1,5})?|90(\.0{1,5})?)[SN]\,(([1-9]\d?)(\.\d{1,5})?|(1[0-7]\d)(\.\d{1,5})?|180(\.0{1,5})?|0(\.\d{1,5})?)[EW]$/;
 
     if(reg.test(input)) {
       $('#Position').parent().parent().attr("class","form-group");
