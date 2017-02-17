@@ -29,7 +29,7 @@
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="user_name" id="username"  placeholder="Enter your Username" onchange="$('#userNameGroup').attr('class','form-group');$('#userNameMsg').hide();" value="<%= @params[:username] %>"/>
+                  <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username" onchange="$('#userNameGroup').attr('class','form-group');$('#userNameMsg').hide();" value="<%= @params[:username] %>"/>
                 </div>
                 <span class="text-danger" id="userNameMsg" hidden></span>
               </div>
@@ -51,7 +51,7 @@
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="mail" id="email" placeholder="Enter your Email" onchange="$('#emailGroup').attr('class','form-group');$('#emailMsg').hide();" value="<%= @params[:email] %>"/>
+                  <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" onchange="$('#emailGroup').attr('class','form-group');$('#emailMsg').hide();" value="<%= @params[:email] %>"/>
                 </div>
                 <span class="text-danger" id="emailMsg" hidden></span>
               </div>
