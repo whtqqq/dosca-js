@@ -256,7 +256,7 @@
         <div class="col-md-12 none-padding history-style">
           <ul class="list-group history-ul-style" id="historyList" style="height: 318px;">
             <% @histories.each{|his|%>
-            <span class="list-group-item li-padding hand-mouse" onclick="loadHistory(<%=@values[:contents_no]%>);"><%=his[:title]%></span>
+            <span class="list-group-item li-padding hand-mouse" onclick="loadHistory(<%=his[:contents_no]%>);"><%=his[:title]%></span>
             <% }%>
           </ul>
         </div>

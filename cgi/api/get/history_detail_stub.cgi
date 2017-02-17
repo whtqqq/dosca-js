@@ -57,8 +57,8 @@ puts ""
 
 json = cgi.params
 
+$stderr.puts json
 json = JSON.parse(json.to_s)
-$stderr.puts json.to_s
 if json["contents_code"].index("NEWS").nil?
 $stderr.puts "-----past---------"
   resp_past
