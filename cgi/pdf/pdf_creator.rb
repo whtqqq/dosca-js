@@ -1,6 +1,7 @@
 require 'pdf/writer'
 require 'pdf/simpletable'
 require 'color/rgb/metallic'
+require 'chunky_png'
 
 # Example
 ############################################################
@@ -23,7 +24,7 @@ class PDFCreator
     @category = category
     @subject = subject
     @map_image = map_image
-    @news_images = news_images
+    @news_images [] = news_images
     @str_list = str_list
 
     @pdf = PDF::Writer.new("A4")
@@ -31,6 +32,16 @@ class PDFCreator
     @pdf.stroke_color    Color::RGB::Black
     @pdf.margins_pt(10, 10, 10, 10)
     @pdf.rectangle(20, 10, @pdf.margin_width - 15, @pdf.margin_height - 10).stroke
+   
+    unless @map_image.nil? 
+      image = ChunkyPNG::Image.from_file(@map_image)
+      image.save(@map_image, {:color_mode=> ChunkyPNG::COLOR_INDEXED, :bit_depth=> 8})
+    end
+
+    @news_images.each do |file|
+      image = ChunkyPNG::Image.from_file(file)
+      image.save(file, {:color_mode=> ChunkyPNG::COLOR_INDEXED, :bit_depth=> 8})
+    end
   end
 
   def create_table(font_size, title_name,position, width, show_lines, shaded_rows)
