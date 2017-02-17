@@ -35,7 +35,7 @@ class ApplicationController
 
   def params_parse
     unless @params.nil?
-       Application.symbolize_keys(@params)
+       @params = Application.symbolize_keys(@params)
     end
     @params ||= {}
 
