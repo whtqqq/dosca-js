@@ -1,6 +1,12 @@
 #!/usr/bin/ruby
 
+require 'rubygems'
+require 'bundler'
+
+Bundler.require
+
 require 'cgi'
+require 'json'
 
 def resp_error
 puts <<END
@@ -42,8 +48,16 @@ end
 
 cgi = CGI.new
 
+
+
 puts "Content-Type: application/json\n"
 
 puts ""
 
-resp_success
+json = cgi.params
+
+unless json["contents_code"].index("NEWS").nil?
+  resp_news
+else
+  resp_past
+end
