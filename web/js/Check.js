@@ -144,23 +144,53 @@ function submitChk(){
     flg ++;
   }
 
-  // if($('#Picture').fileinput('getFilesCount') == 0 ) {
-  //   $.alert("Upload file is require.")
-  //   flg ++;
-  // }
 
+  var submitStatus = true;
   if(flg != 0) {
-    return false;
+    submitStatus = false;
   } else {
+    //D3 pic save
     svgAsPngUri($('svg')[0], {}, function(uri) {
-	     $("#d3Map").val(uri);
+      $("#d3Map").val(uri);
     });
-    $('#Picture').fileinput('upload');
+    //file upload submit
+    $('#Picture')
+    .on("filebatchuploaderror", function(event, data) {
+      if(data.response) {
+          submitStatus = false;
+      }
+    })
+    .on("filecustomerror", function(event, data) {
+      if(data.response) {
+          submitStatus = false;
+      }
+    })
+    .on("fileuploaderror", function(event, data) {
+      if(data.response) {
+          submitStatus = false;
+      }
+    })
+    .on("filebatchuploadsuccess", function(event, data) {
+      if(data.response) {
+          submitStatus = true;
+      }
+    });
+    //new page
+    if($('#Picture').fileinput('getFilesCount') > 0 ) {
+      $('#Picture').fileinput('upload');
+    }
+    //past page
+    if($("#pageID").val() == "past" && $('#Picture').fileinput('getFilesCount') == 0 && $("#picUp").val() == "false") {
+      submitStatus = false;
+      $('#Picture').fileinput('upload');
+    }
+    if($("#pageID").val() == "past") {
+      $('#Picture').fileinput('upload');
+    }
     //Todo submit
-    alert("submit");
-    return true;
+    alert("submitStatus:"+submitStatus);
   }
-
+  return submitStatus;
 }
 
 
