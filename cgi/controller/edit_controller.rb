@@ -41,7 +41,7 @@ class EditController < ApplicationController
     @values[:status] = status
     
     if status == STATUS_NEW
-      pdf_file = save_temp_file(@cgi.params["files"][0])
+      pdf_file = save_temp_file(@session["files"][0])
       new_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
         @value = @params.dup
@@ -49,7 +49,7 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
-      pdf_file = save_temp_file(@cgi.params["files"][0])
+      pdf_file = save_temp_file(@session["files"][0])
       edit_proc(user_info, @past_contents, @values, contents_no, pdf_file)
       if @error_message
         @value = @params.dup
@@ -176,6 +176,17 @@ class EditController < ApplicationController
       }
   end
 
+  def upload
+     @session[:files] =  @cgi.params["files"]
+     @no_render = true
+     json = {
+       "resulet" => "SUCCESS",
+       "message" => ""
+     }.to_json
+       @cgi.out("type" => "application/json")  {
+     }
+  end
+
   private
 
   def new_proc(user_info, contents, values, contents_no, pdf_file)
@@ -254,7 +265,7 @@ class EditController < ApplicationController
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@params[:map_picture], path)
-    news_pictures = @cgi.params["files"]
+    news_pictures = @session["files"]
 
     pdf = PDFCreator.new(pdf_name, 
           title,
