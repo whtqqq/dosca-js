@@ -81,6 +81,7 @@ unless json["client_code"].index("NYK").nil?
 $stderr.puts "-----NYK---------"
   resp_success_nyk
 end 
+
 unless json["client_code"].index("MOL").nil?
   unless json["contents_code"].index("NEW").nil?
     $stderr.puts "-----NYK_NEW---------"
