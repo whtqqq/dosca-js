@@ -27,7 +27,7 @@ $(document).ready(function() {
     $('#Picture').fileinput({
       theme: "explorer",
       uploadAsync:false,
-      // uploadUrl: '#',
+      uploadUrl: '/dosca-js/edit/upload',
       overwriteInitial: false,
       // maxFileSize: 300,
       minFileCount: 1,
@@ -48,7 +48,7 @@ $(document).ready(function() {
   } else {
     $('#Picture').fileinput({
         theme: "explorer",
-        // uploadUrl: '#',
+        uploadUrl: '/dosca-js/edit/upload',
         uploadAsync:false,
         overwriteInitial: false,
         maxFileSize: 100,
