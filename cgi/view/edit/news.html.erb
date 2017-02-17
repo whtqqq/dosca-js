@@ -307,7 +307,7 @@
           } else {
             show[1] = data[1].toFixed(5) + "N";
           }
-          $('#Position').val(show[0] + "," + show[1]);
+          $('#Position').val(show[1] + "," + show[0]);
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);
         }
@@ -317,17 +317,20 @@
     function inputPoint(point) {
       if(point != null) {
         if(pointChk()){
-          var data = point.split(",");
-          if(data[0].charAt(data[0].length - 1) == "W") {
-            data[0] = parseFloat("-" + data[0].substr(0,data[0].length - 1));
+          var pageData = point.split(",");
+          if(pageData[0].charAt(pageData[0].length - 1) == "S") {
+            pageData[0] = parseFloat("-" + pageData[0].substr(0,pageData[0].length - 1));
           } else {
-            data[0] = parseFloat("+" + data[0].substr(0,data[0].length - 1));
+            pageData[0] = parseFloat("+" + pageData[0].substr(0,pageData[0].length - 1));
           }
-          if(data[1].charAt(data[1].length - 1) == "S") {
-            data[1] = parseFloat("-" + data[1].substr(0,data[1].length - 1));
+          if(pageData[1].charAt(pageData[1].length - 1) == "W") {
+            pageData[1] = parseFloat("-" + pageData[1].substr(0,pageData[1].length - 1));
           } else {
-            data[1] = parseFloat("+" + data[1].substr(0,data[1].length - 1));
+            pageData[1] = parseFloat("+" + pageData[1].substr(0,pageData[1].length - 1));
           }
+          var data = new Array();
+          data[0] = pageData[1];
+          data[1] = pageData[0];
           oldMark = data;
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);
