@@ -343,25 +343,27 @@
   });
 
   function dblclicked() {
-  	var data = projection.invert(d3.mouse(this));
-    if(data[0] <= 180 && data[0] >= -180 && data[1] <= 90 && data[1] >= -90) {
-    	oldMark = data;
-      var show = new Array();
-      if(data[0] < 0) {
-        var tmp = String(data[0].toFixed(5));
-        show[0] = tmp.substr(1, tmp.length-1) + "W";
-      } else {
-        show[0] = data[0].toFixed(5) + "E";
+    if($("#pageStatus").val() != 2) {
+      var data = projection.invert(d3.mouse(this));
+      if(data[0] <= 180 && data[0] >= -180 && data[1] <= 90 && data[1] >= -90) {
+        oldMark = data;
+        var show = new Array();
+        if(data[0] < 0) {
+          var tmp = String(data[0].toFixed(5));
+          show[0] = tmp.substr(1, tmp.length-1) + "W";
+        } else {
+          show[0] = data[0].toFixed(5) + "E";
+        }
+        if(data[1] < 0) {
+          var tmp = String(data[1].toFixed(5));
+          show[1] = tmp.substr(1, tmp.length-1) + "S";
+        } else {
+          show[1] = data[1].toFixed(5) + "N";
+        }
+        $('#Position').val(show[0] + "," + show[1]);
+        $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
+        drawVessel(data);
       }
-      if(data[1] < 0) {
-        var tmp = String(data[1].toFixed(5));
-        show[1] = tmp.substr(1, tmp.length-1) + "S";
-      } else {
-        show[1] = data[1].toFixed(5) + "N";
-      }
-      $('#Position').val(show[0] + "," + show[1]);
-      $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
-      drawVessel(data);
     }
   }
 

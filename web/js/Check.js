@@ -134,11 +134,11 @@ function submitChk(){
     }
   }
 
-  if($("#pageID").val() == "edit") {
-    if(!afterDateChk()) {
-      flg ++;
-    }
-  }
+  // if($("#pageID").val() == "edit") {
+  //   if(!afterDateChk()) {
+  //     flg ++;
+  //   }
+  // }
 
   if(!URLChk($('#WebPage'))) {
     flg ++;
