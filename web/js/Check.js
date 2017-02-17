@@ -175,20 +175,25 @@ function submitChk(){
           submitStatus = true;
       }
     });
-    //new page
-    if($('#Picture').fileinput('getFilesCount') > 0 ) {
+    //news page
+    if($("#pageID").val() == "edit" && $('#Picture').fileinput('getFilesCount') > 0 ) {
       $('#Picture').fileinput('upload');
     }
     //past page
     if($("#pageID").val() == "past" && $('#Picture').fileinput('getFilesCount') == 0 && $("#picUp").val() == "false") {
       submitStatus = false;
-      $('#Picture').fileinput('upload');
     }
     if($("#pageID").val() == "past") {
       $('#Picture').fileinput('upload');
     }
-    //Todo submit
-    alert("submitStatus:"+submitStatus);
+  }
+  ////Todo submit
+  alert("submitStatus:"+submitStatus);
+  if(submitStatus == "true" && $("#pageID").val() == "edit") {
+    $("#editForm").submit();
+  }
+  if(submitStatus == "true" && $("#pageID").val() == "past") {
+    $("#pastForm").submit();
   }
   return submitStatus;
 }
