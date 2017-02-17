@@ -89,17 +89,17 @@ $stderr.puts json
 
 json = JSON.parse(json.to_s)
 
-unless json["user_name"][0].index("MOL").nil?
+unless json["user_name"].index("MOL").nil?
 $stderr.puts "-----MOL---------"
   resp_success_mol
 end 
-unless json["user_name"][0].index("NYK").nil?
+unless json["user_name"].index("NYK").nil?
 
 $stderr.puts "-----NYK---------"
   resp_success_nyk
 end
 
-unless json["user_name"][0].index("ERR").nil?
+unless json["user_name"].index("ERR").nil?
 
 $stderr.puts "-----error---------"
   resp_error
