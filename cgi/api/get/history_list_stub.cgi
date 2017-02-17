@@ -55,7 +55,7 @@ puts <<END
 END
 end
 
-def resp_success_nyk_past
+def resp_success_nyk
 puts <<END
 {
     "histories": [
