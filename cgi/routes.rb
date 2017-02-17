@@ -24,6 +24,9 @@ begin
   #create controller
   controller_name = Application.get_controller_and_action_name[:controller]
   action_name = Application.get_controller_and_action_name[:action] || "index"
+  $stderr.puts "--------request target------------"
+  $stderr.puts controller_name
+  $stderr.puts  action_name
   @controller = Kernel.const_get([controller_name, "_controller"].join.split("_").map(&:capitalize).join).new
 
   #call action

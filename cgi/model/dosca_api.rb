@@ -50,6 +50,7 @@ class DoscaAPI
     }.to_json
 
     file_name = nil
+    original_name = nil
     http.request(req) do |resp|
       original_name =  resp.header["Content-Disposition"].match(/filename=\"(.+)\"/)[1]
       file_name = Settings._settings[:server][:temp_pdf_directory]+ "/" + original_name
@@ -59,7 +60,7 @@ class DoscaAPI
         }
       end
     end
-    file_name
+    original_name
   end
 
   def DoscaAPI.new(client_code, mail, contents_code, pdf_file, submit_data)
