@@ -56,7 +56,7 @@ puts <<END
         "Sinking", 
         "Aground", 
         "Collision", 
-        "Oil Leak", 
+        "Oil Leak",
         "Water Seepage", 
         "Engine Fault",
         "For NYK"
@@ -84,10 +84,10 @@ end
 
 unless json["client_code"].index("MOL").nil?
   unless json["contents_code"].index("NEW").nil?
-    $stderr.puts "-----NYK_NEW---------"
+    $stderr.puts "-----MOL_NEW---------"
     resp_success_mol_new
   else
-    $stderr.puts "-----NYK_PAST---------"
+    $stderr.puts "-----MOL_PAST---------"
     resp_success_mol_past
   end
 end

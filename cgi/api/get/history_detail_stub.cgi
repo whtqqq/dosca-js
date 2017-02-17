@@ -17,39 +17,98 @@ puts <<END
 END
 end
 
-def resp_news
+def resp_success_mol_new_1
 puts <<END
 {
-    "issue_date": "2016/11/14 06:33:59",
+    "contents no": "0000001",
+    "issue_date": "2016/01/14 06:33:59",
     "subject": "Vessel A sank in the off Kashima",
     "category": "Oil Leak",
-    "summary": "The engine room oinity of the sailing ship.Ship Charactoristics",
+    "summary": "contents_no : 000001 The engine room oinity of the sailing ship.Ship Charactoristics",
     "web_page": "http://dosca.com",
-    "termination_date": "2016-12-31",
-    "latitude": "145.3E",
-    "longitude": "35.8N"
+    "termination_date": "2015-12-31",
+    "latitude": "35.8N",
+    "longitude": "145.3E"
 }
 END
 end
 
-def resp_past
+def resp_success_mol_new_2
+puts <<END
+{
+    "issue_date": "2016/11/11 06:00:59",
+    "subject": "For test contents_no :000002",
+    "category": "Oil Leak",
+    "summary": "The engine room oinity of the sailing ship.Ship Charactoristics",
+    "web_page": "http://dosca.com",
+    "termination_date": "2017-12-31",
+    "latitude": "35.8N",
+    "longitude": "145.3E"
+}
+END
+end
+
+def resp_success_mol_past_1
+puts <<END
+{
+    "issue_date": "2016/11/14 06:33:59",
+    "category": "Aground",
+    "cargo": "Nagoya Center",
+    "date_time": "2017-2-30 23 50",
+    "vessel_name": "kawasaki maru MOL1",
+    "termination_date": "2018-12-31",
+    "latitude": "56.3N",
+    "longitude": "43.8E"
+}
+END
+end
+
+def resp_success_mol_past_2
+puts <<END
+{
+    "issue_date": "2016/11/14 06:33:59",
+    "category": "Aground",
+    "cargo": "Nagoya Center",
+    "date_time": "2017-2-30 23 47",
+    "vessel_name": "kawasaki maru MOL2",
+    "termination_date": "2016-12-31",
+    "latitude": "56.3N",
+    "longitude": "43.8E"
+}
+END
+end
+
+def resp_success_nyk_past_1
 puts <<END
 {
     "issue_date": "2016/11/14 06:33:59",
     "category": "Aground",
     "cargo": "Nagoya Center",
     "date_time": "2017-2-17 23 50",
-    "vessel_name": "kawasaki maru",
+    "vessel_name": "kawasaki maru nyk1",
     "termination_date": "2016-12-31",
-    "latitude": "56.3E",
-    "longitude": "43.8N"
+    "latitude": "56.3N",
+    "longitude": "43.8E"
+}
+END
+end
+
+def resp_success_nyk_past_2
+puts <<END
+{
+    "issue_date": "2016/11/14 06:33:59",
+    "category": "Aground",
+    "cargo": "Nagoya Center",
+    "date_time": "2017-2-17 23 49",
+    "vessel_name": "kawasaki maru nyk2",
+    "termination_date": "2016-12-31",
+    "latitude": "56.3N",
+    "longitude": "43.8E"
 }
 END
 end
 
 cgi = CGI.new
-
-
 
 puts "Content-Type: application/json\n"
 
@@ -59,10 +118,33 @@ json = cgi.params
 
 $stderr.puts json
 json = JSON.parse(json.to_s)
-if json["contents_code"][0].index("NEWS").nil?
-$stderr.puts "-----past---------"
-  resp_past
-else
-$stderr.puts "-----news---------"
-  resp_news
+
+unless json["client_code"].index("NYK").nil?
+  unless json["contents_no"].eql?("000001")
+    $stderr.puts "-----NYK-1--------"
+    resp_success_nyk_past_1
+  else
+    $stderr.puts "-----NYK-1--------"
+    resp_success_nyk_past_1
+  end
+end 
+
+unless json["client_code"].index("MOL").nil?
+  unless json["contents_code"].index("NEW").nil?
+    unless json["contents_no"].eql?("000001")
+      $stderr.puts "-----MOL_NEW-1--------"
+      resp_success_mol_new_2
+    else
+      $stderr.puts "-----MOL_NEW-2--------"
+      resp_success_mol_new_1
+    end
+  else
+    unless json["contents_no"].eql?("000001")
+      $stderr.puts "-----MOL_PAST-1--------"
+      resp_success_mol_past_1
+    else
+      $stderr.puts "-----MOL_PAST-2--------"
+      resp_success_mol_past_2
+    end
+  end
 end

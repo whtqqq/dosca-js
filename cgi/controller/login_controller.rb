@@ -22,8 +22,7 @@ class LoginController < ApplicationController
       }
 
       #save the json into session 
-      @session[username] = user_info.to_json
-
+      @session[username[0]] = user_info.to_json
       default_contents = user_info[:contents].select{|h| h[:no] == "0"}.first
       forward_action = "news"
       forward_action = "past" if default_contents[:code].index("PAST")
