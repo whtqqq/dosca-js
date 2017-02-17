@@ -37,6 +37,7 @@ puts <<END
 {
     "issue_date": "2016/11/14 06:33:59",
     "category": "Aground",
+    "cargo": "Nagoya Center",
     "date_time": "2017-2-17 23 50",
     "vessel_name": "kawasaki maru",
     "termination_date": "2016-12-31",
