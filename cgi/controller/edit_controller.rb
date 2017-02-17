@@ -41,16 +41,16 @@ class EditController < ApplicationController
     @values[:status] = status
     
     if status == STATUS_NEW
-      pdf_file = save_temp_file(@session["files"][0])
-      new_proc(user_info, @past_contents, @values, contents_no, pdf_file)
+      files = JSON.parse(@session["files"])
+      new_proc(user_info, @past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
       end
     end
 
     if status == STATUS_EDIT
-      pdf_file = save_temp_file(@session["files"][0])
-      edit_proc(user_info, @past_contents, @values, contents_no, pdf_file)
+      files = JSON.parse(@session["files"])
+      edit_proc(user_info, @past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
       end
@@ -176,7 +176,16 @@ class EditController < ApplicationController
   end
 
   def upload
-    @session[:files] =  @params["files[]"]
+    file_names  = []
+    files = @cgi.params["files[]"]
+    if !files.is_a?(Array)
+      file_names.push(save_temp_file(files))
+    else
+      files.each do |file|
+        file_names.push(save_temp_file(file))
+      end
+    end
+    @session["files"] = file_names.to_json
     @no_render = true
 
     json = {

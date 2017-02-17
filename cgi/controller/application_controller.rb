@@ -38,6 +38,16 @@ class ApplicationController
        @params = Application.symbolize_keys(@params)
     end
     @params ||= {}
+ 
+    new_params = {}
+    @params.map do |key, value|
+      if value.size == 1 && value.kind_of?(Array)
+        new_params[key] =  value.first
+      else
+        new_params[key] =  value
+      end
+    end
+    @params = new_params
 
     uri = ENV["REQUEST_URI"]
     unless uri.index("?").nil?
