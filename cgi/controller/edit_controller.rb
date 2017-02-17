@@ -275,13 +275,13 @@ class EditController < ApplicationController
   def create_pdf(client_code, contents_code, contents_no, title, issue_date, data)
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
-    map_picture = save_base64_picture(@cgi.params["map_picture"], path)
+    map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
     news_pictures = @session["files"]
 
     pdf = PDFCreator.new(pdf_name, 
           title,
           issue_date, 
-          data[:latitue] + " " + data[:longitude], data[:category],
+          data[:position],  data[:category],
           data[:subject],
           data[:summary],
           map_picture, news_pictures)
@@ -291,8 +291,7 @@ class EditController < ApplicationController
   end
 
   def save_base64_picture(data_url, path)
-    png  = Base64.decode64(data_url['data:image/png;base64,'.length .. -1])
-    #png  = Base64.decode64(data_url)
+    png  = Base64.decode64(data_url['data:image/png;base64,'.length..-1])
     file_name = path + '/chart.png'
     File.open(file_name, 'wb') { |f| f.write(png) }
     file_name
