@@ -23,9 +23,9 @@ puts <<END
     "contents no": "0000001",
     "issue_date": "2016/01/14 06:33:59",
     "subject": "Vessel A sank in the off Kashima",
-    "category": "Oil Leak",
+    "category": "For MOL New",
     "summary": "contents_no : 000001 The engine room oinity of the sailing ship.Ship Charactoristics",
-    "web_page": "http://dosca.com",
+    "web_page": "http://dosca.com/MOL_NEW-1",
     "termination_date": "2015-12-31",
     "latitude": "35.8N",
     "longitude": "145.3E"
@@ -40,10 +40,9 @@ puts <<END
     "subject": "For test contents_no :000002",
     "category": "Oil Leak",
     "summary": "The engine room oinity of the sailing ship.Ship Charactoristics",
-    "web_page": "http://dosca.com",
-    "termination_date": "2017-12-31",
+    "ports": "Tokyo",
     "latitude": "35.8N",
-    "longitude": "145.3E"
+    "longitude": "140.3E"
 }
 END
 end
@@ -54,9 +53,10 @@ puts <<END
     "issue_date": "2016/11/14 06:33:59",
     "category": "Aground",
     "cargo": "Nagoya Center",
-    "date_time": "2017-2-30 23 50",
+    "date_time": "2017-3-30 23 50",
     "vessel_name": "kawasaki maru MOL1",
     "termination_date": "2018-12-31",
+    "ports": "Tokyo",
     "latitude": "56.3N",
     "longitude": "43.8E"
 }
@@ -66,12 +66,11 @@ end
 def resp_success_mol_past_2
 puts <<END
 {
-    "issue_date": "2016/11/14 06:33:59",
-    "category": "Aground",
-    "cargo": "Nagoya Center",
-    "date_time": "2017-2-30 23 47",
+    "issue_date": "2016/12/14 06:33:59",
+    "category": "Collision",
+    "cargo": "Nagoya",
+    "date_time": "2017-2-13 23 47",
     "vessel_name": "kawasaki maru MOL2",
-    "termination_date": "2016-12-31",
     "latitude": "56.3N",
     "longitude": "43.8E"
 }
@@ -87,6 +86,7 @@ puts <<END
     "date_time": "2017-2-17 23 50",
     "vessel_name": "kawasaki maru nyk1",
     "termination_date": "2016-12-31",
+    "ports": "Tokyo",
     "latitude": "56.3N",
     "longitude": "43.8E"
 }
@@ -96,14 +96,13 @@ end
 def resp_success_nyk_past_2
 puts <<END
 {
-    "issue_date": "2016/11/14 06:33:59",
-    "category": "Aground",
-    "cargo": "Nagoya Center",
-    "date_time": "2017-2-17 23 49",
+    "issue_date": "2016/11/28 00:00:00",
+    "category": "Collision",
+    "cargo": "Nagoya",
+    "date_time": "2017-2-11 23 49",
     "vessel_name": "kawasaki maru nyk2",
-    "termination_date": "2016-12-31",
-    "latitude": "56.3N",
-    "longitude": "43.8E"
+    "latitude": "0.3N",
+    "longitude": "140.8E"
 }
 END
 end

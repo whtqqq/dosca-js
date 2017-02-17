@@ -23,12 +23,12 @@ puts <<END
     "histories": [
         {
             "no": "000",
-            "title": "2016/11/02_03:42:13 Machinery Damage mol new 001",
+            "title": "2016/01/14 06:33:59 Vessel A sank in the off Kashima",
             "contents_no": "000001"
         },
         {
             "no": "001",
-            "title": "2016/10/26_02:09:08 Collision mol new 002",
+            "title": "2016/11/11 06:00:59 For test contents_no :000002",
             "contents_no": "000002"
         }
     ]
@@ -42,12 +42,12 @@ puts <<END
     "histories": [
         {
             "no": "000",
-            "title": "2016/11/02_03:42:13 Machinery Damage mol past 001",
+            "title": "2016/11/14 06:33:59 kawasaki maru MOL1",
             "contents_no": "000001"
         },
         {
             "no": "001",
-            "title": "2016/10/26_02:09:08 Collision mol past 002",
+            "title": "2016/12/14 06:33:59 kawasaki maru MOL2",
             "contents_no": "000002"
         }
     ]
@@ -61,12 +61,12 @@ puts <<END
     "histories": [
         {
             "no": "000",
-            "title": "2016/11/02_03:42:13 Machinery Damage nyk 001",
+            "title": "2016/11/14 06:33:59 kawasaki maru nyk1",
             "contents_no": "000001"
         },
         {
             "no": "001",
-            "title": "2016/10/26_02:09:08 Collision nyk 002",
+            "title": "2016/11/28 00:00:00 kawasaki maru nyk2",
             "contents_no": "000002"
         }
     ]
