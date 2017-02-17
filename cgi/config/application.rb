@@ -4,6 +4,8 @@ class Application
 
   class << self
     def get_controller_and_action_name
+      $stderr.puts "------------request uri------------"
+      $stderr.puts ENV["REQUEST_URI"]
       url_split = ENV["REQUEST_URI"].split("/").delete_if{|element| element.empty?}
       controller = url_split[1] || ROOT_CONTROLLER
       action = url_split[2] || DEFAULT_ACTION

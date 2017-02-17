@@ -1,12 +1,17 @@
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !^/dosca-js/contents.*$
+RewriteCond %{REQUEST_URI} !^/dosca-js/fonts.*$
 RewriteCond %{REQUEST_URI} !^/dosca-js/api.*$
 RewriteCond %{REQUEST_URI} !^/dosca-js/routes.rb.*$
 RewriteCond %{REQUEST_URI} ^/dosca-js/(.+)[/]?$ 
 RewriteRule .* /dosca-js/routes.rb?controller=%1 [L]
 
 RewriteCond %{REQUEST_URI} !^/dosca-js/contents.*$
+RewriteCond %{REQUEST_URI} !^/dosca-js/fonts.*$
 RewriteCond %{REQUEST_URI} !^/dosca-js/api.*$
 RewriteCond %{REQUEST_URI} !^/dosca-js/routes.rb.*$
 RewriteCond %{REQUEST_URI} ^/dosca-js/(.+)/(.+)[/]?$ 
 RewriteRule .* /dosca-js/routes.rb?controller=%1&action=%2 [L]
+
+RewriteCond %{REQUEST_URI} ^/dosca-js/fonts(.*)$
+RewriteRule .* /dosca-js/contents/fonts%1 [L]
