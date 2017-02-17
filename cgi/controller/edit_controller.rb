@@ -62,7 +62,6 @@ class EditController < ApplicationController
       pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @past_contents[:code], contents_no) 
       @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
-      $stderr.puts @values[:pdf_file]
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
