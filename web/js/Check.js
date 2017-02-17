@@ -188,12 +188,9 @@ function submitChk(){
     }
   }
   ////Todo submit
-  alert("submitStatus:"+submitStatus);
-  if(submitStatus == "true" && $("#pageID").val() == "edit") {
-    $("#editForm").submit();
-  }
-  if(submitStatus == "true" && $("#pageID").val() == "past") {
-    $("#pastForm").submit();
+  // alert("submitStatus:"+submitStatus);
+  if(submitStatus){
+    $("form").submit();
   }
   return submitStatus;
 }
