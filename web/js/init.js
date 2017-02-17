@@ -30,11 +30,12 @@ $(document).ready(function() {
       uploadUrl: '/dosca-js/edit/upload',
       overwriteInitial: false,
       // maxFileSize: 300,
-      minFileCount: 1,
+      minFileCount: 0,
       maxFileCount: 4,
       showBrowse:false,
       showCaption:false,
       showUpload:false,
+      showRemove:false,
       browseOnZoneClick:true,
       resizeImage: true,
       maxImageWidth: 200,
@@ -57,6 +58,7 @@ $(document).ready(function() {
         showBrowse:false,
         showCaption:false,
         showUpload:false,
+        showRemove:false,
         browseOnZoneClick:true,
         resizeImage: true,
         maxImageWidth: 200,
@@ -107,6 +109,29 @@ $(document).ready(function() {
 
   if($("#pageStatus").val() == 2 && $("#pageID").val() == "past") {
     $("#PictureDownload").attr("style", "display:block;");
+    $("#picUp").val("true");
+    $('#Picture').fileinput('destroy').fileinput({
+        theme: "explorer",
+        uploadUrl: '/dosca-js/edit/upload',
+        uploadAsync:false,
+        overwriteInitial: false,
+        maxFileSize: 100,
+        minFileCount: 0,
+        maxFileCount: 2,
+        showBrowse:false,
+        showCaption:false,
+        showUpload:false,
+        showRemove:false,
+        browseOnZoneClick:true,
+        resizeImage: true,
+        maxImageWidth: 200,
+        maxImageHeight: 200,
+        resizePreference: 'width',
+        fileActionSettings:{showUpload:false},
+        // previewSettings:{image: {width: "400px", height: "auto"}},
+        allowedFileExtensions : ['pdf'],
+        dropZoneTitle:"PDF file Drag & Drop here !"
+    });
   }
 
 });
