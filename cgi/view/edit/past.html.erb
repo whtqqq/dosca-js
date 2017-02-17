@@ -199,6 +199,13 @@
           </div>
         </div>
         <!--Line-4-->
+        <div class="col-md-12 ">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <a id="PictureDownload" class="btn btn-blue" type="button" target="_blank" hidden="true">PDF Download</a>
+            </div>
+          </div>
+        </div>
         <!--Line-5-->
         <div class="col-md-12">
           <div class="col-md-offset-5">
@@ -454,6 +461,7 @@ $(document).ready(function() {
   });
   $('#Port').change(function(){
     $('#Position').val($(this).val());
+    inputPoint($(this).val());
   });
 });
 </script>

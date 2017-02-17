@@ -105,6 +105,10 @@ $(document).ready(function() {
   //   URLChk($('#WebPage'));
   // });
 
+  if($("#pageStatus").val() == 2 && $("#pageID").val == "past") {
+    
+  }
+
 });
 
 //+---------------------------------------------------

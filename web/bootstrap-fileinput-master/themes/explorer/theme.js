@@ -52,7 +52,7 @@
             flash: {width: "100%", height: "60px"},
             object: {width: "100%", height: "60px"},
             pdf: {width: "100px", height: "60px"},
-            other: {width: "100%", height: "60px"}
+            other: {width: "98%", height: "60px"}
         },
         frameClass: 'explorer-frame'
     };
