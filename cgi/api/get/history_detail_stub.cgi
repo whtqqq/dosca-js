@@ -118,26 +118,26 @@ json = cgi.params
 json = JSON.parse(json.to_s)
 
 unless json["client_code"].index("NYK").nil?
-  unless json["contents_no"].eql?("000001")
+  if json["contents_no"].eql?("000001")
     $stderr.puts "-----NYK-1--------"
     resp_success_nyk_past_1
   else
     $stderr.puts "-----NYK-1--------"
-    resp_success_nyk_past_1
+    resp_success_nyk_past_2
   end
 end 
 
 unless json["client_code"].index("MOL").nil?
   unless json["contents_code"].index("NEW").nil?
-    unless json["contents_no"].eql?("000001")
+    if json["contents_no"].eql?("000001")
       $stderr.puts "-----MOL_NEW-1--------"
-      resp_success_mol_new_2
+      resp_success_mol_new_1
     else
       $stderr.puts "-----MOL_NEW-2--------"
-      resp_success_mol_new_1
+      resp_success_mol_new_2
     end
   else
-    unless json["contents_no"].eql?("000001")
+    if json["contents_no"].eql?("000001")
       $stderr.puts "-----MOL_PAST-1--------"
       resp_success_mol_past_1
     else
