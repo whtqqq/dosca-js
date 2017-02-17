@@ -38,6 +38,7 @@ class EditController < ApplicationController
       status = STATUS_EDIT unless empty?(contents_no)  
       status = STATUS_NEW if  empty?(contents_no) && !empty?(@params[:category]) 
     end
+    @values[:status] = status
     
     if status == STATUS_NEW
       pdf_file = save_temp_file(@cgi.params["files"][0])
@@ -58,8 +59,10 @@ class EditController < ApplicationController
     if status == STATUS_SHOW
       @values[:contents_code] = @past_contents[:code]
       @values[:contents_no] = contents_no  
-      @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
+      pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @past_contents[:code], contents_no) 
+      @values[:pdf_file] = (Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file).to_s
+      $stderr.puts @values[:pdf_file]
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -99,6 +102,7 @@ class EditController < ApplicationController
       status = STATUS_EDIT unless empty?(contents_no)  
       status = STATUS_NEW if  empty?(contents_no) && !empty(@params[:category]) 
     end
+    @values[:status] = status
 
     if status == STATUS_NEW
       new_proc(user_info, @news_contents, @values, contents_no, nil)
