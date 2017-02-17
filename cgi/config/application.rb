@@ -14,12 +14,11 @@ class Application
     end
 
     def symbolize_keys(hash)
-      return hash if hash.is_a?(Array)
-      return hash if hash.is_a?(String)
+      return hash unless hash.is_a?(Hash)
       hash.inject({}){|new_hash, key_value|
         key, value = key_value
         value = symbolize_keys(value) if value.is_a?(Hash)
-        value = value.map{|item| symbolize_keys(item)} if value.is_a?(Array)
+        value = value.map{|item| symbolize_keys(item)} if value.is_a?(Array) 
         new_hash[key.to_sym] = value
         new_hash
       }

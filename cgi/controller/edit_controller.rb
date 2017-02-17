@@ -177,14 +177,17 @@ class EditController < ApplicationController
   end
 
   def upload
-     @session[:files] =  @cgi.params["files"]
-     @no_render = true
-     json = {
+    @session[:files] =  @params["files[]"]
+    @no_render = true
+
+    json = {
        "resulet" => "SUCCESS",
        "message" => ""
-     }.to_json
-       @cgi.out("type" => "application/json")  {
-     }
+    }.to_json
+
+    @cgi.out("type" => "application/json")  {
+       json
+    }
   end
 
   private
