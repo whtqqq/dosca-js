@@ -27,14 +27,15 @@ $(document).ready(function() {
     $('#Picture').fileinput({
       theme: "explorer",
       uploadAsync:false,
-      // uploadUrl: '#',
+      uploadUrl: '/dosca-js/edit/upload',
       overwriteInitial: false,
       // maxFileSize: 300,
-      minFileCount: 1,
+      minFileCount: 0,
       maxFileCount: 4,
       showBrowse:false,
       showCaption:false,
       showUpload:false,
+      showRemove:false,
       browseOnZoneClick:true,
       resizeImage: true,
       maxImageWidth: 200,
@@ -48,20 +49,22 @@ $(document).ready(function() {
   } else {
     $('#Picture').fileinput({
         theme: "explorer",
-        // uploadUrl: '#',
+        uploadUrl: '/dosca-js/edit/upload',
         uploadAsync:false,
         overwriteInitial: false,
+        initialPreviewAsData: true,
+        preferIconicPreview: true,
+        previewFileIconSettings: {
+          'pdf': '<i class="glyphicon glyphicon-file text-danger"></i>'
+        },
         maxFileSize: 100,
         minFileCount: 1,
         maxFileCount: 2,
         showBrowse:false,
         showCaption:false,
         showUpload:false,
+        showRemove:false,
         browseOnZoneClick:true,
-        resizeImage: true,
-        maxImageWidth: 200,
-        maxImageHeight: 200,
-        resizePreference: 'width',
         fileActionSettings:{showUpload:false},
         // previewSettings:{image: {width: "400px", height: "auto"}},
         allowedFileExtensions : ['pdf'],
@@ -104,6 +107,39 @@ $(document).ready(function() {
   // $('#WebPage').blur(function () {
   //   URLChk($('#WebPage'));
   // });
+
+  if($("#pageStatus").val() == 2 && $("#pageID").val() == "past") {
+    $("#PictureDownload").attr("style", "display:block;").attr("disabled","true");
+    $("#picUp").val("true");
+    $('#Picture').fileinput('destroy').fileinput({
+        theme: "explorer",
+        uploadUrl: '/dosca-js/edit/upload',
+        uploadAsync:false,
+        overwriteInitial: false,
+        initialPreviewAsData: true,
+        preferIconicPreview: true,
+        previewFileIconSettings: {
+          'pdf': '<i class="glyphicon glyphicon-file text-danger"></i>'
+        },
+        maxFileSize: 100,
+        minFileCount: 0,
+        maxFileCount: 2,
+        showBrowse:false,
+        showCaption:false,
+        showUpload:false,
+        showRemove:false,
+        browseOnZoneClick:true,
+        fileActionSettings:{showUpload:false},
+        // previewSettings:{image: {width: "400px", height: "auto"}},
+        allowedFileExtensions : ['pdf'],
+        dropZoneTitle:"PDF file Drag & Drop here !"
+    });
+
+  }
+  if($("#pageStatus").val() == 2) {
+      inputPoint($("#Position").val());
+      selectHistory();
+  }
 
 });
 

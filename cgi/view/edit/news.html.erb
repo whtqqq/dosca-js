@@ -41,7 +41,7 @@
         <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
         <%if @past_contents %>
           <!-- <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}"><%= @past_contents[:name] %></a></li> -->
-          <li><a class="nav-border" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
+          <li><a class="nav-border hand-mouse" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
           <li><a href="<%=@root_uri%>/edit/past" id="pastBtnY" class="jump nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
           <li><a href="<%=@root_uri%>/edit/past" id="pastBtnN" class="nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
         <% end %>
@@ -51,11 +51,11 @@
 </div>
 
 <div class="col-md-12">
-<form class="form-horizontal" role="form" method="post" action="/dosca-js/edit/news">
+<form class="form-horizontal" id="editForm" role="form" method="post" action="/dosca-js/edit/news">
   <input type="hidden" id="ClientCode" name="client_code" value="">
   <input type="hidden" id="ContentCode" name="contents_code" value="">
   <input type="hidden" id="ContentNo" name="contents_no" value="">
-  <input type="hidden" id="pageStatus" name="page_status" value="1">
+  <input type="hidden" id="pageStatus" name="page_status" value="<%=@values[:status]%>">
   <input type="hidden" id="d3Map" name="map_picture" value="">
   <input type="hidden" id="pageID" value="edit">
 
@@ -142,7 +142,7 @@
           <div class="form-group">
             <label for="Picture" class="col-sm-2 control-label"><%= @items[:picture] %></label>
             <div class="col-sm-10">
-              <input type="file" class="file" id="Picture" name="files[]" multiple data-preview-file-type="any" data-upload-url="dosca-js/edit/upload">
+              <input type="file" class="file" id="Picture" name="files[]" multiple data-preview-file-type="any" data-upload-url="/dosca-js/edit/upload">
             </div>
           </div>
         </div>
@@ -189,7 +189,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + "," + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -290,42 +290,47 @@
     });
 
     function dblclicked() {
-    	var data = projection.invert(d3.mouse(this));
-      if(data[0] <= 180 && data[0] >= -180 && data[1] <= 90 && data[1] >= -90) {
-      	oldMark = data;
-        var show = new Array();
-        if(data[0] < 0) {
-          var tmp = String(data[0].toFixed(5));
-          show[0] = tmp.substr(1, tmp.length-1) + "W";
-        } else {
-          show[0] = data[0].toFixed(5) + "E";
+      if($("#pageStatus").val() != 2) {
+      	var data = projection.invert(d3.mouse(this));
+        if(data[0] <= 180 && data[0] >= -180 && data[1] <= 90 && data[1] >= -90) {
+        	oldMark = data;
+          var show = new Array();
+          if(data[0] < 0) {
+            var tmp = String(data[0].toFixed(5));
+            show[0] = tmp.substr(1, tmp.length-1) + "W";
+          } else {
+            show[0] = data[0].toFixed(5) + "E";
+          }
+          if(data[1] < 0) {
+            var tmp = String(data[1].toFixed(5));
+            show[1] = tmp.substr(1, tmp.length-1) + "S";
+          } else {
+            show[1] = data[1].toFixed(5) + "N";
+          }
+          $('#Position').val(show[1] + "," + show[0]);
+          $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
+          drawVessel(data);
         }
-        if(data[1] < 0) {
-          var tmp = String(data[1].toFixed(5));
-          show[1] = tmp.substr(1, tmp.length-1) + "S";
-        } else {
-          show[1] = data[1].toFixed(5) + "N";
-        }
-        $('#Position').val(show[0] + "," + show[1]);
-        $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
-        drawVessel(data);
       }
     }
 
     function inputPoint(point) {
       if(point != null) {
         if(pointChk()){
-          var data = point.split(",");
-          if(data[0].charAt(data[0].length - 1) == "W") {
-            data[0] = parseFloat("-" + data[0].substr(0,data[0].length - 1));
+          var pageData = point.split(",");
+          if(pageData[0].charAt(pageData[0].length - 1) == "S") {
+            pageData[0] = parseFloat("-" + pageData[0].substr(0,pageData[0].length - 1));
           } else {
-            data[0] = parseFloat("+" + data[0].substr(0,data[0].length - 1));
+            pageData[0] = parseFloat("+" + pageData[0].substr(0,pageData[0].length - 1));
           }
-          if(data[1].charAt(data[1].length - 1) == "S") {
-            data[1] = parseFloat("-" + data[1].substr(0,data[1].length - 1));
+          if(pageData[1].charAt(pageData[1].length - 1) == "W") {
+            pageData[1] = parseFloat("-" + pageData[1].substr(0,pageData[1].length - 1));
           } else {
-            data[1] = parseFloat("+" + data[1].substr(0,data[1].length - 1));
+            pageData[1] = parseFloat("+" + pageData[1].substr(0,pageData[1].length - 1));
           }
+          var data = new Array();
+          data[0] = pageData[1];
+          data[1] = pageData[0];
           oldMark = data;
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);
@@ -410,7 +415,8 @@
       }
     });
     $('#Port').change(function(){
-      $('#Position').val($(this).val()); 
+      $('#Position').val($(this).val());
+      inputPoint($(this).val());
     });
   });
   </script>

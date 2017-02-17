@@ -50,6 +50,7 @@ class DoscaAPI
     }.to_json
 
     file_name = nil
+    original_name = nil
     http.request(req) do |resp|
       original_name =  resp.header["Content-Disposition"].match(/filename=\"(.+)\"/)[1]
       file_name = Settings._settings[:server][:temp_pdf_directory]+ "/" + original_name
@@ -59,7 +60,7 @@ class DoscaAPI
         }
       end
     end
-    file_name
+    original_name
   end
 
   def DoscaAPI.new(client_code, mail, contents_code, pdf_file, submit_data)
@@ -98,7 +99,7 @@ class DoscaAPI
     Application.symbolize_keys(JSON.parse(resp.body)) 
   end
 
-  def DoscaAPI.update_common(client_code, mail, contents_code, contents_no, pdf_file, submit_data)
+  def DoscaAPI.update_common(url, client_code, mail, contents_code, contents_no, pdf_file, submit_data)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
 
@@ -123,7 +124,7 @@ class DoscaAPI
     data["cargo"] = submit_data[:cargo] || ""
     data["vessel_name"] = submit_data[:vessel_name] || ""
 
-    if !submit_data[:location].blank?
+    unless submit_data[:location].nil? || submit_data[:location].empty?
       localtion = submit_data[:latitude].split(",")
       data["longitude"] = location[0]
       data["latitude"] = location[1]
@@ -140,8 +141,9 @@ class DoscaAPI
     post_body << "\r\n\r\n--#{my_boundary}--\r\n"
 
     # add file data
+    basename = File.basename(pdf_file)
     post_body << "--#{my_boundary}\r\n"
-    post_body << "Content-Disposition: form-data; name=\"contents_key[][pdf]\"; filename=\"#{File.basename(pdf_file)}\"\r\n"
+    post_body << "Content-Disposition: form-data; name=\"contents_key[][pdf]\"; filename=\"#{basename}\"\r\n"
     post_body << "Content-Type: application/pdf\r\n\r\n"
     post_body << File.read(pdf_file)
      

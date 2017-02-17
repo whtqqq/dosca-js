@@ -30,21 +30,21 @@ $("#Period").click(function() {
 });
 
 /*##########Historical Contents select##########*/
-function selectHistory(e) {
-  $("#pageStatus").val("2");
-  $("#historyList span").each(function(index) {
-    $(this).removeClass("active");
-  });
-  $(e).addClass("active");
+function selectHistory() {
+  // $("#pageStatus").val("2");
+  // $("#historyList span").each(function(index) {
+  //   $(this).removeClass("active");
+  // });
+  // $(e).addClass("active");
 
   $(".combo-arrow").attr("class", "combo-arrow1");
 
-  var text = $(e).text();
-  var date = text.substring(0, 19);
-  var sub = text.substring(20, text.length);
+  // var text = $(e).text();
+  // var date = text.substring(0, 19);
+  // var sub = text.substring(20, text.length);
   $("#editBtn").attr("class", "btn btn-blue").removeAttr("disabled");
   $("#delBtn").attr("class", "btn btn-pink").removeAttr("disabled");
-  $("#IssueDate").val(date.replace("_"," ")).removeClass("bg-white");
+  $("#IssueDate").removeClass("bg-white");
   /*TerminationDate-start*/
   $("#TerminationDate").removeClass("bg-white");
   $("#incidentDate").removeClass("bg-white");
@@ -60,8 +60,8 @@ function selectHistory(e) {
   $('#Picture').fileinput('disable');
   $('.file-preview').addClass("bg-disable");
   /*PictureSelect-end*/
-  $("#Subject").val(sub).attr("readonly", "readonly");
-  $("#Summary").val(sub + "          " + date).attr("readonly", "readonly");
+  $("#Subject").attr("readonly", "readonly");
+  $("#Summary").attr("readonly", "readonly");
   $("#WebPage").attr("readonly", "readonly");
   $("#Position").attr("readonly", "readonly");
   $("#submitBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
@@ -84,6 +84,7 @@ function selectHistory(e) {
 function editBtnAction() {
   $("#editBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
   $("#delBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
+  $("#PictureDownload").removeAttr("disabled");
   $("#IssueDate").addClass("bg-white");
   $("#TerminationDate").addClass("bg-white");
   $("#incidentDate").addClass("bg-white");

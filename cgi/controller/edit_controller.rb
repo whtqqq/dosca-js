@@ -38,18 +38,19 @@ class EditController < ApplicationController
       status = STATUS_EDIT unless empty?(contents_no)  
       status = STATUS_NEW if  empty?(contents_no) && !empty?(@params[:category]) 
     end
+    @values[:status] = status
     
     if status == STATUS_NEW
-      pdf_file = save_temp_file(@cgi.params["files"][0])
-      new_proc(user_info, @past_contents, @values, contents_no, pdf_file)
+      files = JSON.parse(@session["files"])
+      new_proc(user_info, @past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
       end
     end
 
     if status == STATUS_EDIT
-      pdf_file = save_temp_file(@cgi.params["files"][0])
-      edit_proc(user_info, @past_contents, @values, contents_no, pdf_file)
+      files = JSON.parse(@session["files"])
+      edit_proc(user_info, @past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
       end
@@ -58,8 +59,9 @@ class EditController < ApplicationController
     if status == STATUS_SHOW
       @values[:contents_code] = @past_contents[:code]
       @values[:contents_no] = contents_no  
-      @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
+      pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @past_contents[:code], contents_no) 
+      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -70,7 +72,6 @@ class EditController < ApplicationController
 
   def news
     user_info = user_info_from_session
-
     @news_contents = extract_contents(user_info, "INCIDENT_NEWS")
     if user_info[:contents].size > 1
       @past_contents = extract_contents(user_info, "PAST_INCIDENT")
@@ -97,10 +98,12 @@ class EditController < ApplicationController
       status = STATUS_SHOW unless empty?(contents_no)
     else
       status = STATUS_EDIT unless empty?(contents_no)  
-      status = STATUS_NEW if  empty?(contents_no) && !empty(@params[:category]) 
+      status = STATUS_NEW if  empty?(contents_no) && !empty?(@params[:category]) 
     end
+    @values[:status] = status
 
     if status == STATUS_NEW
+      $stderr.puts "status == STATUS_NEW"
       new_proc(user_info, @news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
@@ -117,8 +120,9 @@ class EditController < ApplicationController
     if status == STATUS_SHOW
       @values[:contents_code] = @news_contents[:code]
       @values[:contents_no] = contents_no  
-      @values[:pdf_file] =  DoscaAPI.pdf_download(user_info[:client_code], 
+      pdf_file =  DoscaAPI.pdf_download(user_info[:client_code], 
                               user_info[:mail], @news_contents[:code], contents_no) 
+      @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -169,6 +173,29 @@ class EditController < ApplicationController
       @cgi.out("type" => "application/json")  {
         json
       }
+  end
+
+  def upload
+    file_names  = []
+    files = @cgi.params["files[]"]
+    if !files.is_a?(Array)
+      file_names.push(save_temp_file(files))
+    else
+      files.each do |file|
+        file_names.push(save_temp_file(file))
+      end
+    end
+    @session["files"] = file_names.to_json
+    @no_render = true
+
+    json = {
+       "resulet" => "SUCCESS",
+       "message" => ""
+    }.to_json
+
+    @cgi.out("type" => "application/json")  {
+       json
+    }
   end
 
   private
@@ -248,13 +275,13 @@ class EditController < ApplicationController
   def create_pdf(client_code, contents_code, contents_no, title, issue_date, data)
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
-    map_picture = save_base64_picture(@params[:map_picture], path)
-    news_pictures = @cgi.params["files"]
+    map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
+    news_pictures = @session["files"]
 
     pdf = PDFCreator.new(pdf_name, 
           title,
           issue_date, 
-          data[:latitue] + " " + data[:longitude], data[:category],
+          data[:position],  data[:category],
           data[:subject],
           data[:summary],
           map_picture, news_pictures)
@@ -264,9 +291,9 @@ class EditController < ApplicationController
   end
 
   def save_base64_picture(data_url, path)
-    png  = Base64.decode64(data_url['data:image/png;base64,'.length .. -1])
+    png  = Base64.decode64(data_url['data:image/png;base64,'.length..-1])
     file_name = path + '/chart.png'
-    File.open(file, 'wb') { |f| f.write(png) }
+    File.open(file_name, 'wb') { |f| f.write(png) }
     file_name
   end
   

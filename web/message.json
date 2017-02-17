@@ -11,5 +11,5 @@
 	"MSG_LOGINPWD":"please input your password.",
 	"MSG_LOGINEMAIL":"please input your email.",
 	"MSG_LOGINEMAILILLEGAL":"Mailbox format is incorrect, please re-fill.",
-	"MSG_POSITIONILLEGAL":"Illegal format.Please don't input any space.Example: 0~180E,0~90N "
+	"MSG_POSITIONILLEGAL":"Illegal format.Please don't input any space.Example: 0~90N,0~180E "
 }
