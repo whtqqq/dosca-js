@@ -6,7 +6,6 @@ class LoginController < ApplicationController
 
   def auth
     username = @params[:username]
-	LogWriter.write("ys-han@rontech.co.jp", "#{username}")
     resp = DoscaAPI.auth(username, @params[:password], @params[:email])
     if has_error?(resp)
       @error_message = resp[:message]
