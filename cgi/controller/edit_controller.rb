@@ -72,7 +72,6 @@ class EditController < ApplicationController
 
   def news
     user_info = user_info_from_session
-
     @news_contents = extract_contents(user_info, "INCIDENT_NEWS")
     if user_info[:contents].size > 1
       @past_contents = extract_contents(user_info, "PAST_INCIDENT")
