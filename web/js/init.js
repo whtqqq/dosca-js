@@ -109,7 +109,7 @@ $(document).ready(function() {
   // });
 
   if($("#pageStatus").val() == 2 && $("#pageID").val() == "past") {
-    $("#PictureDownload").attr("style", "display:block;");
+    $("#PictureDownload").attr("style", "display:block;").attr("disabled","true");
     $("#picUp").val("true");
     $('#Picture').fileinput('destroy').fileinput({
         theme: "explorer",
@@ -134,6 +134,11 @@ $(document).ready(function() {
         allowedFileExtensions : ['pdf'],
         dropZoneTitle:"PDF file Drag & Drop here !"
     });
+
+  }
+  if($("#pageStatus").val() == 2) {
+      inputPoint($("#Position").val());
+      selectHistory();
   }
 
 });
