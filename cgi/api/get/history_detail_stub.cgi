@@ -26,8 +26,8 @@ puts <<END
     "summary": "The engine room oinity of the sailing ship.Ship Charactoristics",
     "web_page": "http://dosca.com",
     "termination_date": "2016-12-31",
-    "latitude": "145-56.3 E",
-    "longitude": "45-35.8 N"
+    "latitude": "145.3E",
+    "longitude": "35.8N"
 }
 END
 end
@@ -41,8 +41,8 @@ puts <<END
     "date_time": "2017-2-17 23 50",
     "vessel_name": "kawasaki maru",
     "termination_date": "2016-12-31",
-    "latitude": "145-56.3 E",
-    "longitude": "45-35.8 N"
+    "latitude": "56.3E",
+    "longitude": "43.8N"
 }
 END
 end
@@ -57,8 +57,12 @@ puts ""
 
 json = cgi.params
 
-unless json["contents_code"].index("NEWS").nil?
-  resp_news
-else
+json = JSON.parse(json.to_s)
+$stderr.puts json.to_s
+if json["contents_code"].index("NEWS").nil?
+$stderr.puts "-----past---------"
   resp_past
+else
+$stderr.puts "-----news---------"
+  resp_news
 end
