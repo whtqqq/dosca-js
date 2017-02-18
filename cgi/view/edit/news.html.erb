@@ -108,8 +108,8 @@
               <label class="col-sm-3 control-label">Termination Date</label>
               <div class="col-sm-3">
                 <div class="input-group">
-                  <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" style="cursor:pointer;" onchange="$('#TerminationDate').parent().parent().parent().attr('class', '');
-                      $('#TerminationDate').parent().next().text('');" readonly value="<%=@values[:termination_date]%>">
+                  <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" style="cursor:pointer;" onchange="$('#TerminationDate').parent().parent().parent().attr('class', ''); $('#TerminationDate').parent().next().text('');"
+                              readonly value="<%= @values[:termination_date]%>">
                   <span class="input-group-addon hand-mouse" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
                 <span class="text-danger"></span>
@@ -181,7 +181,7 @@
                 <select id="Port" name="ports">
                   <option value=""></option>
                  <% @ports.each {|hash| %>
-                    <option value="<%= hash.values[0][0] + "," + hash.values[0][1] %>"><%= hash.keys[0] %></option>
+                    <option value="<%= hash.values[0][0] + " " + hash.values[0][1] %>" <%="selected" if @values[:ports] and hash.keys[0].to_s==@values[:ports].to_s%>><%= hash.keys[0] %></option>
                   <% } %>
                 </select>
               </div>
@@ -189,7 +189,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + "," + @values[:longitude] if @values[:latitude]%>">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -291,23 +291,29 @@
 
     function dblclicked() {
       if($("#pageStatus").val() != 2) {
-      	var data = projection.invert(d3.mouse(this));
+        var data = projection.invert(d3.mouse(this));
         if(data[0] <= 180 && data[0] >= -180 && data[1] <= 90 && data[1] >= -90) {
-        	oldMark = data;
+          oldMark = data;
+
           var show = new Array();
+
+          var lon_d = Math.floor(Math.abs(data[0]));
+          var lon_m = ((Math.abs(data[0]) - lon_d) * 60).toFixed(2);
           if(data[0] < 0) {
-            var tmp = String(data[0].toFixed(5));
-            show[0] = tmp.substr(1, tmp.length-1) + "W";
+            show[1] = String(lon_d) + "-" + lon_m + " W";
           } else {
-            show[0] = data[0].toFixed(5) + "E";
+            show[1] = String(lon_d) + "-" + lon_m + " E";
           }
+
+          var lat_d = Math.floor(Math.abs(data[1]));
+          var lat_m = ((Math.abs(data[1]) - lat_d) * 60).toFixed(2);
           if(data[1] < 0) {
-            var tmp = String(data[1].toFixed(5));
-            show[1] = tmp.substr(1, tmp.length-1) + "S";
+            show[0] = String(lat_d) + "-" + lat_m + " S";
           } else {
-            show[1] = data[1].toFixed(5) + "N";
+            show[0] = String(lat_d) + "-" + lat_m + " N";
           }
-          $('#Position').val(show[1] + "," + show[0]);
+
+          $('#Position').val(show[0] + " " + show[1]);
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);
         }
@@ -317,20 +323,41 @@
     function inputPoint(point) {
       if(point != null) {
         if(pointChk()){
-          var pageData = point.split(",");
-          if(pageData[0].charAt(pageData[0].length - 1) == "S") {
-            pageData[0] = parseFloat("-" + pageData[0].substr(0,pageData[0].length - 1));
-          } else {
-            pageData[0] = parseFloat("+" + pageData[0].substr(0,pageData[0].length - 1));
-          }
-          if(pageData[1].charAt(pageData[1].length - 1) == "W") {
-            pageData[1] = parseFloat("-" + pageData[1].substr(0,pageData[1].length - 1));
-          } else {
-            pageData[1] = parseFloat("+" + pageData[1].substr(0,pageData[1].length - 1));
-          }
           var data = new Array();
-          data[0] = pageData[1];
-          data[1] = pageData[0];
+          var position = point.split(" ");
+
+          if　(position[0].indexOf("-") > 0) {
+            var lat = position[0].split("-");
+            var lat_d = lat[0];
+            var lat_m = lat[1];
+          } else {
+            var lat_d = position[0];
+            var lat_m = 0;
+          }
+
+          var lat_num = parseFloat(lat_d) + parseFloat(lat_m) / 60;
+
+          data[1] = lat_num;
+          if(position[1] == "S") {
+            data[1] = lat_num * (-1);
+          }
+
+          if　(position[2].indexOf("-") > 0) {
+            var lon = position[2].split("-");
+            var lon_d = lon[0];
+            var lon_m = lon[1];
+          } else {
+            var lon_d = position[2];
+            var lon_m = 0;
+          }
+
+          var lon_num = parseFloat(lon_d) + parseFloat(lon_m) / 60;
+
+          data[0] = lon_num;
+          if(position[3] == "W") {
+            data[0] = lon_num * (-1);
+          }
+
           oldMark = data;
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);

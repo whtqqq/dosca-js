@@ -46,6 +46,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
 
     if status == STATUS_EDIT
@@ -54,6 +55,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
     
     if status == STATUS_SHOW
@@ -107,6 +109,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
 
     if status == STATUS_EDIT
@@ -114,6 +117,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
 
     if status == STATUS_SHOW
@@ -136,7 +140,7 @@ class EditController < ApplicationController
     resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], 
               @params[:contents_code], @params[:contents_no])
     @cgi.out("type" => "application/json") {
-      resp.to_s
+      resp
     }
   rescue => e
     api_response("ERROR", e.to_s)
@@ -158,11 +162,15 @@ class EditController < ApplicationController
         fp.read
       end
     end
+    @session["files"] = 
   rescue => e
     api_response("ERROR", e.to_s)
+  ensure
+    @session["files"] =  nil
   end
 
   def upload
+    @no_render = true
     file_names  = []
     files = @cgi.params["files[]"]
     if !files.is_a?(Array)
@@ -173,7 +181,6 @@ class EditController < ApplicationController
       end
     end
     @session["files"] = file_names.to_json
-    @no_render = true
      
     api_response("SUCCESS", "")
   rescue Exception => e
@@ -274,7 +281,6 @@ class EditController < ApplicationController
   end
 
   def save_base64_picture(data_url, path)
-  $stderr.puts data_url
     png  = Base64.decode64(data_url['data:image/png;base64,'.length..-1])
     file_name = path + '/chart.png'
     File.open(file_name, 'wb') { |f| f.write(png) }

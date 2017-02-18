@@ -68,7 +68,7 @@ class DoscaAPI
                client_code, mail, contents_code, nil, pdf_file, submit_data)
   end
 
-  def DoscaAPI.update(client_code, mail, contents_code, contents_no, submit_data)
+  def DoscaAPI.update(client_code, mail, contents_code, contents_no, pdf_file, submit_data)
     update_common(Settings._settings[:api][:update_url],
                client_code, mail, contents_code, contents_no, pdf_file, submit_data)
   end
