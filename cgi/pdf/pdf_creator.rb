@@ -39,6 +39,8 @@ class PDFCreator
     end
 
     @news_images.each do |file|
+    $stderr.puts "file-------------"
+    $stderr.puts file
       image = ChunkyPNG::Image.from_file(file)
       image.save(file, {:bit_depth=> 8})
     end

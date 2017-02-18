@@ -6,10 +6,12 @@
   <title>DOSCA JS Contents</title>
   <script src="<%=@contents_uri%>/js/jquery.min.js"></script>
   <script src="<%=@contents_uri%>/js/message.js"></script>
+  <script src="<%=@contents_uri%>/js/jquery.loading-indicator.js"></script>
   <!-- Bootstrap core CSS -->
   <link href="<%=@contents_uri%>/css/bootstrap.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/bootstrap-theme.min.css" rel="stylesheet">
   <!-- Custom styles for this template -->
+  <link href="<%=@contents_uri%>/css/jquery.loading-indicator.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/theme.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/pikaday/css/pikaday.css" rel="stylesheet">
   <link href="<%=@contents_uri%>/css/combo.select.css" rel="stylesheet">
@@ -211,7 +213,7 @@
         <!--Line-5-->
         <div class="col-md-12">
           <div class="col-md-offset-5">
-            <button type="button" class="btn btn-grey" id="submitBtn" style="width: 120px; margin-right: 20px;" onclick="submitChk();" disabled>Submit</button>
+            <button type="button" class="btn btn-grey" id="submitBtn" style="width: 120px; margin-right: 20px;" onclick="submitChk('self');" disabled>Submit</button>
           </div>
         </div>
       </div>

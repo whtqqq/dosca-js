@@ -131,29 +131,23 @@ class EditController < ApplicationController
   end
 
   def delete 
+    @no_render = true
     user_info = user_info_from_session
     resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], 
               @params[:contents_code], @params[:contents_no])
-    @no_render = true
     @cgi.out("type" => "application/json") {
       resp.to_s
     }
+  rescue => e
+    api_response("ERROR", e.to_s)
   end
 
   def preview
-    user_info = user_info_from_session
-    past_contents = extract_contents(user_info, "PAST_INCIDENT")
-    news_contents = extract_contents(user_info, "INCIDENT_NEWS")
-    if past_contents && past_contents[:code] == @params[:contents_code]
-      title = past_contents[:name]
-    end
-    if news_contents && news_contents[:code] == @params[:contents_code]
-      title = news_contents[:name]
-    end
-
-    pdf_file = create_pdf(user_info[:client_code], @params[:contents_code], @params[:contents_no], 
-                        title, utc_time, @params)
     @no_render = true
+    user_info = user_info_from_session
+    news_contents = extract_contents(user_info, "INCIDENT_NEWS")
+    pdf_file = create_pdf(user_info[:client_code], @params[:contents_code], @params[:contents_no], 
+                        news_contents[:name], utc_time, @params)
     open(pdf_file) do |fp|
       basename = File.basename(pdf_file)
       header = {
@@ -164,14 +158,8 @@ class EditController < ApplicationController
         fp.read
       end
     end
-    rescue => e
-      json = {
-         "resulet" => "ERROR",
-         "message" =>  e.to_s
-      }.to_json
-      @cgi.out("type" => "application/json")  {
-        json
-      }
+  rescue => e
+    api_response("ERROR", e.to_s)
   end
 
   def upload
@@ -186,15 +174,10 @@ class EditController < ApplicationController
     end
     @session["files"] = file_names.to_json
     @no_render = true
-
-    json = {
-       "resulet" => "SUCCESS",
-       "message" => ""
-    }.to_json
-
-    @cgi.out("type" => "application/json")  {
-       json
-    }
+     
+    api_response("SUCCESS", "")
+  rescue Exception => e
+    api_response("ERROR", e.to_s)
   end
 
   private
@@ -275,7 +258,8 @@ class EditController < ApplicationController
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
-    news_pictures = JSON.parse(@session["files"] || [])
+    news_pictures = []
+    news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil?
 
     pdf = PDFCreator.new(pdf_name, 
           title,
@@ -311,5 +295,16 @@ class EditController < ApplicationController
     return true if obj.nil?
     return true if obj.empty?
     return false 
+  end
+
+  def api_response(result, message)
+    json = {
+       "result" => result,
+       "message" => message
+    }.to_json
+
+    @cgi.out("type" => "application/json")  {
+       json
+    }
   end
 end
