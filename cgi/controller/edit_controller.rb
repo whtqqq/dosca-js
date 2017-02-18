@@ -162,7 +162,7 @@ class EditController < ApplicationController
         fp.read
       end
     end
-    @session["files"] = 
+    @session["files"] = nil
   rescue => e
     api_response("ERROR", e.to_s)
   ensure
