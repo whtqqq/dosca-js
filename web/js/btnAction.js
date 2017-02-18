@@ -176,3 +176,22 @@ function reSetForm() {
     $("#incidentGroup").attr("class", "form-group");
     $("#incidentMsg").text("");
 }
+
+$("#delBtn").on("click",function(){
+  console.log("/dosca-js/edit/delete?contents_code=" + $("#ContentCode").val() + "&contents_no=" + $("#ContentNo").val());
+  $.ajax({
+    async:false,
+    type:"GET",
+    url:"/dosca-js/edit/delete?contents_code=" + $("#ContentCode").val() + "&contents_no=" + $("#ContentNo").val(),
+    success:function(data,textStatus,jqXHR){
+        console.log(data)
+        console.log(textStatus)
+        console.log(jqXHR)
+    },
+    error:function(xhr,textStatus){
+        console.log('错误')
+        console.log(xhr)
+        console.log(textStatus)
+    }
+  });
+});
