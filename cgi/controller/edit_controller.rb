@@ -46,6 +46,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
 
     if status == STATUS_EDIT
@@ -54,6 +55,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
     
     if status == STATUS_SHOW
@@ -107,6 +109,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
 
     if status == STATUS_EDIT
@@ -114,6 +117,7 @@ class EditController < ApplicationController
       if @error_message
         @value = @params.dup
       end
+      @session["files"] =  nil
     end
 
     if status == STATUS_SHOW
@@ -158,8 +162,11 @@ class EditController < ApplicationController
         fp.read
       end
     end
+    @session["files"] = 
   rescue => e
     api_response("ERROR", e.to_s)
+  ensure
+    @session["files"] =  nil
   end
 
   def upload
