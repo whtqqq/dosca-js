@@ -27,8 +27,8 @@ puts <<END
     "summary": "contents_no : 000001 The engine room oinity of the sailing ship.Ship Charactoristics",
     "web_page": "http://dosca.com/MOL_NEW-1",
     "termination_date": "2015-12-31",
-    "latitude": "35.8N",
-    "longitude": "145.3E"
+    "latitude": "35-48.8 N",
+    "longitude": "145-18.3 E"
 }
 END
 end
@@ -40,9 +40,9 @@ puts <<END
     "subject": "For test contents_no :000002",
     "category": "Oil Leak",
     "summary": "The engine room oinity of the sailing ship.Ship Charactoristics",
-    "ports": "Tokyo",
-    "latitude": "35.8N",
-    "longitude": "140.3E"
+    "ports": "FLORO (FLORA)",
+    "latitude": "61-36.29 N",
+    "longitude": "5-1.7 E"
 }
 END
 end
@@ -56,9 +56,9 @@ puts <<END
     "date_time": "2017-3-30 23 50",
     "vessel_name": "kawasaki maru MOL1",
     "termination_date": "2018-12-31",
-    "ports": "Tokyo",
-    "latitude": "56.3N",
-    "longitude": "43.8E"
+    "ports": "TOKYO",
+    "latitude": "56-18.3 N",
+    "longitude": "43-48.8 E"
 }
 END
 end
@@ -71,8 +71,8 @@ puts <<END
     "cargo": "Nagoya",
     "date_time": "2017-2-13 23 47",
     "vessel_name": "kawasaki maru MOL2",
-    "latitude": "56.3N",
-    "longitude": "43.8E"
+    "latitude": "56-18.3 N",
+    "longitude": "43-48.8 E"
 }
 END
 end
@@ -86,9 +86,9 @@ puts <<END
     "date_time": "2017-2-17 23 50",
     "vessel_name": "kawasaki maru nyk1",
     "termination_date": "2016-12-31",
-    "ports": "Tokyo",
-    "latitude": "56.3N",
-    "longitude": "43.8E"
+    "ports": "TOKYO",
+    "latitude": "56-18.3 N",
+    "longitude": "43-48.8 E"
 }
 END
 end
@@ -101,8 +101,8 @@ puts <<END
     "cargo": "Nagoya",
     "date_time": "2017-2-11 23 49",
     "vessel_name": "kawasaki maru nyk2",
-    "latitude": "0.3N",
-    "longitude": "140.8E"
+    "latitude": "0-18.3 N",
+    "longitude": "140-48.8 E"
 }
 END
 end
