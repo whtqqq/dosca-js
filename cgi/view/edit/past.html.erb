@@ -77,7 +77,7 @@
           <div class="form-group">
             <label for="IssueDate" class="col-sm-2 control-label">Issue Date</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control bg-white" id="IssueDate" value="<%= @values[:issue_date]%>" readonly>
+              <input type="text" class="form-control bg-white" id="IssueDate" value="<%=@values[:issue_date]%>" readonly>
             </div>
             <div class="pull-right">
               <div class="btn-group">
@@ -379,7 +379,7 @@
       if(pointChk()){
         var data = new Array();
         var position = point.split(" ");
-        
+
         if　(position[0].indexOf("-") > 0) {
           var lat = position[0].split("-");
           var lat_d = lat[0];
@@ -388,14 +388,14 @@
           var lat_d = position[0];
           var lat_m = 0;
         }
-        
+
         var lat_num = parseFloat(lat_d) + parseFloat(lat_m) / 60;
-        
+
         data[1] = lat_num;
         if(position[1] == "S") {
           data[1] = lat_num * (-1);
         }
-        
+
         if　(position[2].indexOf("-") > 0) {
           var lon = position[2].split("-");
           var lon_d = lon[0];
@@ -404,9 +404,9 @@
           var lon_d = position[2];
           var lon_m = 0;
         }
-        
+
         var lon_num = parseFloat(lon_d) + parseFloat(lon_m) / 60;
-        
+
         data[0] = lon_num;
         if(position[3] == "W") {
           data[0] = lon_num * (-1);
