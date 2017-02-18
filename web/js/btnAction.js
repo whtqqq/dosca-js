@@ -187,6 +187,8 @@ $("#delBtn").on("click",function(){
         console.log(data)
         console.log(textStatus)
         console.log(jqXHR)
+        $.alert(getMsg(MSG_DELSUCCESS));
+        $("#newJumpN").click();
     },
     error:function(xhr,textStatus){
         console.log('错误')

@@ -55,7 +55,7 @@
 <form class="form-horizontal" id="editForm" role="form" method="post" action="/dosca-js/edit/news">
   <input type="hidden" id="ContentCode" name="contents_code" value="<%=@values[:contents_code]%>">
   <input type="hidden" id="ContentNo" name="contents_no" value="<%=@values[:contents_no]%>">
-  <input type="hidden" id="pageStatus" name="status" value="<%=@values[:status]%>"> 
+  <input type="hidden" id="pageStatus" name="status" value="<%=@values[:status]%>">
   <input type="hidden" id="d3Map" name="map_picture" value="">
   <input type="hidden" id="pageID" value="edit">
 
@@ -79,7 +79,7 @@
           <div class="form-group">
             <label for="IssueDate" class="col-sm-2 control-label">Issue Date</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control bg-white" id="IssueDate" readonly>
+              <input type="text" class="form-control bg-white" id="IssueDate" value="<%=@values[:issue_date]%>" readonly>
             </div>
             <div class="pull-right">
               <div class="btn-group">
