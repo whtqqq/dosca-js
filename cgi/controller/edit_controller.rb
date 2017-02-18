@@ -136,7 +136,7 @@ class EditController < ApplicationController
     resp = DoscaAPI.remove(user_info[:client_code], user_info[:mail], 
               @params[:contents_code], @params[:contents_no])
     @cgi.out("type" => "application/json") {
-      resp.to_s
+      resp
     }
   rescue => e
     api_response("ERROR", e.to_s)
