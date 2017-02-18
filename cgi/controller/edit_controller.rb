@@ -103,7 +103,6 @@ class EditController < ApplicationController
     @values[:status] = status
 
     if status == STATUS_NEW
-      $stderr.puts "status == STATUS_NEW"
       new_proc(user_info, @news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
@@ -212,7 +211,7 @@ class EditController < ApplicationController
     if !has_error?(resp)
       @error_message = resp[:message]
     end
-    File.delete pdf_file if File.exist?(pdf_file)
+    #File.delete pdf_file if File.exist?(pdf_file)
   end
 
   def edit_proc(user_info, contents, values, contents_no, pdf_file)
@@ -276,7 +275,7 @@ class EditController < ApplicationController
     path = Settings._settings[:server][:temp_pdf_directory]
     pdf_name = path + "/" + [client_code, contents_code, contents_no].join("_") + ".pdf"
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
-    news_pictures = @session["files"]
+    news_pictures = JSON.parse(@session["files"] || [])
 
     pdf = PDFCreator.new(pdf_name, 
           title,
@@ -291,6 +290,7 @@ class EditController < ApplicationController
   end
 
   def save_base64_picture(data_url, path)
+  $stderr.puts data_url
     png  = Base64.decode64(data_url['data:image/png;base64,'.length..-1])
     file_name = path + '/chart.png'
     File.open(file_name, 'wb') { |f| f.write(png) }
