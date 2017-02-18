@@ -232,7 +232,7 @@
                 <select id="Port" class="form-control">
                   <option value=""></option>
                   <% @ports.each {|hash| %>
-                    <option value="<%= hash.keys[0] %>"><%= hash.keys[0] %></option>
+                    <option value="<%= hash.values[0][0] + "," + hash.values[0][1] %>"><%= hash.keys[0] %></option>
                   <% } %>
                 </select>
               </div>
@@ -257,7 +257,7 @@
         <div class="col-md-12 none-padding history-style">
           <ul class="list-group history-ul-style" id="historyList" style="height: 318px;">
             <% @histories.each{|his|%>
-            <span class="list-group-item li-padding hand-mouse" onclick="loadHistory(<%=his[:contents_no]%>);"><%=his[:title]%></span>
+            <span class="list-group-item li-padding hand-mouse" onclick="loadHistory('<%=his[:contents_no]%>');"><%=his[:title]%></span>
             <% }%>
           </ul>
         </div>

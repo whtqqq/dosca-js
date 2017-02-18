@@ -180,7 +180,7 @@
                 <select id="Port" name="ports">
                   <option value=""></option>
                  <% @ports.each {|hash| %>
-                    <option value="<%= hash.values[0] %>"><%= hash.keys[0] %></option>
+                    <option value="<%= hash.values[0][0] + "," + hash.values[0][1] %>"><%= hash.keys[0] %></option>
                   <% } %>
                 </select>
               </div>
