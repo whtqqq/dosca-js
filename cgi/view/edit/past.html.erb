@@ -234,7 +234,7 @@
                 <select id="Port" class="form-control">
                   <option value=""></option>
                   <% @ports.each {|hash| %>
-                    <option value="<%= hash.values[0][0] + " " + hash.values[0][1] %>"><%= hash.keys[0] %></option>
+                    <option value="<%= hash.values[0][0] + " " + hash.values[0][1] %>" <%="selected" if @values[:ports] and hash.keys[0].to_s==@values[:ports].to_s%>><%= hash.keys[0] %></option>
                   <% } %>
                 </select>
               </div>
