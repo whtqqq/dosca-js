@@ -143,11 +143,11 @@ function submitChk(action){
     }
   }
 
-  if($("#pageID").val() == "edit") {
+  //if($("#pageID").val() == "edit") {
     if(!afterDateChk()) {
       flg ++;
     }
-  }
+  //}
 
   if(!URLChk($('#WebPage'))) {
     flg ++;
