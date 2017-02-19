@@ -313,13 +313,9 @@ function pointChk() {
 function afterDateChk() {
   var date = $("#TerminationDate").val();
   var now = new Date().Format("yyyy-MM-dd");
-  console.log(date);
-  console.log(now);
   if(date.trim() != "" && date.trim().length != 0) {
     var pageDate = new Date(date);
     var nowDate = new Date(now);
-    console(pageDate);
-    console(nowDate);
     if(nowDate.getTime() > pageDate.getTime()){
       $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
       $("#TerminationDate").parent().next().text(getMsg("MSG_TERMINATIONSTART"));

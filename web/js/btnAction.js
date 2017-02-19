@@ -85,7 +85,7 @@ function selectHistory() {
 function editBtnAction() {
   $("#editBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
   $("#delBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
-  $("#PictureDownload").removeAttr("disabled");
+  // $("#PictureDownload").removeAttr("disabled");
   $("#IssueDate").addClass("bg-white");
   $("#TerminationDate").addClass("bg-white");
   $("#incidentDate").addClass("bg-white");
