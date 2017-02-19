@@ -305,7 +305,7 @@ function pointChk() {
         $('#Position').next().show();
         result = false;
     } else {
-        // Add for check 
+        // Add for check
         var reg = /[NS]/;
         var position = input.split(reg);
         if (position[0].indexOf("-") > 0 ) {
@@ -324,7 +324,7 @@ function pointChk() {
                 result = false;
             }
         }
-    
+
         if (position[1].indexOf("-") > 0 ) {
             var lon = position[1].split("-");
             var lon_d = parseFloat(lon[0]);
@@ -342,7 +342,7 @@ function pointChk() {
             }
         }
     }
-    
+
     if (!result) {
         $('#Position').parent().parent().attr("class","form-group has-error");
         $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
@@ -350,6 +350,7 @@ function pointChk() {
     } else {
         $('#Position').parent().parent().attr("class","form-group");
         $('#Position').next().hide();
+        $('#PositionOld').val($("#Position").val());
     }
     return result;
   }
