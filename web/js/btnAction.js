@@ -22,6 +22,7 @@ $("#Period").click(function() {
       maxDate: new Date('2099-12-31'),
       yearRange: [1980,2099],
     });
+    picker.setDate(new Date());
   }
 
   var date = addDay(30);
@@ -98,6 +99,7 @@ function editBtnAction() {
     maxDate: new Date('2099-12-31'),
     yearRange: [1980,2099],
   });
+  picker.setDate(new Date());
   if(terminationDate.trim() != "") {
     $("#TerminationDate").val(terminationDate);
   } else {
@@ -128,6 +130,7 @@ function editBtnAction() {
       maxDate: new Date(),
       yearRange: [1980,2099],
     });
+    picker2.setDate(new Date());
   }
   $("#pageStatus").val(3);
   $(".combo-arrow1").attr("class", "combo-arrow");

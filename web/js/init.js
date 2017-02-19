@@ -12,6 +12,7 @@ $(document).ready(function() {
   maxDate: new Date('2099-12-31'),
   yearRange: [1980,2099],
   });
+  picker.setDate(new Date());
   if(document.getElementById('incidentDate') != null) {
     picker2 = new Pikaday({
     field: document.getElementById('incidentDate'),
@@ -21,6 +22,7 @@ $(document).ready(function() {
     yearRange: [1980,2099],
     });
   }
+  picker2.setDate(new Date());
   $('#Port').comboSelect();
   $('#Category').comboSelect();
   if(document.getElementById('incidentDate') == null) {
