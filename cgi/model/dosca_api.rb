@@ -163,7 +163,7 @@ class DoscaAPI
     req.body = post_body.join
 
     resp = http.request(req)
-    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + data.to_s)
+    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + data.to_json.to_s)
     LogWriter.info(mail, File.basename(uri.to_s) + " response:" + resp.body.to_s)
     Application.symbolize_keys(JSON.parse(resp.body)) 
   end
