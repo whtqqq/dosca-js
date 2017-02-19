@@ -212,12 +212,12 @@ class EditController < ApplicationController
     if !has_error?(resp)
       @error_message = resp[:message]
     end
-    #File.delete pdf_file if File.exist?(pdf_file)
+    File.delete pdf_file if File.exist?(pdf_file)
   end
 
   def edit_proc(contents, values, contents_no, pdf_file)
     if !dirty?(values, @params)
-      @error_message = "no change"
+      @error_message = "No change happended."
       return
     end
 
