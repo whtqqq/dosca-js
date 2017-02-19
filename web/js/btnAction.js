@@ -130,7 +130,7 @@ function editBtnAction() {
       maxDate: new Date(),
       yearRange: [1980,2099],
     });
-    picker2.setDate(new Date());
+    // picker2.setDate(new Date());
   }
   $("#pageStatus").val(3);
   $(".combo-arrow1").attr("class", "combo-arrow");

@@ -21,7 +21,7 @@ $(document).ready(function() {
     maxDate: new Date(),
     yearRange: [1980,2099],
     });
-    picker2.setDate(new Date());
+    // picker2.setDate(new Date());
   }
   $('#Port').comboSelect();
   $('#Category').comboSelect();
@@ -39,12 +39,12 @@ $(document).ready(function() {
       showUpload:false,
       showRemove:false,
       browseOnZoneClick:true,
+      // resizePreference: 'width',
       resizeImage: true,
       maxImageWidth: 200,
       maxImageHeight: 200,
-      resizePreference: 'width',
       fileActionSettings:{showUpload:false},
-      // previewSettings:{image: {width: "260px", height: "auto"}},
+      previewSettings:{image: {width: "200px", height: "auto"}},
       allowedFileExtensions : ['jpg', 'png', 'gif'],
       dropZoneTitle:"Picture file（jpeg/jpg/png） Drag & Drop here !"
     });
