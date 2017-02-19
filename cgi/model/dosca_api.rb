@@ -115,6 +115,7 @@ class DoscaAPI
   def DoscaAPI.update_common(url, client_code, mail, contents_code, contents_no, pdf_file, submit_data)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
+    $stderr.puts submit_data.inspect
 
     my_boundary = "AaB03x0lsmtxm2"
     header = {"type"=> "multipart/form-data, boundary=#{my_boundary}"}
@@ -137,10 +138,10 @@ class DoscaAPI
     data["cargo"] = submit_data[:cargo] || ""
     data["vessel_name"] = submit_data[:vessel_name] || ""
 
-    unless submit_data[:location].nil? || submit_data[:location].empty?
-      localtion = submit_data[:latitude].split(",")
-      data["longitude"] = location[0]
-      data["latitude"] = location[1]
+    unless submit_data[:position].nil? || submit_data[:position].empty?
+      position = submit_data[:position].match(/(.*)(N|S|s|n)(.*)/)
+      data["longitude"] = position[1] + position[2]
+      data["latitude"] = position[3].strip
     end
 
 
