@@ -44,7 +44,7 @@ class PDFCreator
     end
   end
 
-  def create_table(font_size, title_name,position, width, show_lines, shaded_rows)
+  def create_table(font_size, title_name, position, width, show_lines, shaded_rows)
     PDF::SimpleTable.new do |tab|
       tab.column_order.push(*%w(colname))
       tab.columns["colname"] = PDF::SimpleTable::Column.new("colname") { |col|
@@ -91,34 +91,34 @@ class PDFCreator
   end
 
   def put_news_picture()
-    create_table(15, "                                                         Picture", 311, @pdf.margin_width, :all, :shaded)
+    create_table(15, "                      Picture", 311, @pdf.margin_width, :all, :shaded)
     #One picture
     if @news_images && @news_images.size == 1
-      put_image(@news_images[0], 160, 13, nil, 230)
+      put_image(@news_images[0], 160, 33, nil, 230)
     end
     #Two pircture
     if @news_images && @news_images.size == 2
-      put_image(@news_images[0], 45, 33, nil, 180)
-      put_image(@news_images[1], 320, 33, nil, 180)
+      put_image(@news_images[0], 45, 50, nil, 200)
+      put_image(@news_images[1], 320, 50, nil, 200)
     end
     #Three picture
     if @news_images && @news_images.size == 3
-      put_image(@news_images[0], 100, 130, nil, 115)
-      put_image(@news_images[1], 385, 130, nil, 115)
-      put_image(@news_images[2], 100, 13, nil, 115)
+      put_image(@news_images[0], 100, 160, nil, 115)
+      put_image(@news_images[1], 385, 160, nil, 115)
+      put_image(@news_images[2], 100, 33, nil, 115)
     end
     #Four picture
     if @news_images && @news_images.size == 4
-      put_image(@news_images[0], 100, 130, nil, 115)
-      put_image(@news_images[1], 385, 130, nil, 115)
-      put_image(@news_images[2], 100, 13, nil, 115)
-      put_image(@news_images[3], 385, 13, nil, 115)
+      put_image(@news_images[0], 100, 160, nil, 115)
+      put_image(@news_images[1], 385, 160, nil, 115)
+      put_image(@news_images[2], 100, 33, nil, 115)
+      put_image(@news_images[3], 385, 33, nil, 115)
     end
   end
 
   def put_information()
     #issue_date
-    @pdf.move_pointer(9)
+    @pdf.move_pointer(14)
     create_table(10, "Issue Date:" + "#{@issue_date}", 221, @pdf.margin_width - 180, :none, :none)
     create_line(60)
 
@@ -140,10 +140,10 @@ class PDFCreator
   def put_summary()
     arr = str_to_arr(@str_list)
     @pdf.move_pointer(2)
-    create_table(15, "                                                         Summary", 311, @pdf.margin_width, :all, :shaded)
+    create_table(15, "                     Summary", 311, @pdf.margin_width, :all, :shaded)
     @pdf.move_pointer(2)
     (0..SUMMARY_LINES - 1).each { |i| 
-      create_table(8.5, "#{arr[i]}", 311, @pdf.margin_width, :none, :none)
+      create_table(7.9, "#{arr[i]}", 309, @pdf.margin_width + 50, :none, :none)
     }
   end
 
@@ -152,13 +152,16 @@ class PDFCreator
     @pdf.move_pointer(-50)
 
     #Title
-    create_table(30, "                " + "#{@title_name}", 311, @pdf.margin_width, :all, :shaded)
+    create_table(32, "   " + "#{@title_name}", 311, @pdf.margin_width, :all, :shaded)
 
     #Information
     put_information()
 
     #Map image
     put_image(@map_image, @pdf.margin_width - 180, @pdf.margin_height - 133, nil, 96)
+
+    #vertical stroke
+    @pdf.line(@pdf.margin_width - 180,  @pdf.margin_height - 133, @pdf.margin_width - 180,  @pdf.margin_height - 37).stroke
 
     #Write Summary
     put_summary()

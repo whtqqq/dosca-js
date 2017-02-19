@@ -18,9 +18,7 @@ class EditController < ApplicationController
 
     @mail = user_info[:mail]
     @client_code = user_info[:client_code]
-
     @past_contents = extract_contents(user_info, "PAST_INCIDENT")
-
     @items = user_info[:disp][@past_contents[:code].to_sym]
     @categories = user_info[:categories][@past_contents[:code].to_sym]
     @ports = user_info[:ports][@past_contents[:code].to_sym]
@@ -158,6 +156,10 @@ class EditController < ApplicationController
       end
     end
 
+    if status != STATUS_EDIT && status != STATUS_NEW
+      delete_cached_files
+    end
+
     LogWriter.info("System", "Edit#news End.")
   end
 
@@ -203,7 +205,7 @@ class EditController < ApplicationController
       end
     end
 
-    @session["files"] = nil
+    File.delete pdf_file if File.exist?(pdf_file)
     LogWriter.info("System", "Edit#preview End.")
   end
 
@@ -241,11 +243,12 @@ class EditController < ApplicationController
 
     resp = DoscaAPI.new(@client_code,
                       @mail, contents[:code],  pdf_file, @params) 
-
     if !has_error?(resp)
       @error_message = resp[:message]
     end
+
     File.delete pdf_file if File.exist?(pdf_file)
+    delete_cached_files
   end
 
   def edit_proc(contents, values, contents_no, pdf_file)
@@ -264,7 +267,9 @@ class EditController < ApplicationController
     if !has_error?(resp)
       @error_message = resp[:message]
     end
+
     File.delete pdf_file if File.exist?(pdf_file)
+    delete_cached_files
   end
 
   def extract_contents(user_info, keyword)
@@ -324,9 +329,6 @@ class EditController < ApplicationController
           map_picture, news_pictures)
     pdf.create()
 
-    news_pictures.each do |file|
-      File.delete file if File.exist?(file)
-    end
     File.delete map_picture if File.exist?(map_picture)
 
     pdf_name
@@ -364,5 +366,14 @@ class EditController < ApplicationController
     @cgi.out("type" => "application/json")  {
        json
     }
+  end
+
+  def delete_cached_files
+    news_pictures = []
+    news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil? || @session["files"].empty?
+    news_pictures.each do |file|
+      File.delete file if File.exist?(file)
+    end
+    @session["files"] = nil
   end
 end
