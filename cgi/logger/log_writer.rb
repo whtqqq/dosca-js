@@ -9,8 +9,37 @@ require 'fileutils'
 #    LogWriter.exit              >>>> close log writer
 
 class LogWriter
-
   class << self
+    def write(mail, str)
+      @log = find_log_file
+      @controller = Application.get_controller_and_action_name[:controller]
+      @log.puts "? #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.flush
+    end
+  
+    def info(mail, str)
+      @log = find_log_file
+      @controller = Application.get_controller_and_action_name[:controller]
+      @log.puts "I #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.flush
+    end
+  
+    def warn(mail, str)
+      @log = find_log_file
+      @controller = Application.get_controller_and_action_name[:controller]
+      @log.puts "W #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.flush
+    end
+  
+    def error(mail, str)
+      @log = find_log_file
+      @controller = Application.get_controller_and_action_name[:controller]
+      @log.puts "E #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.flush
+    end
+
+    private
+  
     def nowtime
       now = Time.now
       str = sprintf( "%s:%06d", now.strftime("%Y/%m/%d %H:%M:%S"), now.usec )
@@ -59,7 +88,7 @@ class LogWriter
       end
   
       tm_str = Time.now.utc.strftime( "%Y%m%d" )
-      logfile = "#{log_uri}/#{controller}.#{tm_str}.log"
+      logfile = "#{log_uri}/#{controller}_controller.#{tm_str}.log"
   
       if(logfile == nil)
         logfile = File.basename(__FILE__) + ".log"
@@ -67,39 +96,6 @@ class LogWriter
       logfile_rename(logfile, 2, 10000000)
       log = open(logfile, "a")
       return log
-    end
-  
-    def write(mail, str)
-      @log = find_log_file
-      @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "? #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
-      @log.flush
-    end
-  
-    def info(mail, str)
-      @log = find_log_file
-      @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "I #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
-      @log.flush
-    end
-  
-    def warn(mail, str)
-      @log = find_log_file
-      @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "W #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
-      @log.flush
-    end
-  
-    def error(mail, str)
-      @log = find_log_file
-      @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "E #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
-      @log.flush
-    end
-  
-    def LogWriter.exit
-      @log = find_log_file
-      @log.close
     end
   end
 end
