@@ -18,9 +18,9 @@ $("#Period").click(function() {
     picker = new Pikaday({
       field: document.getElementById('TerminationDate'),
       firstDay: 1,
-      minDate: new Date(),
-      maxDate: new Date('2030-12-31'),
-      yearRange: [2017,2030],
+      minDate: new Date('1980-01-01'),
+      maxDate: new Date('2099-12-31'),
+      yearRange: [1980,2099],
     });
   }
 
@@ -94,9 +94,9 @@ function editBtnAction() {
   picker = new Pikaday({
     field: document.getElementById('TerminationDate'),
     firstDay: 1,
-    minDate: new Date(),
-    maxDate: new Date('2030-12-31'),
-    yearRange: [2017,2030],
+    minDate: new Date('1980-01-01'),
+    maxDate: new Date('2099-12-31'),
+    yearRange: [1980,2099],
   });
   if(terminationDate != " ") {
     $("#TerminationDate").val(terminationDate);
@@ -126,7 +126,7 @@ function editBtnAction() {
       firstDay: 1,
       minDate: new Date('1980-01-01'),
       maxDate: new Date(),
-      yearRange: [2017,2030],
+      yearRange: [1980,2099],
     });
   }
   $("#pageStatus").val(3);

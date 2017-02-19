@@ -8,9 +8,9 @@ $(document).ready(function() {
   picker = new Pikaday({
   field: document.getElementById('TerminationDate'),
   firstDay: 1,
-  minDate: new Date(),
-  maxDate: new Date('2030-12-31'),
-  yearRange: [2017,2030],
+  minDate: new Date('1980-01-01'),
+  maxDate: new Date('2099-12-31'),
+  yearRange: [1980,2099],
   });
   if(document.getElementById('incidentDate') != null) {
     picker2 = new Pikaday({
@@ -18,7 +18,7 @@ $(document).ready(function() {
     firstDay: 1,
     minDate: new Date('1980-01-01'),
     maxDate: new Date(),
-    yearRange: [2017,2030],
+    yearRange: [1980,2099],
     });
   }
   $('#Port').comboSelect();
@@ -59,7 +59,7 @@ $(document).ready(function() {
         },
         maxFileSize: 100,
         minFileCount: 1,
-        maxFileCount: 2,
+        maxFileCount: 1,
         showBrowse:false,
         showCaption:false,
         showUpload:false,
@@ -71,7 +71,9 @@ $(document).ready(function() {
         dropZoneTitle:"PDF file Drag & Drop here !"
     });
   }
-  $("#noPeriod").click();
+  if($("#pageStatus").val() != 2) {
+    $("#noPeriod").click();
+  }
   submitBtnActive();
 //+---------------------------------------------------
 //| listener

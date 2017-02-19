@@ -315,6 +315,8 @@
 
           $('#Position').val(show[0] + " " + show[1]);
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
+          $("#pageStatus").val("4");
+          submitBtnActive();
           drawVessel(data);
         }
       }
