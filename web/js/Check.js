@@ -342,8 +342,9 @@ function pointChk() {
             }
         }
     }
-    
-    if (!result) {
+  }
+
+  if (!result) {
         $('#Position').parent().parent().attr("class","form-group has-error");
         $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
         $('#Position').next().show();
@@ -352,7 +353,7 @@ function pointChk() {
         $('#Position').next().hide();
     }
     return result;
-  }
+
 }
 
 function afterDateChk() {
