@@ -48,7 +48,7 @@ function selectHistory() {
   /*TerminationDate-start*/
   $("#TerminationDate").removeClass("bg-white");
   $("#incidentDate").removeClass("bg-white");
-  $("#noPeriod").click();
+  // $("#noPeriod").click();
   $("#Period").attr("disabled", "disabled");
   $("#noPeriod").attr("disabled", "disabled");
   if(picker != null){
@@ -98,7 +98,7 @@ function editBtnAction() {
     maxDate: new Date('2099-12-31'),
     yearRange: [1980,2099],
   });
-  if(terminationDate != " ") {
+  if(terminationDate.trim() != "") {
     $("#TerminationDate").val(terminationDate);
   } else {
     $("#noPeriod").click();
@@ -188,7 +188,7 @@ function delAction() {
         console.log(textStatus)
         console.log(jqXHR)
         $.alert(getMsg("MSG_DELSUCCESS"));
-        $("#newJumpN").click();
+        window.location.href = $("#newJumpN").attr("href");
     },
     error:function(xhr,textStatus){
         console.log('错误')
