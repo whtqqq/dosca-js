@@ -114,7 +114,9 @@ function submitChk(action){
     if(!inputChk($("#Summary"))){
       flg ++;
     }
-    summaryLineNumChk(flg);
+    if(summaryLineNumChk() > 0) {
+      flg ++;
+    }
   }
 
   if(position != undefined && position != null && position.trim().length != 0) {
@@ -371,16 +373,16 @@ function afterDateChk() {
   }
 }
 
-function summaryLineNumChk(flg) {
+function summaryLineNumChk() {
+  var tmpFlg = 0;
   var strs = new Array();
   strs = $("#Summary").val().split("\n");
   var lineNum = strs.length;
-
   if(lineNum > 25) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
     $("#Summary").next().text(getMsg("MSG_SUMMARYLINE"));
     $("#Summary").next().show();
-    flg++;
+    tmpFlg++;
   } else {
     for(var line in strs) {
       var tmp = Math.ceil(strs[line].length/120)-1;
@@ -391,9 +393,10 @@ function summaryLineNumChk(flg) {
         $("#Summary").parent().parent().attr("class", "form-group has-error");
         $("#Summary").next().text(getMsg("MSG_SUMMARYLINE"));
         $("#Summary").next().show();
-        flg++
+        tmpFlg++
         break;
       }
     }
   }
+  return tmpFlg;
 }
