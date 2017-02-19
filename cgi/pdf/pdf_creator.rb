@@ -28,7 +28,7 @@ class PDFCreator
     @str_list = str_list
 
     @pdf = PDF::Writer.new("A4")
-    @pdf.select_font("Helvetica")
+    @pdf.select_font("Courier")
     @pdf.stroke_color    Color::RGB::Black
     @pdf.margins_pt(10, 10, 10, 10)
     @pdf.rectangle(20, 10, @pdf.margin_width - 15, @pdf.margin_height - 10).stroke
