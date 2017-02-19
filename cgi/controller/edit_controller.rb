@@ -7,7 +7,15 @@ class EditController < ApplicationController
   
   def past
     LogWriter.info("System", "Edit#past Start.")
-    user_info = user_info_from_session
+
+    user_info = {}
+    begin
+      user_info = user_info_from_session
+    rescue => e
+      redirect_to @root_uri + "/login"
+      return 
+    end
+
     @mail = user_info[:mail]
     @client_code = user_info[:client_code]
 
@@ -79,7 +87,15 @@ class EditController < ApplicationController
 
   def news
     LogWriter.info("System", "Edit#news Start.")
-    user_info = user_info_from_session
+
+    user_info = {}
+    begin
+      user_info = user_info_from_session
+    rescue => e
+      redirect_to @root_uri + "/login"
+      return 
+    end
+
     @mail = user_info[:mail]
     @client_code = user_info[:client_code]
 
@@ -128,10 +144,15 @@ class EditController < ApplicationController
       @session["files"] =  nil
     end
 
+$stderr.puts "status="
+$stderr.puts status
     if status == STATUS_SHOW
+
+$stderr.puts "Execute show"
       pdf_file =  DoscaAPI.pdf_download(@client_code, 
                               @mail, @news_contents[:code], contents_no) 
 
+$stderr.puts pdf_file
       @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       @values[:contents_code] = @news_contents[:code]
       @values[:contents_no] = contents_no  
