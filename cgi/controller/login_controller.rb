@@ -10,7 +10,7 @@ class LoginController < ApplicationController
     username = @params[:username]
     resp = DoscaAPI.auth(username, @params[:password], @params[:email])
     if has_error?(resp)
-      @error_message = resp[:message]
+      @error_message = "Please try again."
     else
       @session["username"] = username
       user_info =  resp
@@ -32,5 +32,7 @@ class LoginController < ApplicationController
     end
 
     LogWriter.info("System", "Login#auth End.")
+  rescue => e 
+     @error_message = "System failure:[" + e.to_s + "]"
   end
 end

@@ -73,6 +73,9 @@
         </div>
         <!--Line-1-->
         <div class="col-md-12 padding-top-25">
+          <div>
+             <span class="text-danger"><%= @error_message %></span>
+          </div>
           <div class="form-group">
             <label for="IssueDate" class="col-sm-2 control-label">Issue Date</label>
             <div class="col-sm-4">
@@ -135,6 +138,8 @@
                   <label class="col-sm-6 control-label" style="text-align: left;"><%= @items[:date_time] %></label>
                   <% date_arr = nil %>
                   <% date_arr = @values[:date_time].split(" ") unless @values[:date_time].nil? ||  @values[:date_time].empty?%>
+                  <% hs_arr = nil %>
+                  <% hs_arr = date_arr[1].split(":") if date_arr %>
                   <div class="col-sm-6 pull-right">
                     <div class="row">
                       <div class="col-md-6" style="padding-right: 5px;">
@@ -147,7 +152,7 @@
                               $('#incidentMsg').text('');">
                             <option value=""></option>
                             <% (0..23).each {|num| %>
-                              <option <%="selected" if date_arr && date_arr[1].to_i == num%> value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
+                              <option <%="selected" if hs_arr && hs_arr[0].to_i == num%> value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
                             <% } %>
                           </select>
                         </div>
@@ -159,7 +164,7 @@
                               $('#incidentMsg').text('');">
                             <option value=""></option>
                             <% (0..59).each {|num| %>
-                              <option <%="selected" if date_arr && date_arr[2].to_i == num%> value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
+                              <option <%="selected" if hs_arr && hs_arr[1].to_i == num%> value="<%= '%02d' % num %>"><%= '%02d' % num %></option>
                             <% } %>
                           </select>
                         </div>

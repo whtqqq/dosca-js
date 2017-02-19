@@ -32,7 +32,7 @@ class EditController < ApplicationController
     @values = {} 
     @values = fetch_history_detail(
                       @past_contents[:code], 
-                      contents_no) unless contents_no.nil? || contents_no.empty?  
+                      contents_no) unless empty?(contents_no)  
 
 
     @values[:contents_code] =  @past_contents[:code]
@@ -58,8 +58,14 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
+      if !dirty?(@values, @params)
+        @error_message = "No change occurred."
+        LogWriter.info("System", "Edit#past End.")
+        return
+      end
+
       file = nil
-      unless @session["files"].nil? || @session["files"].empty?
+      unless empty?(@session["files"])
         file = JSON.parse(@session["files"])[0]
       end
       edit_proc(@past_contents, @values, contents_no, file, false)
@@ -114,7 +120,7 @@ class EditController < ApplicationController
     @values = {} 
     @values = fetch_history_detail(
                       @news_contents[:code], 
-                      contents_no) unless contents_no.nil? || contents_no.empty?  
+                      contents_no) unless empty?(contents_no)  
 
     @values[:contents_code] =  @news_contents[:code]
     @values[:contents_no] = "" 
@@ -138,6 +144,12 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
+      if !dirty?(@values, @params)
+        @error_message = "No change occurred."
+        LogWriter.info("System", "Edit#news End.")
+        return
+      end
+
       edit_proc(@news_contents, @values, contents_no, nil, true)
       if @error_message
         @value = @params.dup
@@ -255,11 +267,6 @@ class EditController < ApplicationController
   end
 
   def edit_proc(contents, values, contents_no, pdf_file, pdf_create_flg)
-    if !dirty?(values, @params)
-      @error_message = "No change happended."
-      return
-    end
-
     if pdf_create_flg
       pdf_file = create_pdf(contents[:code], 
         contents_no, contents[:name], utc_time, @params)
@@ -306,22 +313,29 @@ class EditController < ApplicationController
   end
 
   def dirty?(before, after)
+    return true unless empty?(@session["files"])
     return true if before.empty?
-    before.each {|key, value|
-      return true if value != after[key]
-    }
+    keys = [:subject, :category, :summary, 
+             :web_page, :termination_date, 
+            :cargo, :vessel_name,  :date_time, :position]
+    before[:position] = before[:latitude] + " " + before[:longitude] 
+
+    keys.each do |key|
+      return true if before[key].to_s.strip != after[key].to_s.strip
+    end
+    
     return false
   end
  
   def create_pdf(contents_code, contents_no, title, issue_date, data)
     path = Settings._settings[:server][:temp_directory]
     pdf_name = path + "/" + [@client_code, contents_code, contents_no].join("_") + ".pdf"
-    if contents_no.nil? || contents_no.empty?
+    if empty?(contents_no)
       pdf_name = path + "/" + [@client_code, contents_code, "new"].join("_") + ".pdf"
     end
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
     news_pictures = []
-    news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil? || @session["files"].empty?
+    news_pictures = JSON.parse(@session["files"]) unless empty?(@session["files"])
 
     pdf = PDFCreator.new(pdf_name, 
           title,
@@ -373,7 +387,7 @@ class EditController < ApplicationController
 
   def delete_cached_files
     news_pictures = []
-    news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil? || @session["files"].empty?
+    news_pictures = JSON.parse(@session["files"]) unless empty?(@session["files"])
     news_pictures.each do |file|
       File.delete file if File.exist?(file)
     end

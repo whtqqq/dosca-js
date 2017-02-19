@@ -141,6 +141,7 @@ class DoscaAPI
     data["date_time"] = submit_data[:date_time] || ""
     data["cargo"] = submit_data[:cargo] || ""
     data["vessel_name"] = submit_data[:vessel_name] || ""
+    data["web_page"] = submit_data[:web_page] || ""
 
     unless submit_data[:position].nil? || submit_data[:position].empty?
       position = submit_data[:position].match(/(.*)(N|S|s|n)(.*)/)
@@ -180,6 +181,7 @@ class DoscaAPI
     data["date_time"] = submit_data[:date_time] || ""
     data["cargo"] = submit_data[:cargo] || ""
     data["vessel_name"] = submit_data[:vessel_name] || ""
+    data["web_page"] = submit_data[:web_page] || ""
 
     unless submit_data[:position].nil? || submit_data[:position].empty?
       position = submit_data[:position].match(/(.*)(N|S|s|n)(.*)/)
