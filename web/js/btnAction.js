@@ -43,7 +43,7 @@ function selectHistory() {
   // var date = text.substring(0, 19);
   // var sub = text.substring(20, text.length);
   $("#editBtn").attr("class", "btn btn-blue").removeAttr("disabled");
-  $("#delBtn").attr("class", "btn btn-pink").removeAttr("disabled");
+  $("#delBtn").attr("class", "btn btn-pink delJump").removeAttr("disabled");
   $("#IssueDate").removeClass("bg-white");
   /*TerminationDate-start*/
   $("#TerminationDate").removeClass("bg-white");
@@ -177,7 +177,7 @@ function reSetForm() {
     $("#incidentMsg").text("");
 }
 
-$("#delBtn").on("click",function(){
+function delAction() {
   console.log("/dosca-js/edit/delete?contents_code=" + $("#ContentCode").val() + "&contents_no=" + $("#ContentNo").val());
   $.ajax({
     async:false,
@@ -187,7 +187,7 @@ $("#delBtn").on("click",function(){
         console.log(data)
         console.log(textStatus)
         console.log(jqXHR)
-        $.alert(getMsg(MSG_DELSUCCESS));
+        $.alert(getMsg("MSG_DELSUCCESS"));
         $("#newJumpN").click();
     },
     error:function(xhr,textStatus){
@@ -196,4 +196,4 @@ $("#delBtn").on("click",function(){
         console.log(textStatus)
     }
   });
-});
+}
