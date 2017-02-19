@@ -1,9 +1,6 @@
 var picker, picker2;
 $(document).ready(function() {
-  /*IssueDate init*/
-  // $("#IssueDate").val(new Date().Format("yyyy-MM-dd hh:mm:ss"));
 /*##########Termination Date datepicker init##########*/
-
   changeLayout();
   picker = new Pikaday({
   field: document.getElementById('TerminationDate'),

@@ -8,8 +8,13 @@ $("#noPeriod").click(function() {
     picker.destroy();
     picker = null;
   }
-  $("#pageStatus").val("4");
-  submitBtnActive();
+  var initTerDate = 0;
+  if(($("#pageStatus").val() == "1" || $("#pageStatus").val() == "") && initTerDate == 0) {
+    initTerDate++;
+  } else {
+    $("#pageStatus").val("4");
+    submitBtnActive();
+  }
 });
 $("#Period").click(function() {
   $("#Period").attr("class", "btn btn-blue");
