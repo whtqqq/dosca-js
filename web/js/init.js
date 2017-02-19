@@ -80,8 +80,15 @@ $(document).ready(function() {
 //+---------------------------------------------------
 /*##########Add Change listener##########*/
   $('input').change(function () {
-    $("#pageStatus").val("4");
-    submitBtnActive();
+    if($(this).attr("id") == "Position") {
+      if(pointChk()){
+        $("#pageStatus").val("4");
+        submitBtnActive();
+      }
+    } else {
+        $("#pageStatus").val("4");
+        submitBtnActive();
+    }
   });
   $('select').change(function () {
     $("#pageStatus").val("4");

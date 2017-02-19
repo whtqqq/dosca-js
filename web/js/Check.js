@@ -294,51 +294,50 @@ function URLChk(e) {
 
 
 function pointChk() {
-  var result = true;
-  var input = $('#Position').val();
-  if(input != null && input.length > 0) {
-    var reg = /^(\d{1,2})(\-(\d{1,2})(\.(\d{1,2}))?)?\s[NS]\s(\d{1,3})(\-(\d{1,2})(\.(\d{1,2}))?)?\s[WE]$/;
-    //return true; // Add for Test
-    if(!reg.test(input)) {
-        $('#Position').parent().parent().attr("class","form-group has-error");
-        $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
-        $('#Position').next().show();
-        result = false;
-    } else {
-        // Add for check
-        var reg = /[NS]/;
-        var position = input.split(reg);
-        if (position[0].indexOf("-") > 0 ) {
-            var lat = position[0].split("-");
-            var lat_d = parseFloat(lat[0]);
-            var lat_m = parseFloat(lat[1]) / 60;
-            var lat_num = lat_d + lat_m;
-            if(0 > lat_d || lat_num > 90 || lat_d > lat_num || lat_num >= (lat_d + 1)) {
-                result = false;
-            }
-        }
+    var result = true;
+    var input = $('#Position').val();
+    if(input != null && input.length > 0) {
+        var reg = /^(\d{1,2})(\-(\d{1,2})(\.(\d{1,2}))?)?\s[NS]\s(\d{1,3})(\-(\d{1,2})(\.(\d{1,2}))?)?\s[WE]$/;
+        //return true; // Add for Test
+        if(!reg.test(input)) {
+            result = false;
+        } 
         else {
-            var lat_d = Math.floor(parseFloat(position[0]));
-            var lat_num = parseFloat(position[0]);
-            if (lat_d != lat_num) {
-                result = false;
+            // Add for check
+            var reg = /[NS]/;
+            var position = input.split(reg);
+            if (position[0].indexOf("-") > 0 ) {
+                var lat = position[0].split("-");
+                var lat_d = parseFloat(lat[0]);
+                var lat_m = parseFloat(lat[1]) / 60;
+                var lat_num = lat_d + lat_m;
+                if(0 > lat_d || lat_num > 90 || lat_d > lat_num || lat_num >= (lat_d + 1)) {
+                    result = false;
+                }
             }
-        }
-
-        if (position[1].indexOf("-") > 0 ) {
-            var lon = position[1].split("-");
-            var lon_d = parseFloat(lon[0]);
-            var lon_m = parseFloat(lon[1]) / 60;
-            var lon_num = lon_d + lon_m;
-            if(0 > lon_d || lon_num > 180 || lon_d > lon_num || lon_num >= (lon_d + 1)) {
-                result = false;
+            else {
+                var lat_d = Math.floor(parseFloat(position[0]));
+                var lat_num = parseFloat(position[0]);
+                if (lat_d != lat_num) {
+                    result = false;
+                }
             }
-        }
-        else {
-            var lon_d = Math.floor(parseFloat(position[0]));
-            var lon_num = parseFloat(position[0]);
-            if (lon_d != lon_num) {
-                result = false;
+    
+            if (position[1].indexOf("-") > 0 ) {
+                var lon = position[1].split("-");
+                var lon_d = parseFloat(lon[0]);
+                var lon_m = parseFloat(lon[1]) / 60;
+                var lon_num = lon_d + lon_m;
+                if(0 > lon_d || lon_num > 180 || lon_d > lon_num || lon_num >= (lon_d + 1)) {
+                    result = false;
+                }
+            }
+            else {
+                var lon_d = Math.floor(parseFloat(position[0]));
+                var lon_num = parseFloat(position[0]);
+                if (lon_d != lon_num) {
+                    result = false;
+                }
             }
         }
     }
@@ -353,7 +352,7 @@ function pointChk() {
         $('#PositionOld').val($("#Position").val());
     }
     return result;
-  }
+
 }
 
 function afterDateChk() {
