@@ -189,7 +189,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');$('.combo-input').eq(1).val('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -317,12 +317,18 @@
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           $("#pageStatus").val("4");
           submitBtnActive();
+          $(".combo-input").eq(1).val("");
           drawVessel(data);
         }
       }
     }
 
     function inputPoint(point) {
+      if(point.trim().length == 0) {
+        oldMark = null;
+        data = null;
+        drawVessel(data);
+      }
       if(point != null) {
         if(pointChk()){
           var data = new Array();
