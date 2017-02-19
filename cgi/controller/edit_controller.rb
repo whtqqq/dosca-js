@@ -144,15 +144,10 @@ class EditController < ApplicationController
       @session["files"] =  nil
     end
 
-$stderr.puts "status="
-$stderr.puts status
     if status == STATUS_SHOW
-
-$stderr.puts "Execute show"
       pdf_file =  DoscaAPI.pdf_download(@client_code, 
                               @mail, @news_contents[:code], contents_no) 
 
-$stderr.puts pdf_file
       @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
       @values[:contents_code] = @news_contents[:code]
       @values[:contents_no] = contents_no  
