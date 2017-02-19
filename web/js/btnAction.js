@@ -18,9 +18,9 @@ $("#Period").click(function() {
     picker = new Pikaday({
       field: document.getElementById('TerminationDate'),
       firstDay: 1,
-      minDate: new Date(),
-      maxDate: new Date('2030-12-31'),
-      yearRange: [2017,2030],
+      minDate: new Date('1980-01-01'),
+      maxDate: new Date('2099-12-31'),
+      yearRange: [1980,2099],
     });
   }
 
@@ -43,7 +43,7 @@ function selectHistory() {
   // var date = text.substring(0, 19);
   // var sub = text.substring(20, text.length);
   $("#editBtn").attr("class", "btn btn-blue").removeAttr("disabled");
-  $("#delBtn").attr("class", "btn btn-pink").removeAttr("disabled");
+  $("#delBtn").attr("class", "btn btn-pink delJump").removeAttr("disabled");
   $("#IssueDate").removeClass("bg-white");
   /*TerminationDate-start*/
   $("#TerminationDate").removeClass("bg-white");
@@ -94,9 +94,9 @@ function editBtnAction() {
   picker = new Pikaday({
     field: document.getElementById('TerminationDate'),
     firstDay: 1,
-    minDate: new Date(),
-    maxDate: new Date('2030-12-31'),
-    yearRange: [2017,2030],
+    minDate: new Date('1980-01-01'),
+    maxDate: new Date('2099-12-31'),
+    yearRange: [1980,2099],
   });
   if(terminationDate != " ") {
     $("#TerminationDate").val(terminationDate);
@@ -126,7 +126,7 @@ function editBtnAction() {
       firstDay: 1,
       minDate: new Date('1980-01-01'),
       maxDate: new Date(),
-      yearRange: [2017,2030],
+      yearRange: [1980,2099],
     });
   }
   $("#pageStatus").val(3);
@@ -177,7 +177,7 @@ function reSetForm() {
     $("#incidentMsg").text("");
 }
 
-$("#delBtn").on("click",function(){
+function delAction() {
   console.log("/dosca-js/edit/delete?contents_code=" + $("#ContentCode").val() + "&contents_no=" + $("#ContentNo").val());
   $.ajax({
     async:false,
@@ -187,7 +187,7 @@ $("#delBtn").on("click",function(){
         console.log(data)
         console.log(textStatus)
         console.log(jqXHR)
-        $.alert(getMsg(MSG_DELSUCCESS));
+        $.alert(getMsg("MSG_DELSUCCESS"));
         $("#newJumpN").click();
     },
     error:function(xhr,textStatus){
@@ -196,4 +196,4 @@ $("#delBtn").on("click",function(){
         console.log(textStatus)
     }
   });
-});
+}
