@@ -55,6 +55,7 @@ function submitChk(action){
   if(position != undefined && position != null && position.trim().length == 0) {
     $("#Position").parent().parent().attr("class", "form-group has-error");
     $("#Position").next().text(getMsg("MSG_REQUIRE"));
+    $("#Position").next().show();
     flg++;
   } else {
     $("#Position").parent().parent().attr("class", "form-group");
@@ -76,6 +77,7 @@ function submitChk(action){
   if(vessel != undefined && vessel != null && vessel.trim().length == 0) {
     $("#Vessel").parent().parent().attr("class", "form-group has-error");
     $("#Vessel").next().text(getMsg("MSG_REQUIRE"));
+    $("#Vessel").next().show();
     flg++;
   } else {
     $("#Vessel").parent().parent().attr("class", "form-group");
@@ -85,6 +87,7 @@ function submitChk(action){
   if(cargo != undefined && cargo != null && cargo.trim().length == 0) {
     $("#Cargo").parent().parent().attr("class", "form-group has-error");
     $("#Cargo").next().text(getMsg("MSG_REQUIRE"));
+    $("#Cargo").next().show();
     flg++;
   } else {
     $("#Cargo").parent().parent().attr("class", "form-group");
@@ -96,7 +99,7 @@ function submitChk(action){
     (incidentDateMin != undefined && incidentDateMin != null && incidentDateMin.length == 0)
   ) {
     $("#incidentGroup").attr("class", "form-group has-error");
-    $("#incidentMsg").text(getMsg("MSG_REQUIRE"));
+    $("#incidentMsg").text(getMsg("MSG_REQUIRE")).show();
     flg++;
   } else {
     $("#incidentGroup").attr("class", "form-group");
