@@ -273,8 +273,11 @@ class EditController < ApplicationController
   end
  
   def create_pdf(contents_code, contents_no, title, issue_date, data)
-    path = Settings._settings[:server][:temp_pdf_directory]
+    path = Settings._settings[:server][:temp_directory]
     pdf_name = path + "/" + [@client_code, contents_code, contents_no].join("_") + ".pdf"
+    if contents_no.nil? || contents_no.empty?
+      pdf_name = path + "/" + [@client_code, contents_code, "new"].join("_") + ".pdf"
+    end
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
     news_pictures = []
     news_pictures = JSON.parse(@session["files"]) unless @session["files"].nil? || @session["files"].empty?

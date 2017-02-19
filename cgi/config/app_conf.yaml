@@ -1,9 +1,8 @@
 server:
   root_uri: /dosca-js
   contents_uri: /dosca-js/contents
-  temp_pdf_directory: /host-dir/web/pdf
   contents_pdf_uri: /dosca-js/contents/pdf
-  temp_directory: /host-dir/log
+  temp_directory: /host-dir/log/temp
   log_directory: /host-dir/log
 api:
   login_url: http://localhost/dosca-js/api/get/auth_stub.cgi
@@ -12,7 +11,6 @@ api:
   history_list_url: http://localhost/dosca-js/api/get/history_list_stub.cgi
   history_detail_url: http://localhost/dosca-js/api/get/history_detail_stub.cgi
   pdf_download_url: http://localhost/dosca-js/api/get/pdf_stub.cgi
-  pdf_upload_url: http://localhost/dosca-js/api/set/pdf_stub.cgi
   new_url: http://localhost/dosca-js/api/set/new_stub.cgi
   update_url: http://localhost/dosca-js/api/set/update_stub.cgi
   remove_url: http://localhost/dosca-js/api/set/remove_stub.cgi

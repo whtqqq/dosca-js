@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'bundler'
+require 'fileutils'
 
 Bundler.require
 
@@ -20,6 +21,8 @@ begin
 
   # load config file
   Settings.load!("config/app_conf.yaml")
+  FileUtils.mkdir_p Settings._settings[:server][:temp_directory]
+  FileUtils.mkdir_p Settings._settings[:server][:log_directory]
 
   #create controller
   controller_name = Application.get_controller_and_action_name[:controller]
