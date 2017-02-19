@@ -291,6 +291,11 @@ class EditController < ApplicationController
           map_picture, news_pictures)
     pdf.create()
 
+    news_pictures.each do |file|
+      File.delete file if File.exist?(file)
+    end
+    File.delete map_picture if File.exist?(map_picture)
+
     pdf_name
   end
 
