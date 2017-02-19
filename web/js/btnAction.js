@@ -21,8 +21,9 @@ $("#Period").click(function() {
       minDate: new Date('1980-01-01'),
       maxDate: new Date('2099-12-31'),
       yearRange: [1980,2099],
+      defaultDate:new Date()
     });
-    picker.setDate(new Date());
+    // picker.setDefaultDate(new Date());
   }
 
   var date = addDay(30);
@@ -98,8 +99,9 @@ function editBtnAction() {
     minDate: new Date('1980-01-01'),
     maxDate: new Date('2099-12-31'),
     yearRange: [1980,2099],
+    defaultDate:new Date()
   });
-  picker.setDate(new Date());
+  // picker.setDefaultDate(new Date());
   if(terminationDate.trim() != "") {
     $("#TerminationDate").val(terminationDate);
   } else {

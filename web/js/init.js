@@ -11,8 +11,9 @@ $(document).ready(function() {
   minDate: new Date('1980-01-01'),
   maxDate: new Date('2099-12-31'),
   yearRange: [1980,2099],
+  defaultDate:new Date()
   });
-  picker.setDate(new Date());
+  // picker.setDefaultDate(new Date());
   if(document.getElementById('incidentDate') != null) {
     picker2 = new Pikaday({
     field: document.getElementById('incidentDate'),
