@@ -6,6 +6,7 @@ class EditController < ApplicationController
   STATUS_EDIT = 4
   
   def past
+    LogWriter.info("System", "Edit#past Start.")
     user_info = user_info_from_session
     @mail = user_info[:mail]
     @client_code = user_info[:client_code]
@@ -72,9 +73,12 @@ class EditController < ApplicationController
         @values[:period]  = "period"
       end
     end
+
+    LogWriter.info("System", "Edit#past End.")
   end
 
   def news
+    LogWriter.info("System", "Edit#news Start.")
     user_info = user_info_from_session
     @mail = user_info[:mail]
     @client_code = user_info[:client_code]
@@ -137,9 +141,13 @@ class EditController < ApplicationController
         @values[:period]  = "period"
       end
     end
+
+    LogWriter.info("System", "Edit#news End.")
   end
 
   def delete 
+    LogWriter.info("System", "Edit#delete Start.")
+
     @no_render = true
     user_info = user_info_from_session
     @mail = user_info[:mail]
@@ -150,11 +158,15 @@ class EditController < ApplicationController
     @cgi.out("type" => "application/json") {
       resp.to_json
     }
+
+    LogWriter.info("System", "Edit#delete End.")
   rescue => e
     api_response("ERROR", e.to_s)
+    LogWriter.error(@mail, e.to_s)
   end
 
   def preview
+    LogWriter.info("System", "Edit#preview Start.")
     @no_render = true
     user_info = user_info_from_session
     @mail = user_info[:mail]
@@ -176,12 +188,15 @@ class EditController < ApplicationController
     end
 
     @session["files"] = nil
-  rescue => e
-    api_response("ERROR", e.to_s)
+    LogWriter.info("System", "Edit#preview End.")
   end
 
   def upload
+    LogWriter.info("System", "Edit#upload Start.")
     @no_render = true
+    user_info = user_info_from_session
+    @mail = user_info[:mail]
+
     file_names  = []
     files = @cgi.params["files[]"]
     if !files.is_a?(Array)
@@ -194,7 +209,9 @@ class EditController < ApplicationController
     @session["files"] = file_names.to_json
      
     api_response("SUCCESS", "")
+    LogWriter.info("System", "Edit#upload End.")
   rescue Exception => e
+    LogWriter.error(@mail, e.to_s)
     api_response("ERROR", e.to_s)
   end
 
@@ -227,7 +244,7 @@ class EditController < ApplicationController
     end
 
     resp = DoscaAPI.update(@client_code,
-                        user_info[:mail], contents[:code], contents_no, pdf_file, @params) 
+                        @mail, contents[:code], contents_no, pdf_file, @params) 
     if !has_error?(resp)
       @error_message = resp[:message]
     end

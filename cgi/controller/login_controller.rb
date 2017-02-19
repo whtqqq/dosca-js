@@ -5,6 +5,8 @@ class LoginController < ApplicationController
   end
 
   def auth
+    LogWriter.info("System", "Login#auth Start.")
+
     username = @params[:username]
     resp = DoscaAPI.auth(username, @params[:password], @params[:email])
     if has_error?(resp)
@@ -28,5 +30,7 @@ class LoginController < ApplicationController
       forward_action = "past" if default_contents[:code].index("PAST")
       redirect_to @root_uri + "/edit" + "/" + forward_action
     end
+
+    LogWriter.info("System", "Login#auth End.")
   end
 end

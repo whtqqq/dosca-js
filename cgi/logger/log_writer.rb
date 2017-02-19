@@ -13,28 +13,28 @@ class LogWriter
     def write(mail, str)
       @log = find_log_file
       @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "? #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.puts "? #{nowtime()} [#{$$}] < #{mail} > #{str} "
       @log.flush
     end
   
     def info(mail, str)
       @log = find_log_file
       @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "I #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.puts "I #{nowtime()} [#{$$}] < #{mail} > #{str} "
       @log.flush
     end
   
     def warn(mail, str)
       @log = find_log_file
       @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "W #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.puts "W #{nowtime()} [#{$$}] < #{mail} > #{str} "
       @log.flush
     end
   
     def error(mail, str)
       @log = find_log_file
       @controller = Application.get_controller_and_action_name[:controller]
-      @log.puts "E #{nowtime()} [#{$$}] < #{mail}: #{@controller}> #{str} "
+      @log.puts "E #{nowtime()} [#{$$}] < #{mail} > #{str} "
       @log.flush
     end
 
