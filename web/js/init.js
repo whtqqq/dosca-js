@@ -80,8 +80,15 @@ $(document).ready(function() {
 //+---------------------------------------------------
 /*##########Add Change listener##########*/
   $('input').change(function () {
-    $("#pageStatus").val("4");
-    submitBtnActive();
+    if($(this).attr("id") == "Position") {
+      if(pointChk() && $('#AutoInptFlg').val() == "0"){
+        $("#pageStatus").val("4");
+        submitBtnActive();
+      }
+    } else {
+        $("#pageStatus").val("4");
+        submitBtnActive();
+    }
   });
   $('select').change(function () {
     $("#pageStatus").val("4");
@@ -194,4 +201,10 @@ function changeLayout() {
   var historyH = $("#leftPanel").height() - $("#locationPanel").height() - 50;
   var historyH_str = "height: " + historyH +"px";
   $("#historyList").attr("style", historyH_str);
+}
+
+function clearPort() {
+  if (pointChk() && $('#AutoInptFlg').val() == "0") {
+    $('.combo-input').eq(1).val('');
+  }
 }

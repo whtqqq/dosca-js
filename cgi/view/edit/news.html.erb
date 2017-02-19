@@ -52,6 +52,7 @@
 </div>
 
 <div class="col-md-12">
+  <input type="hidden" id="AutoInptFlg" name="auto_inpt_flg" value="0">
 <form class="form-horizontal" id="editForm" role="form" method="post" action="/dosca-js/edit/news">
   <input type="hidden" id="ContentCode" name="contents_code" value="<%=@values[:contents_code]%>">
   <input type="hidden" id="ContentNo" name="contents_no" value="<%=@values[:contents_no]%>">
@@ -192,7 +193,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$('.combo-input').eq(1).val('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
+                <input type="text" class="form-control" id="Position" name="position" onchange="pointChk();inputPoint(this.value);clearPort();" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
                 <input type="hidden" class="form-control" id="PositionOld" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
               </div>
@@ -373,8 +374,11 @@
           oldMark = data;
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);
+          $('#AutoInptFlg').val("0");
         } else {
+          $('#AutoInptFlg').val("1");
           $('#Position').val($("#PositionOld").val());
+          
         }
       }
     }
