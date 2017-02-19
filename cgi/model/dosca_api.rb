@@ -113,9 +113,52 @@ class DoscaAPI
   end
 
   def DoscaAPI.update_common(url, client_code, mail, contents_code, contents_no, pdf_file, submit_data)
+    unless pdf_file.nil? || pdf_file.empty?
+      update_common_with_pdf(url, client_code, mail, contents_code, contents_no, pdf_file, submit_data)
+    else
+      update_common_without_pdf(url, client_code, mail, contents_code, contents_no,submit_data)
+    end
+  end
+
+  def DoscaAPI.update_common_without_pdf(url, client_code, mail, contents_code, contents_no, submit_data)
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
-    $stderr.puts submit_data.inspect
+    req = Net::HTTP::Post.new(uri.request_uri)
+     
+    data  = {
+         "client_code" => client_code,
+         "mail" => mail,
+         "contents_code" => contents_code
+    }
+    data["contents_no"] = contents_no unless contents_no.nil? || contents_no.empty?
+
+    #add submit data
+    data["subject"] = submit_data[:subject] || ""
+    data["category"] = submit_data[:category] || ""
+    data["summary"] = submit_data[:summary] || ""
+    data["web_page"] = submit_data[:web_page] || ""
+    data["termination_date"] = submit_data[:termination_date] || ""
+    data["date_time"] = submit_data[:date_time] || ""
+    data["cargo"] = submit_data[:cargo] || ""
+    data["vessel_name"] = submit_data[:vessel_name] || ""
+
+    unless submit_data[:position].nil? || submit_data[:position].empty?
+      position = submit_data[:position].match(/(.*)(N|S|s|n)(.*)/)
+      data["longitude"] = position[1] + position[2]
+      data["latitude"] = position[3].strip
+    end
+
+    req.body = data.to_json
+    resp = http.request(req)
+
+    LogWriter.info(mail, File.basename(uri.to_s) +  " request:" + req.body.to_s)
+    LogWriter.info(mail, File.basename(uri.to_s) + " response:" + resp.body.to_s)
+    Application.symbolize_keys(JSON.parse(resp.body)) 
+  end
+
+  def DoscaAPI.update_common_with_pdf(url, client_code, mail, contents_code, contents_no, pdf_file, submit_data)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
 
     my_boundary = "AaB03x0lsmtxm2"
     header = {"type"=> "multipart/form-data, boundary=#{my_boundary}"}

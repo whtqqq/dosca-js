@@ -58,8 +58,11 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
-      files = JSON.parse(@session["files"])
-      edit_proc(@past_contents, @values, contents_no, files[0])
+      file = nil
+      unless @session["files"].nil? || @session["files"].empty?
+        file = JSON.parse(@session["files"])[0]
+      end
+      edit_proc(@past_contents, @values, contents_no, file, false)
       if @error_message
         @value = @params.dup
       end
@@ -135,7 +138,7 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
-      edit_proc(@news_contents, @values, contents_no, nil)
+      edit_proc(@news_contents, @values, contents_no, nil, true)
       if @error_message
         @value = @params.dup
       end
@@ -251,13 +254,13 @@ class EditController < ApplicationController
     delete_cached_files
   end
 
-  def edit_proc(contents, values, contents_no, pdf_file)
+  def edit_proc(contents, values, contents_no, pdf_file, pdf_create_flg)
     if !dirty?(values, @params)
       @error_message = "No change happended."
       return
     end
 
-    if !pdf_file
+    if pdf_create_flg
       pdf_file = create_pdf(contents[:code], 
         contents_no, contents[:name], utc_time, @params)
     end
@@ -268,7 +271,7 @@ class EditController < ApplicationController
       @error_message = resp[:message]
     end
 
-    File.delete pdf_file if File.exist?(pdf_file)
+    File.delete pdf_file if !empty?(pdf_file) && File.exist?(pdf_file)
     delete_cached_files
   end
 
