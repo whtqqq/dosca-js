@@ -8,6 +8,8 @@ $("#noPeriod").click(function() {
     picker.destroy();
     picker = null;
   }
+  $("#pageStatus").val("4");
+  submitBtnActive();
 });
 $("#Period").click(function() {
   $("#Period").attr("class", "btn btn-blue");
@@ -21,13 +23,16 @@ $("#Period").click(function() {
       minDate: new Date('1980-01-01'),
       maxDate: new Date('2099-12-31'),
       yearRange: [1980,2099],
+      defaultDate:new Date()
     });
-    picker.setDate(new Date());
+    // picker.setDefaultDate(new Date());
   }
 
   var date = addDay(30);
   $("#TerminationDate").attr("style", "cursor:pointer;");
   $("#TerminationDate").val(date.Format("yyyy-MM-dd"));
+  $("#pageStatus").val("4");
+  submitBtnActive();
 });
 
 /*##########Historical Contents select##########*/
@@ -98,8 +103,9 @@ function editBtnAction() {
     minDate: new Date('1980-01-01'),
     maxDate: new Date('2099-12-31'),
     yearRange: [1980,2099],
+    defaultDate:new Date()
   });
-  picker.setDate(new Date());
+  // picker.setDefaultDate(new Date());
   if(terminationDate.trim() != "") {
     $("#TerminationDate").val(terminationDate);
   } else {
@@ -130,7 +136,7 @@ function editBtnAction() {
       maxDate: new Date(),
       yearRange: [1980,2099],
     });
-    picker2.setDate(new Date());
+    // picker2.setDate(new Date());
   }
   $("#pageStatus").val(3);
   $(".combo-arrow1").attr("class", "combo-arrow");

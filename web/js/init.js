@@ -11,8 +11,9 @@ $(document).ready(function() {
   minDate: new Date('1980-01-01'),
   maxDate: new Date('2099-12-31'),
   yearRange: [1980,2099],
+  defaultDate:new Date()
   });
-  picker.setDate(new Date());
+  // picker.setDefaultDate(new Date());
   if(document.getElementById('incidentDate') != null) {
     picker2 = new Pikaday({
     field: document.getElementById('incidentDate'),
@@ -21,7 +22,7 @@ $(document).ready(function() {
     maxDate: new Date(),
     yearRange: [1980,2099],
     });
-    picker2.setDate(new Date());
+    // picker2.setDate(new Date());
   }
   $('#Port').comboSelect();
   $('#Category').comboSelect();
@@ -39,12 +40,12 @@ $(document).ready(function() {
       showUpload:false,
       showRemove:false,
       browseOnZoneClick:true,
+      // resizePreference: 'width',
       resizeImage: true,
       maxImageWidth: 200,
       maxImageHeight: 200,
-      resizePreference: 'width',
       fileActionSettings:{showUpload:false},
-      // previewSettings:{image: {width: "260px", height: "auto"}},
+      previewSettings:{image: {width: "200px", height: "auto"}},
       allowedFileExtensions : ['jpg', 'png', 'gif'],
       dropZoneTitle:"Picture file（jpeg/jpg/png） Drag & Drop here !"
     });

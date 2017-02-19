@@ -95,7 +95,7 @@
                 <label class=" col-sm-6 control-label">Termination Date</label>
                 <div class="col-sm-6">
                   <div class="input-group">
-                    <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" placeholder="2017/01/01" style="cursor:pointer;" readonly vlue="<%=@values[:termination_date]%>">
+                    <input type="text" class="form-control bg-white" id="TerminationDate" name="termination_date" style="cursor:pointer;" readonly vlue="<%=@values[:termination_date]%>">
                     <span class="input-group-addon" id="DateIcon" onclick="$('#TerminationDate').click();"><span class="glyphicon glyphicon-calendar"></span></span>
                   </div>
                   <span class="text-danger"></span>
@@ -242,7 +242,7 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');$('.combo-input').eq(1).val('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
               </div>
             </div>
@@ -371,12 +371,18 @@
         $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
         $("#pageStatus").val("4");
         submitBtnActive();
+        $('.combo-input').eq(1).val('');
         drawVessel(data);
       }
     }
   }
 
   function inputPoint(point) {
+    if(point.trim().length == 0) {
+      oldMark = null;
+      data = null;
+      drawVessel(data);
+    }
     if(point != null) {
       if(pointChk()){
         var data = new Array();
@@ -456,8 +462,22 @@
 
   d3.select("svg").on("dblclick", dblclicked);
 
- function loadHistory(contents_no) {
-    window.location.href = '/dosca-js/edit/past?contents_no=' + contents_no;
+  function loadHistory(contents_no) {
+    if($("#pageStatus").val() == "4"){
+      $.confirm({
+        title: 'DOSCA JS Contents',
+        content: getMsg("MSG_NEWPAGE"),
+        buttons: {
+          OK: function () {
+            window.location.href = '/dosca-js/edit/past?contents_no=' + contents_no;
+          },
+          Cancel: function () {
+          }
+        }
+      });
+    } else {
+      window.location.href = '/dosca-js/edit/past?contents_no=' + contents_no;
+    }
   }
 </script>
 <script>

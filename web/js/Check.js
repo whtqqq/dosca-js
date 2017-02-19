@@ -197,7 +197,7 @@ function submitChk(action){
     if($("#pageID").val() == "past" && $('#Picture').fileinput('getFilesCount') == 0 && $("#picUp").val() == "false") {
       submitStatus = false;
     }
-    if($("#pageID").val() == "past") {
+    if($("#pageID").val() == "past" && $("#picUp").val() != "true") {
       $('#Picture').fileinput('upload');
     }
   }
