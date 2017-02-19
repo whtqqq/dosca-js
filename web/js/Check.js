@@ -138,11 +138,11 @@ function submitChk(action){
     }
   }
 
-  // if($("#pageID").val() == "edit") {
-  //   if(!afterDateChk()) {
-  //     flg ++;
-  //   }
-  // }
+  if($("#pageID").val() == "edit") {
+    if(!afterDateChk()) {
+      flg ++;
+    }
+  }
 
   if(!URLChk($('#WebPage'))) {
     flg ++;
@@ -313,7 +313,7 @@ function pointChk() {
 function afterDateChk() {
   var date = $("#TerminationDate").val();
   var now = new Date().Format("yyyy-MM-dd");
-  if(date != " ") {
+  if(date.trim() != "" && date.trim().length != 0) {
     var pageDate = new Date(date);
     var nowDate = new Date(now);
     if(nowDate.getTime() > pageDate.getTime()){
@@ -323,6 +323,8 @@ function afterDateChk() {
     } else {
       return true;
     }
+  } else {
+    return true;
   }
 }
 

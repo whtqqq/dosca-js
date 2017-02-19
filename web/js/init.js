@@ -12,6 +12,7 @@ $(document).ready(function() {
   maxDate: new Date('2099-12-31'),
   yearRange: [1980,2099],
   });
+  picker.setDate(new Date());
   if(document.getElementById('incidentDate') != null) {
     picker2 = new Pikaday({
     field: document.getElementById('incidentDate'),
@@ -20,6 +21,7 @@ $(document).ready(function() {
     maxDate: new Date(),
     yearRange: [1980,2099],
     });
+    picker2.setDate(new Date());
   }
   $('#Port').comboSelect();
   $('#Category').comboSelect();
@@ -111,7 +113,8 @@ $(document).ready(function() {
   // });
 
   if($("#pageStatus").val() == 2 && $("#pageID").val() == "past") {
-    $("#PictureDownload").attr("style", "display:block;").attr("disabled","true");
+    // $("#PictureDownload").attr("style", "display:block;").attr("disabled","true");
+    $("#PictureDownload").attr("style", "display:block;");
     $("#picUp").val("true");
     $('#Picture').fileinput('destroy').fileinput({
         theme: "explorer",

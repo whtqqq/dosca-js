@@ -22,6 +22,7 @@ $("#Period").click(function() {
       maxDate: new Date('2099-12-31'),
       yearRange: [1980,2099],
     });
+    picker.setDate(new Date());
   }
 
   var date = addDay(30);
@@ -48,7 +49,7 @@ function selectHistory() {
   /*TerminationDate-start*/
   $("#TerminationDate").removeClass("bg-white");
   $("#incidentDate").removeClass("bg-white");
-  $("#noPeriod").click();
+  // $("#noPeriod").click();
   $("#Period").attr("disabled", "disabled");
   $("#noPeriod").attr("disabled", "disabled");
   if(picker != null){
@@ -84,7 +85,7 @@ function selectHistory() {
 function editBtnAction() {
   $("#editBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
   $("#delBtn").attr("class", "btn btn-grey").attr("disabled", "disabled");
-  $("#PictureDownload").removeAttr("disabled");
+  // $("#PictureDownload").removeAttr("disabled");
   $("#IssueDate").addClass("bg-white");
   $("#TerminationDate").addClass("bg-white");
   $("#incidentDate").addClass("bg-white");
@@ -98,7 +99,8 @@ function editBtnAction() {
     maxDate: new Date('2099-12-31'),
     yearRange: [1980,2099],
   });
-  if(terminationDate != " ") {
+  picker.setDate(new Date());
+  if(terminationDate.trim() != "") {
     $("#TerminationDate").val(terminationDate);
   } else {
     $("#noPeriod").click();
@@ -128,6 +130,7 @@ function editBtnAction() {
       maxDate: new Date(),
       yearRange: [1980,2099],
     });
+    picker2.setDate(new Date());
   }
   $("#pageStatus").val(3);
   $(".combo-arrow1").attr("class", "combo-arrow");
@@ -188,7 +191,7 @@ function delAction() {
         console.log(textStatus)
         console.log(jqXHR)
         $.alert(getMsg("MSG_DELSUCCESS"));
-        $("#newJumpN").click();
+        window.location.href = $("#newJumpN").attr("href");
     },
     error:function(xhr,textStatus){
         console.log('错误')
