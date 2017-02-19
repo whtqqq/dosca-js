@@ -189,8 +189,9 @@
             <div class="form-group">
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="Position" name="position" onchange="$(this).parent().parent().attr('class', 'form-group');$(this).next().text('');$('.combo-input').eq(1).val('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
+                <input type="text" class="form-control" id="Position" name="position" onchange="$('.combo-input').eq(1).val('');pointChk();inputPoint(this.value);" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
                 <span class="text-danger" id="PositionMsg"></span>
+                <input type="hidden" class="form-control" id="PositionOld" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
               </div>
             </div>
           </div><!--col-xs-9-->
@@ -314,6 +315,7 @@
           }
 
           $('#Position').val(show[0] + " " + show[1]);
+          $('#PositionOld').val(show[0] + " " + show[1]);
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           $("#pageStatus").val("4");
           submitBtnActive();
@@ -369,6 +371,8 @@
           oldMark = data;
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
           drawVessel(data);
+        } else {
+          $('#Position').val($("#PositionOld").val());
         }
       }
     }
