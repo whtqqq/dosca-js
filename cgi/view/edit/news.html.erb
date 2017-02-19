@@ -403,7 +403,21 @@
     d3.select("svg").on("dblclick", dblclicked);
 
     function loadHistory(contents_no) {
-      window.location.href = '/dosca-js/edit/news?contents_no=' + contents_no;
+      if($("#pageStatus").val() == "4"){
+        $.confirm({
+          title: 'DOSCA JS Contents',
+          content: getMsg("MSG_NEWPAGE"),
+          buttons: {
+            OK: function () {
+              window.location.href = '/dosca-js/edit/news?contents_no=' + contents_no;
+            },
+            Cancel: function () {
+            }
+          }
+        });
+      } else {
+        window.location.href = '/dosca-js/edit/news?contents_no=' + contents_no;
+      }
     }
 
   </script>

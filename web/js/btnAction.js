@@ -8,6 +8,8 @@ $("#noPeriod").click(function() {
     picker.destroy();
     picker = null;
   }
+  $("#pageStatus").val("4");
+  submitBtnActive();
 });
 $("#Period").click(function() {
   $("#Period").attr("class", "btn btn-blue");
@@ -29,6 +31,8 @@ $("#Period").click(function() {
   var date = addDay(30);
   $("#TerminationDate").attr("style", "cursor:pointer;");
   $("#TerminationDate").val(date.Format("yyyy-MM-dd"));
+  $("#pageStatus").val("4");
+  submitBtnActive();
 });
 
 /*##########Historical Contents select##########*/
