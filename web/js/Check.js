@@ -1,5 +1,13 @@
 /*##########Submit Chk##########*/
+invaild_flg = 0;
+
 function submitChk(action){
+  if (invaild_flg == 1) {
+    return false; 
+  }
+  else {
+    invaild_flg = 1;  
+  }
   var flg = 0;
   var category         = $("#Category").val();
   var subject          = $("#Subject").val();
@@ -156,6 +164,7 @@ function submitChk(action){
 
   var submitStatus = true;
   if(flg != 0) {
+    invaild_flg = 0;
     submitStatus = false;
   } else {
     //file upload submit
