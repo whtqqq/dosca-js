@@ -2,6 +2,7 @@ require 'pdf/writer'
 require 'pdf/simpletable'
 require 'color/rgb/metallic'
 require 'chunky_png'
+require 'time'
 
 # Example
 ############################################################
@@ -91,7 +92,7 @@ class PDFCreator
   end
 
   def put_news_picture()
-    create_table(15, "                      Picture", 311, @pdf.margin_width, :all, :shaded)
+    create_table(15, "                       Picture", 311, @pdf.margin_width, :all, :shaded)
     #One picture
     if @news_images && @news_images.size == 1
       put_image(@news_images[0], 160, 33, nil, 230)
@@ -119,7 +120,7 @@ class PDFCreator
   def put_information()
     #issue_date
     @pdf.move_pointer(14)
-    create_table(10, "Issue Date:" + "#{@issue_date}", 221, @pdf.margin_width - 180, :none, :none)
+    create_table(10, "Issue Date:" + "#{time_formt()}", 221, @pdf.margin_width - 180, :none, :none)
     create_line(60)
 
     #location
@@ -140,11 +141,17 @@ class PDFCreator
   def put_summary()
     arr = str_to_arr(@str_list)
     @pdf.move_pointer(2)
-    create_table(15, "                     Summary", 311, @pdf.margin_width, :all, :shaded)
+    create_table(15, "                       Summary", 311, @pdf.margin_width, :all, :shaded)
     @pdf.move_pointer(2)
     (0..SUMMARY_LINES - 1).each { |i| 
       create_table(7.9, "#{arr[i]}", 309, @pdf.margin_width + 50, :none, :none)
     }
+  end
+
+  def time_formt()
+    time = Time.parse(@issue_date)
+    time.gmtime
+    time.strftime("%Y/%m/%d %H:%M") + " " + time.zone
   end
 
   def create()
