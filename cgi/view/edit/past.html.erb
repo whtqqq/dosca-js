@@ -254,7 +254,7 @@
               <label for="Position" class="col-sm-2 control-label">Position</label>
               <div class="col-sm-10">
                 <input type="text" class="form-control" id="Position" name="position" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>"
-                onchange="clearPort;pointChk();inputPoint(this.value);" >
+                onchange="pointChk();inputPoint(this.value);clearPort();" >
                 <span class="text-danger" id="PositionMsg"></span>
                 <input type="hidden" class="form-control" id="PositionOld" value="<%=@values[:latitude] + " " + @values[:longitude] if @values[:latitude]%>">
               </div>
@@ -305,7 +305,6 @@
 <script src="<%=@contents_uri%>/js/saveSvgAsPng.js"></script>
 <script>
   var clientWidth = $("#map").width();
-  var clientHeight = document.documentElement.clientHeight;
 
   var oldMark =null;
 
@@ -397,6 +396,7 @@
     if(point.trim().length == 0) {
       oldMark = null;
       data = null;
+      $('.combo-input').eq(1).val('');
       drawVessel(data);
     }
     if(point != null) {
@@ -438,6 +438,7 @@
 
         oldMark = data;
         $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
+        mapMove(data);
         drawVessel(data);
         $('#AutoInptFlg').val("0");
       } else {
@@ -446,6 +447,21 @@
       }
     }
   }
+
+    function mapMove(data) {
+        var point = projection(data);
+        var centroid = path.centroid(point)
+        var translate = projection.translate();
+        projection.translate([
+            translate[0] - point[0] + width / 2,
+            translate[1] - point[1] + height / 2
+        ]);
+        zoom.translate(projection.translate());
+        
+        g.selectAll("path").transition()
+            .duration(700)
+            .attr("d", path);
+    }
 
   function drawVessel(data) {
       d3.select("#map").select("svg").selectAll("image").remove();

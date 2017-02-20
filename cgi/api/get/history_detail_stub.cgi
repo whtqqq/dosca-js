@@ -41,8 +41,8 @@ puts <<END
     "category": "Oil Leak",
     "summary": "The engine room oinity of the sailing ship.Ship Charactoristics",
     "ports": "FLORO (FLORA)",
-    "latitude": "61-36.29 N",
-    "longitude": "5-1.7 E"
+    "latitude": "54-18.34 S",
+    "longitude": "73-40.74 W"
 }
 END
 end

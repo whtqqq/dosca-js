@@ -245,7 +245,6 @@
   <script src="<%=@contents_uri%>/js/saveSvgAsPng.js"></script>
   <script>
     var clientWidth = $("#map").width();
-    var clientHeight = document.documentElement.clientHeight;
 
     var oldMark =null;
 
@@ -338,6 +337,7 @@
       if(point.trim().length == 0) {
         oldMark = null;
         data = null;
+        $('.combo-input').eq(1).val('');
         drawVessel(data);
       }
       if(point != null) {
@@ -379,7 +379,9 @@
 
           oldMark = data;
           $('#PositionMsg').text('').parent().parent().attr('class', 'form-group');
+          mapMove(data);
           drawVessel(data);
+          
           $('#AutoInptFlg').val("0");
         } else {
           $('#AutoInptFlg').val("1");
@@ -387,6 +389,21 @@
 
         }
       }
+    }
+
+    function mapMove(data) {
+        var point = projection(data);
+        var centroid = path.centroid(point);
+        var translate = projection.translate();
+        projection.translate([
+            translate[0] - point[0] + width / 2,
+            translate[1] - point[1] + height / 2
+        ]);
+        zoom.translate(projection.translate());
+        
+        g.selectAll("path").transition()
+            .duration(700)
+            .attr("d", path);
     }
 
     function drawVessel(data) {
