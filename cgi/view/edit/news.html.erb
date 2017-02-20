@@ -41,7 +41,7 @@
       <ul class="nav nav-tabs">
         <li class="active"><a href="#" class="nav-bg-blue"><%= @news_contents[:name] %></a></li>
         <%if @past_contents %>
-          <!-- <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(MSG_NEWPAGE)}"><%= @past_contents[:name] %></a></li> -->
+          <!-- <li><a href="<%=@root_uri%>/edit/past" class="nav-border" onclick="if($('#pageStatus').val() == 4) {return confirm(jsit.validation.warning.movepage)}"><%= @past_contents[:name] %></a></li> -->
           <li><a class="nav-border hand-mouse" onclick="if($('#pageStatus').val() == 4) {$('#pastBtnY').click();} else {$('#pastBtnN')[0].click();}"><%= @past_contents[:name] %></a></li>
           <li><a href="<%=@root_uri%>/edit/past" id="pastBtnY" class="jump nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
           <li><a href="<%=@root_uri%>/edit/past" id="pastBtnN" class="nav-border" style="display: none"><%= @past_contents[:name] %></a></li>
@@ -71,8 +71,11 @@
             <a href="<%=@root_uri%>/edit/news" id="newJumpN" class="btn btn-blue new-Btn" style="display: none">New</a>
             <!-- <button type="button" class="btn btn-blue" id="newBtn" style="width: 80px;margin-left: 20px;margin-right: 20px">New</button> -->
             <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
-            <!-- <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" onclick="if(confirm(MSG_DELITEM)) {alert('del')} else {alert('cal')}" disabled>Delete</button> -->
+            <!-- <button type="button" class="btn btn-grey" id="delBtn" style="width: 80px" onclick="if(confirm(jsit.validation.warning.delItem)) {alert('del')} else {alert('cal')}" disabled>Delete</button> -->
             <button type="button" class="btn btn-grey delJump" id="delBtn" style="width: 80px" disabled>Delete</button>
+            <div class="pull-right" style="padding-top: 5px;">
+              <span class="text-danger"><b id="backMsg" style="font-size:15px; padding-right:15px;padding-top:10px;"></b></span>
+            </div>
           </div>
         </div>
         <!--Line-1-->
@@ -378,7 +381,7 @@
         } else {
           $('#AutoInptFlg').val("1");
           $('#Position').val($("#PositionOld").val());
-          
+
         }
       }
     }
@@ -422,7 +425,7 @@
       if($("#pageStatus").val() == "4"){
         $.confirm({
           title: 'DOSCA JS Contents',
-          content: getMsg("MSG_NEWPAGE"),
+          content: getMsg("jsit.validation.warning.movepage"),
           buttons: {
             OK: function () {
               window.location.href = '/dosca-js/edit/news?contents_no=' + contents_no;
@@ -441,7 +444,7 @@
   $(document).ready(function() {
     $('a.jump').confirm({
       title: 'DOSCA JS Contents',
-      content: getMsg("MSG_NEWPAGE"),
+      content: getMsg("jsit.validation.warning.movepage"),
       buttons: {
         OK: function () {
             location.href = this.$target.attr('href');
@@ -452,7 +455,7 @@
     });
     $('a.newJump').confirm({
       title: 'DOSCA JS Contents',
-      content: getMsg("MSG_NEWPAGE"),
+      content: getMsg("jsit.validation.warning.movepage"),
       buttons: {
         OK: function () {
             location.href = this.$target.attr('href');
@@ -463,7 +466,7 @@
     });
     $('button.delJump').confirm({
       title: 'DOSCA JS Contents',
-      content: getMsg("MSG_DELITEM"),
+      content: getMsg("jsit.validation.warning.delItem"),
       buttons: {
         OK: function () {
           delAction();

@@ -20,7 +20,7 @@ function submitChk(action){
     $("#Category").parent().parent().parent().attr("class", "has-error");
     $("#Category").nextAll("input").attr("style", "border:1px solid #a94442;");
     $("#Category").parent().attr("style", "margin-bottom: 0px;");
-    $("#CategoryMsg").removeAttr("hidden").text(getMsg("MSG_REQUIRE")).show();
+    $("#CategoryMsg").removeAttr("hidden").text(getMsg("jsit.validation.error.required")).show();
     flg++;
   } else {
     $("#Category").parent().parent().parent().attr("class","");
@@ -30,7 +30,7 @@ function submitChk(action){
 
   if(subject != undefined && subject != null && subject.trim().length == 0) {
     $("#Subject").parent().parent().attr("class", "form-group has-error");
-    $("#Subject").next().text(getMsg("MSG_REQUIRE"));
+    $("#Subject").next().text(getMsg("jsit.validation.error.required"));
     $("#Subject").show();
     flg++;
   } else {
@@ -42,7 +42,7 @@ function submitChk(action){
   }
   if(summary != undefined && summary != null && summary.trim().length == 0) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
-    $("#Summary").next().text(getMsg("MSG_REQUIRE"));
+    $("#Summary").next().text(getMsg("jsit.validation.error.required"));
     $("#Summary").show();
     flg++;
   } else {
@@ -54,7 +54,7 @@ function submitChk(action){
   }
   if(position != undefined && position != null && position.trim().length == 0) {
     $("#Position").parent().parent().attr("class", "form-group has-error");
-    $("#Position").next().text(getMsg("MSG_REQUIRE"));
+    $("#Position").next().text(getMsg("jsit.validation.error.required"));
     $("#Position").next().show();
     flg++;
   } else {
@@ -67,7 +67,7 @@ function submitChk(action){
 
   if(terminationDate != undefined && terminationDate != null && terminationDate.length == 0) {
     $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
-    $("#TerminationDate").parent().next().text(getMsg("MSG_REQUIRE"));
+    $("#TerminationDate").parent().next().text(getMsg("jsit.validation.error.required"));
     flg++;
   } else {
     $("#TerminationDate").parent().parent().parent().attr("class", "");
@@ -76,7 +76,7 @@ function submitChk(action){
 
   if(vessel != undefined && vessel != null && vessel.trim().length == 0) {
     $("#Vessel").parent().parent().attr("class", "form-group has-error");
-    $("#Vessel").next().text(getMsg("MSG_REQUIRE"));
+    $("#Vessel").next().text(getMsg("jsit.validation.error.required"));
     $("#Vessel").next().show();
     flg++;
   } else {
@@ -86,7 +86,7 @@ function submitChk(action){
 
   if(cargo != undefined && cargo != null && cargo.trim().length == 0) {
     $("#Cargo").parent().parent().attr("class", "form-group has-error");
-    $("#Cargo").next().text(getMsg("MSG_REQUIRE"));
+    $("#Cargo").next().text(getMsg("jsit.validation.error.required"));
     $("#Cargo").next().show();
     flg++;
   } else {
@@ -99,7 +99,7 @@ function submitChk(action){
     (incidentDateMin != undefined && incidentDateMin != null && incidentDateMin.length == 0)
   ) {
     $("#incidentGroup").attr("class", "form-group has-error");
-    $("#incidentMsg").text(getMsg("MSG_REQUIRE")).show();
+    $("#incidentMsg").text(getMsg("jsit.validation.error.required")).show();
     flg++;
   } else {
     $("#incidentGroup").attr("class", "form-group");
@@ -254,7 +254,7 @@ function inputChk(e) {
     return true;
   }else{
     $(e).parent().parent().attr("class","form-group has-error");
-    $(e).next().text(getMsg("MSG_ILLEGAL"));
+    $(e).next().text(getMsg("jsit.validation.error.alphanum"));
     $(e).next().show();
     return false;
   }
@@ -265,7 +265,7 @@ function inputBlurChk(e) {
   if($("#pageStatus").val() == "4") {
     if(value != undefined && value != null && value.length == 0) {
       $(e).parent().parent().attr("class", "form-group has-error");
-      $(e).next().text(getMsg("MSG_REQUIRE")).show();
+      $(e).next().text(getMsg("jsit.validation.error.required")).show();
     } else {
       $(e).parent().parent().attr("class", "form-group");
       $(e).next().text("").hide();
@@ -284,7 +284,7 @@ function URLChk(e) {
       return true;
     } else {
       $(e).parent().parent().attr("class","form-group has-error");
-      $(e).next().text(getMsg("MSG_URL"));
+      $(e).next().text(getMsg("jsit.validation.error.format"));
       $(e).next().show();
       return false;
     }
@@ -304,7 +304,7 @@ function pointChk() {
         //return true; // Add for Test
         if(!reg.test(input)) {
             result = false;
-        } 
+        }
         else {
             // Add for check
             var reg = /[NS]/;
@@ -325,7 +325,7 @@ function pointChk() {
                     result = false;
                 }
             }
-    
+
             if (position[1].indexOf("-") > 0 ) {
                 var lon = position[1].split("-");
                 var lon_d = parseFloat(lon[0]);
@@ -347,7 +347,7 @@ function pointChk() {
 
     if (!result) {
         $('#Position').parent().parent().attr("class","form-group has-error");
-        $('#Position').next().text(getMsg("MSG_POSITIONILLEGAL"));
+        $('#Position').next().text(getMsg("jsit.validation.error.format"));
         $('#Position').next().show();
     } else {
         $('#Position').parent().parent().attr("class","form-group");
@@ -366,7 +366,7 @@ function afterDateChk() {
     var nowDate = new Date(now);
     if(nowDate.getTime() > pageDate.getTime()){
       $("#TerminationDate").parent().parent().parent().attr("class", "has-error");
-      $("#TerminationDate").parent().next().text(getMsg("MSG_TERMINATIONSTART"));
+      $("#TerminationDate").parent().next().text(getMsg("jsit.validation.error.pastdate"));
       return false;
     } else {
       return true;

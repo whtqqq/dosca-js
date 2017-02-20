@@ -76,7 +76,7 @@
         var pwd = $("#password").val();
         if(chkEmpty(username)) {
           $("#userNameGroup").attr("class","form-group has-error");
-          $("#userNameMsg").text(getMsg("MSG_LOGINNAME"));
+          $("#userNameMsg").text(getMsg("jsit.validation.error.required"));
           $("#userNameMsg").show();
           flg++;
         } else {
@@ -88,7 +88,7 @@
         }
         if(chkEmpty(pwd)) {
           $("#pwdGroup").attr("class","form-group has-error");
-          $("#pwdMsg").text(getMsg("MSG_LOGINPWD"));
+          $("#pwdMsg").text(getMsg("jsit.validation.error.required"));
           $("#pwdMsg").show();
           flg++;
         } else {
@@ -119,7 +119,7 @@
           return true;
         }else{
           $("#userNameGroup").attr("class","form-group has-error");
-          $("#userNameMsg").text(getMsg("MSG_ILLEGAL"));
+          $("#userNameMsg").text(getMsg("jsit.validation.error.alphanum"));
           $("#userNameMsg").show();
           return false;
         }
@@ -135,13 +135,13 @@
             return true;
           }else{
             $("#emailGroup").attr("class","form-group has-error");
-            $("#emailMsg").text(getMsg("MSG_LOGINEMAILILLEGAL"));
+            $("#emailMsg").text(getMsg("jsit.validation.error.format"));
             $("#emailMsg").show();
             return false;
           }
         } else {
           $("#emailGroup").attr("class","form-group has-error");
-          $("#emailMsg").text(getMsg("MSG_LOGINEMAIL"));
+          $("#emailMsg").text(getMsg("jsit.validation.error.required"));
           $("#emailMsg").show();
           return false;
         }

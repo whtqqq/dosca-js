@@ -70,6 +70,9 @@
             <a href="<%=@root_uri%>/edit/past" id="newJumpN" class="btn btn-blue new-Btn" style="display: none">New</a>
             <button type="button" class="btn btn-grey" id="editBtn" style="width: 80px;margin-right: 20px;" onClick="editBtnAction();" disabled>Edit</button>
             <button class="btn btn-grey delJump" id="delBtn" style="width: 80px" disabled>Delete</button>
+            <div class="pull-right" style="padding-top: 5px;">
+              <span class="text-danger"><b id="backMsg" style="font-size:15px; padding-right:15px;padding-top:10px;"></b></span>
+            </div>
           </div>
         </div>
         <!--Line-1-->
@@ -479,7 +482,7 @@
     if($("#pageStatus").val() == "4"){
       $.confirm({
         title: 'DOSCA JS Contents',
-        content: getMsg("MSG_NEWPAGE"),
+        content: getMsg("jsit.validation.warning.movepage"),
         buttons: {
           OK: function () {
             window.location.href = '/dosca-js/edit/past?contents_no=' + contents_no;
@@ -497,7 +500,7 @@
 $(document).ready(function() {
   $('a.jump').confirm({
     title: 'DOSCA JS Contents',
-    content: getMsg("MSG_NEWPAGE"),
+    content: getMsg("jsit.validation.warning.movepage"),
     buttons: {
       OK: function () {
           location.href = this.$target.attr('href');
@@ -508,7 +511,7 @@ $(document).ready(function() {
   });
   $('a.newJump').confirm({
     title: 'DOSCA JS Contents',
-    content: getMsg("MSG_NEWPAGE"),
+    content: getMsg("jsit.validation.warning.movepage"),
     buttons: {
       OK: function () {
           location.href = this.$target.attr('href');

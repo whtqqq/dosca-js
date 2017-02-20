@@ -201,7 +201,7 @@ function delAction() {
         console.log(data)
         console.log(textStatus)
         console.log(jqXHR)
-        $.alert(getMsg("MSG_DELSUCCESS"));
+        $.alert(getMsg("jsit.validation.success.delItm"));
         window.location.href = $("#newJumpN").attr("href");
     },
     error:function(xhr,textStatus){
