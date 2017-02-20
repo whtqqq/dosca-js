@@ -198,35 +198,42 @@ function submitChk(action){
     if($("#pageID").val() == "edit" && $('#Picture').fileinput('getFilesCount') > 0 ) {
       $('#Picture').fileinput('upload');
     }
-    //past page
+    //past page newItem
     if($("#pageID").val() == "past" && $('#Picture').fileinput('getFilesCount') == 0 && $("#picUp").val() == "false") {
       submitStatus = false;
     }
+
+    ////Todo submit
+    //Summit immedately when no file is selected
+    if(submitStatus && $('#Picture').fileinput('getFilesCount') == 0) {
+      //D3 pic save
+      homeLoader.show();
+      svgAsPngUri($('svg')[0], {}, function(uri) {
+        $("#d3Map").val(uri);
+        if(action === "preview") {
+          $("form").attr("action", "/dosca-js/edit/preview");
+          $("form").attr("target", "_blank");
+          homeLoader.hide();
+        }
+        $("form").submit();
+        var toAction = "news";
+        if($("#pageID").val() === "past") {
+          toAction = "past";
+        }
+        $("form").attr("action", "/dosca-js/edit/" + toAction);
+        $("form").attr("target", "_self");
+      });
+    }
+
     if($("#pageID").val() == "past" && $("#picUp").val() != "true") {
       $('#Picture').fileinput('upload');
     }
+    //past page update
+    if($("#pageID").val() == "past" && $("#picUp").val() == "true" && $('#Picture').fileinput('getFilesCount') > 0) {
+      $('#Picture').fileinput('upload');
+    }
   }
-  ////Todo submit
-  //Summit immedately when no file is selected
-  if(submitStatus && $('#Picture').fileinput('getFilesCount') == 0) {
-    //D3 pic save
-    homeLoader.show();
-    svgAsPngUri($('svg')[0], {}, function(uri) {
-      $("#d3Map").val(uri);
-      if(action === "preview") {
-        $("form").attr("action", "/dosca-js/edit/preview");
-        $("form").attr("target", "_blank");
-        homeLoader.hide();
-      }
-      $("form").submit();
-      var toAction = "news";
-      if($("#pageID").val() === "past") {
-        toAction = "past";
-      }
-      $("form").attr("action", "/dosca-js/edit/" + toAction);
-      $("form").attr("target", "_self");
-    });
-  }
+
 
   return submitStatus;
 }
