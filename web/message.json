@@ -1,16 +1,11 @@
 {
-	"MSG_NEWPAGE":"Now open new page?Current page information will be lost.",
-	"MSG_DELITEM":"Are you sure delete the contents.",
-	"MSG_REQUIRE":"The item is required.",
-	"MSG_ILLEGAL":"Please input using half-width characters and letters.",
-	"MSG_URL":"Please input in crorrect format.",
-	"MSG_TERMINATIONSTART":"A past date is not allowed.",
-	"MSG_SUMMARYLINE":"Please control Summary in 25 lines and max 120 characters in each line.",
-	"MSG_LOGINERROR":"Please try again.",
-	"MSG_LOGINNAME":"The item is required.",
-	"MSG_LOGINPWD":"The item is required.",
-	"MSG_LOGINEMAIL":"The item is required.",
-	"MSG_LOGINEMAILILLEGAL":"Please input in crorrect format.",
-	"MSG_POSITIONILLEGAL":"Please input in crorrect format.",
-	"MSG_DELSUCCESS":"Delete Success.Now will jump to new page."
+	"jsit.validation.warning.movepage":"Now open new page?Current page information will be lost.",
+	"jsit.validation.warning.delItem":"Are you sure delete the contents?",
+	"jsit.validation.error.required":"The item is required.",
+	"jsit.validation.error.alphanum":"Please input using half-width characters and letters.",
+	"jsit.validation.error.format":"Please input in crorrect format.",
+	"jsit.validation.error.pastdate":"A past date is not allowed.",
+	"jsit.validation.error.summary.tooLong":"Please control Summary in 25 lines and max 120 characters in each line.",
+	"jsit.validation.error.auth":"Please try again.",
+	"jsit.validation.success.delItm":"Delete Success.Now will jump to new page."
 }

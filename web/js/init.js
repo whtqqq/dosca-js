@@ -43,7 +43,7 @@ $(document).ready(function() {
       maxImageHeight: 200,
       fileActionSettings:{showUpload:false},
       previewSettings:{image: {width: "200px", height: "auto"}},
-      allowedFileExtensions : ['jpg', 'png', 'gif'],
+      allowedFileExtensions : ['jpeg','jpg', 'png' ],
       dropZoneTitle:"Picture file（jpeg/jpg/png） Drag & Drop here !"
     });
   } else {
