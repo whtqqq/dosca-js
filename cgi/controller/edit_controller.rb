@@ -74,7 +74,7 @@ class EditController < ApplicationController
         file = JSON.parse(@session["files"])[0]
       end
       edit_proc(@past_contents, @values, contents_no, file, false)
-      if @error_message
+      unless empty?(@error_message)
         copy_values(@values, @params)
       else
         clear_values
