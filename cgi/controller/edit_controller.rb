@@ -29,14 +29,15 @@ class EditController < ApplicationController
 
     @histories = fetch_histories( @past_contents[:code])
     contents_no = @params[:contents_no]
-    @values = {} 
-    @values = fetch_history_detail(
-                      @past_contents[:code], 
-                      contents_no) unless empty?(contents_no)  
+    @values ||= {} 
+    unless empty?(contents_no) 
+      dosca_values = fetch_history_detail(@past_contents[:code], contents_no)  
+      copy_values(@values, dosca_values)
+    end
 
 
     @values[:contents_code] =  @past_contents[:code]
-    @values[:contents_no] = "" 
+    @values[:contents_no] = contents_no
     gui_status = @params[:status]
     status = ""
 
@@ -51,8 +52,8 @@ class EditController < ApplicationController
     if status == STATUS_NEW
       files = JSON.parse(@session["files"])
       new_proc(@past_contents, @values, contents_no, files[0])
-      if @error_message
-        @value = @params.dup
+      unless empty?(@error_message)
+        copy_values(@values, @params)
       else
         clear_values
       end
@@ -60,8 +61,10 @@ class EditController < ApplicationController
     end
 
     if status == STATUS_EDIT
+
       if !dirty?(@values, @params)
         @error_message = "No change occurred."
+        copy_values(@values,  @params)
         LogWriter.info("System", "Edit#past End.")
         return
       end
@@ -72,7 +75,7 @@ class EditController < ApplicationController
       end
       edit_proc(@past_contents, @values, contents_no, file, false)
       if @error_message
-        @value = @params.dup
+        copy_values(@values, @params)
       else
         clear_values
       end
@@ -84,9 +87,7 @@ class EditController < ApplicationController
                               @mail, @past_contents[:code], contents_no) 
 
       @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
-      @values[:contents_code] = @past_contents[:code]
-      @values[:contents_no] = contents_no  
-      if @values[:termination_date].nil? ||  @values[:termination_date].empty?
+      if empty?(@values[:termination_date])
         @values[:period]  = nil 
       else 
         @values[:period]  = "period"
@@ -121,13 +122,14 @@ class EditController < ApplicationController
 
     @histories = fetch_histories(@news_contents[:code])
     contents_no = @params[:contents_no]
-    @values = {} 
-    @values = fetch_history_detail(
-                      @news_contents[:code], 
-                      contents_no) unless empty?(contents_no)  
+    @values ||= {} 
+    unless empty?(contents_no) 
+      dosca_values = fetch_history_detail(@news_contents[:code], contents_no)  
+      copy_values(@values, dosca_values)
+    end
 
     @values[:contents_code] =  @news_contents[:code]
-    @values[:contents_no] = "" 
+    @values[:contents_no] = contents_no
     gui_status = @params[:status]
     status = ""
 
@@ -141,8 +143,8 @@ class EditController < ApplicationController
 
     if status == STATUS_NEW
       new_proc(@news_contents, @values, contents_no, nil)
-      if @error_message
-        @value = @params.dup
+      unless empty?(@error_message)
+        copy_values(@values,  @params)
       else
         clear_values
       end
@@ -152,13 +154,14 @@ class EditController < ApplicationController
     if status == STATUS_EDIT
       if !dirty?(@values, @params)
         @error_message = "No change occurred."
+        copy_values(@values,  @params)
         LogWriter.info("System", "Edit#news End.")
         return
       end
 
       edit_proc(@news_contents, @values, contents_no, nil, true)
-      if @error_message
-        @value = @params.dup
+      unless empty?(@error_message)
+        copy_values(@values,  @params)
       else
         clear_values
       end
@@ -170,8 +173,6 @@ class EditController < ApplicationController
                               @mail, @news_contents[:code], contents_no) 
 
       @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
-      @values[:contents_code] = @news_contents[:code]
-      @values[:contents_no] = contents_no  
       if @values[:termination_date].nil? ||  @values[:termination_date].empty?
         @values[:period]  = nil 
       else 
@@ -403,13 +404,31 @@ class EditController < ApplicationController
   end
 
   def clear_values
+    keys = [:contents_no, :subject, :category, :summary, 
+             :web_page, :termination_date, 
+            :cargo, :vessel_name,  :date_time,
+            :position, :latitude, :longitude]
+
+    keys.each do |key|
+      @values[key] = ""
+    end
+    @values[:status] = "1"
+  end
+
+  def copy_values(to, from)
     keys = [:subject, :category, :summary, 
              :web_page, :termination_date, 
             :cargo, :vessel_name,  :date_time,
             :position, :latitude, :longitude]
 
     keys.each do |key|
-      @value[key] = ""
+      to[key] = from[key]
+    end
+
+    if empty?(to[:termination_date])
+      to[:period]  = nil 
+    else 
+      to[:period]  = "period"
     end
   end
 end
