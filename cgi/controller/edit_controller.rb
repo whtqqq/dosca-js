@@ -53,6 +53,8 @@ class EditController < ApplicationController
       new_proc(@past_contents, @values, contents_no, files[0])
       if @error_message
         @value = @params.dup
+      else
+        clear_values
       end
       @session["files"] =  nil
     end
@@ -71,6 +73,8 @@ class EditController < ApplicationController
       edit_proc(@past_contents, @values, contents_no, file, false)
       if @error_message
         @value = @params.dup
+      else
+        clear_values
       end
       @session["files"] =  nil
     end
@@ -139,6 +143,8 @@ class EditController < ApplicationController
       new_proc(@news_contents, @values, contents_no, nil)
       if @error_message
         @value = @params.dup
+      else
+        clear_values
       end
       @session["files"] =  nil
     end
@@ -153,6 +159,8 @@ class EditController < ApplicationController
       edit_proc(@news_contents, @values, contents_no, nil, true)
       if @error_message
         @value = @params.dup
+      else
+        clear_values
       end
       @session["files"] =  nil
     end
@@ -392,5 +400,16 @@ class EditController < ApplicationController
       File.delete file if File.exist?(file)
     end
     @session["files"] = nil
+  end
+
+  def clear_values
+    keys = [:subject, :category, :summary, 
+             :web_page, :termination_date, 
+            :cargo, :vessel_name,  :date_time,
+            :position, :latitude, :longitude]
+
+    keys.each do |key|
+      @value[key] = ""
+    end
   end
 end
