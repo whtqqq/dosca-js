@@ -39,6 +39,9 @@ $("#Period").click(function() {
   $("#pageStatus").val("4");
   submitBtnActive();
 });
+$("#Picture").change(function(){
+  $("#pageStatus").val("4");
+});
 
 /*##########Historical Contents select##########*/
 function selectHistory() {

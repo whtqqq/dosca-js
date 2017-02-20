@@ -414,6 +414,8 @@ class EditController < ApplicationController
       @values[key] = ""
     end
     @values[:status] = "1"
+    @values[:pdf_file] = nil
+    @session["original_pdf_file"] = nil
   end
 
   def copy_values(to, from)
