@@ -430,5 +430,11 @@ class EditController < ApplicationController
     else 
       to[:period]  = "period"
     end
+
+    unless empty?(to[:position])
+      position = to[:position].match(/(.*)(N|S|s|n)(.*)/)
+      to[:longitude] = position[1] + position[2]
+      to[:latitude] = position[3].strip
+    end
   end
 end
