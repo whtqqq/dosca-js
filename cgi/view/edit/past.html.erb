@@ -214,7 +214,9 @@
           <div class="form-group">
             <div class="col-sm-12">
               <% pdf_file = @values[:pdf_file]%>
-              <a id="PictureDownload" href="<%= pdf_file%>" class="btn btn-blue" target="_blank" style="display: none;">Past PDF Download</a>
+              <% unless pdf_file.nil? || pdf_file.empty? %>
+                <a id="PictureDownload" href="<%= pdf_file%>" class="btn btn-blue" style="display:block;" target="_blank">Past PDF Download</a>
+              <% end%>
               <input id="picUp" type="hidden" value="false">
             </div>
           </div>

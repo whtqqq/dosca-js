@@ -87,6 +87,7 @@ class EditController < ApplicationController
                               @mail, @past_contents[:code], contents_no) 
 
       @values[:pdf_file] = Settings._settings[:server][:contents_pdf_uri] + "/" + pdf_file
+      @session["original_pdf_file"] = @values[:pdf_file] 
       if empty?(@values[:termination_date])
         @values[:period]  = nil 
       else 
@@ -436,5 +437,7 @@ class EditController < ApplicationController
       to[:longitude] = position[1] + position[2]
       to[:latitude] = position[3].strip
     end
+
+    to[:pdf_file] = @session["original_pdf_file"]
   end
 end
