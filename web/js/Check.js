@@ -31,7 +31,7 @@ function submitChk(action){
   if(subject != undefined && subject != null && subject.trim().length == 0) {
     $("#Subject").parent().parent().attr("class", "form-group has-error");
     $("#Subject").next().text(getMsg("jsit.validation.error.required"));
-    $("#Subject").show();
+    $("#Subject").next().show();
     flg++;
   } else {
     $("#Subject").parent().parent().attr("class", "form-group");
@@ -43,7 +43,7 @@ function submitChk(action){
   if(summary != undefined && summary != null && summary.trim().length == 0) {
     $("#Summary").parent().parent().attr("class", "form-group has-error");
     $("#Summary").next().text(getMsg("jsit.validation.error.required"));
-    $("#Summary").show();
+    $("#Summary").next().show();
     flg++;
   } else {
     $("#Summary").parent().parent().attr("class", "form-group");
