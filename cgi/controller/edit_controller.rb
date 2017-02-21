@@ -57,7 +57,6 @@ class EditController < ApplicationController
       else
         clear_values
       end
-      @session["files"] =  nil
     end
 
     if status == STATUS_EDIT
@@ -79,7 +78,6 @@ class EditController < ApplicationController
       else
         clear_values
       end
-      @session["files"] =  nil
     end
     
     if status == STATUS_SHOW
@@ -149,7 +147,6 @@ class EditController < ApplicationController
       else
         clear_values
       end
-      @session["files"] =  nil
     end
 
     if status == STATUS_EDIT
@@ -166,7 +163,6 @@ class EditController < ApplicationController
       else
         clear_values
       end
-      @session["files"] =  nil
     end
 
     if status == STATUS_SHOW
@@ -268,12 +264,13 @@ class EditController < ApplicationController
 
     resp = DoscaAPI.new(@client_code,
                       @mail, contents[:code],  pdf_file, @params) 
-    if !has_error?(resp)
+    if has_error?(resp)
       @error_message = resp[:message]
+    else
+      delete_cached_files
     end
 
     File.delete pdf_file if File.exist?(pdf_file)
-    delete_cached_files
   end
 
   def edit_proc(contents, values, contents_no, pdf_file, pdf_create_flg)
@@ -284,12 +281,13 @@ class EditController < ApplicationController
 
     resp = DoscaAPI.update(@client_code,
                         @mail, contents[:code], contents_no, pdf_file, @params) 
-    if !has_error?(resp)
+    if has_error?(resp)
       @error_message = resp[:message]
+    else
+      delete_cached_files
     end
 
     File.delete pdf_file if !empty?(pdf_file) && File.exist?(pdf_file)
-    delete_cached_files
   end
 
   def extract_contents(user_info, keyword)
@@ -362,8 +360,8 @@ class EditController < ApplicationController
   end
 
   def save_base64_picture(data_url, path)
-    png  = Base64.decode64(data_url['data:image/png;base64,'.length..-1])
-    file_name = path + '/chart.png'
+    png  = Base64.decode64(data_url['data:image/svg+xml;base64,'.length..-1])
+    file_name = path + '/chart.svg'
     File.open(file_name, 'wb') { |f| f.write(png) }
     file_name
   end

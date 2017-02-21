@@ -6,7 +6,6 @@ require 'fileutils'
 #    LogWriter.info(email, "message")   >>>> write I time ：［pid］ <email: controller> message
 #    LogWriter.warn(email, "message")   >>>> write W time ：［pid］ <email: controller> message 
 #    LogWriter.error(email, "message")  >>>> write E time ：［pid］ <email: controller> message
-#    LogWriter.exit              >>>> close log writer
 
 class LogWriter
   class << self

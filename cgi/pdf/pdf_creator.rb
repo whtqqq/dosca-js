@@ -1,7 +1,7 @@
 require 'pdf/writer'
 require 'pdf/simpletable'
 require 'color/rgb/metallic'
-require 'chunky_png'
+require 'RMagick'
 require 'time'
 
 # Example
@@ -34,14 +34,36 @@ class PDFCreator
     @pdf.margins_pt(10, 10, 10, 10)
     @pdf.rectangle(20, 10, @pdf.margin_width - 15, @pdf.margin_height - 10).stroke
 
-   unless @map_image.nil? 
-      image = ChunkyPNG::Image.from_file(@map_image)
-      image.save(@map_image, {:bit_depth=> 8})
+    unless @map_image.nil?
+      img = Magick::Image.read(@map_image).first
+      img.border!(0, 0, 'white')
+      img.alpha Magick::DeactivateAlphaChannel
+
+      origin = @map_image.dup
+      @map_image["svg"] = "png"
+
+      img.write(@map_image) {
+        self.depth = 8
+      }
+
+      File.delete(origin)
     end
 
+    max_size = 300 * 1024
     @news_images.each do |file|
-      image = ChunkyPNG::Image.from_file(file)
-      image.save(file, {:bit_depth=> 8})
+      img = Magick::Image.read(file).first
+      img.border!(0, 0, 'white')
+      img.alpha Magick::DeactivateAlphaChannel
+
+      quality = 100
+      if img.filesize > max_size
+        quality = max_size.to_f / img.filesize * 10 
+      end
+
+      img.write(file) {
+        self.depth = 8
+        self.quality = quality.to_i
+      }
     end
   end
 
@@ -97,40 +119,40 @@ class PDFCreator
     #One picture
     if @news_images && @news_images.size == 1
       # x =>21, y =>11
-      put_ratio_one_picture (21, 11, @news_images[0])
+      put_ratio_one_picture(21, 11, @news_images[0])
     end
 
     #Two pircture
     if @news_images && @news_images.size == 2
       # x =>21, y =>11
-      put_ratio_two_picture (21, 11, @news_images[0])
+      put_ratio_two_picture(21, 11, @news_images[0])
 
       # x => 305, y => 11;
-      put_ratio_two_picture (308, 11, @news_images[1])
+      put_ratio_two_picture(308, 11, @news_images[1])
     end
 
     #Three picture
     if @news_images && @news_images.size == 3
       # x =>21, y =>150
-      put_ratio_picture (21, 150, @news_images[0])
+      put_ratio_picture(21, 150, @news_images[0])
 
       # x => 308, y => 150;
-      put_ratio_picture (308, 150, @news_images[1])
+      put_ratio_picture(308, 150, @news_images[1])
  
       # x => 21, y => 11;
-      put_ratio_picture (21, 11, @news_images[2])
+      put_ratio_picture(21, 11, @news_images[2])
     end
 
     #Four picture
     if @news_images && @news_images.size == 4
       # x => 21, y => 150
-      put_ratio_picture (21, 150, @news_images[0])
+      put_ratio_picture(21, 150, @news_images[0])
 
       # x => 308, y => 150;
-      put_ratio_picture (308, 150, @news_images[1])
+      put_ratio_picture(308, 150, @news_images[1])
 
       # x => 21, y => 11;
-      put_ratio_picture (21, 11, @news_images[2])
+      put_ratio_picture(21, 11, @news_images[2])
 
       # x => 308, y => 11;
       put_ratio_picture(308, 11, @news_images[3])
@@ -138,29 +160,29 @@ class PDFCreator
   end
 
   def put_ratio_picture (x, y, file)
-    image1 = ChunkyPNG::Image.from_file(file)
-    if image1.dimension.width > 2 * image1.dimension.height
-      put_image(file, x, y + (138 - image1.dimension.height * 287 / image1.dimension.width ) / 2, 287, nil)
+    image1 = Magick::Image.read(file).first
+    if image1.columns > 2 * image1.rows
+      put_image(file, x, y + (138 - image1.rows * 287 / image1.columns ) / 2, 287, nil)
     else
-      put_image(file, x + (287 - image1.dimension.width * 138 / image1.dimension.height) / 2, y, nil, 138)
+      put_image(file, x + (287 - image1.columns * 138 / image1.rows) / 2, y, nil, 138)
     end
   end
 
-   def put_ratio_one_picture (x, y, file)
-    image1 = ChunkyPNG::Image.from_file(file)
-    if image1.dimension.width > image1.dimension.height
-      put_image(file, x, y + (277 - image1.dimension.height * 574 / image1.dimension.width ) / 2, 574, nil)
+   def put_ratio_one_picture(x, y, file)
+    image1 = Magick::Image.read(file).first
+    if image1.columns > image1.rows
+      put_image(file, x, y + (277 - image1.rows * 574 / image1.columns ) / 2, 574, nil)
     else
-      put_image(file, x + (574 - image1.dimension.width * 277 / image1.dimension.height) / 2, y, nil, 277)
+      put_image(file, x + (574 - image1.columns * 277 / image1.rows) / 2, y, nil, 277)
     end
   end
 
   def put_ratio_two_picture (x, y, file)
-    image1 = ChunkyPNG::Image.from_file(file)
-    if image1.dimension.width > image1.dimension.height
-      put_image(file, x, y + (277 - image1.dimension.height * 287 / image1.dimension.width ) / 2, 287, nil)
+    image1 = Magick::Image.read(file).first
+    if image1.columns > image1.rows
+      put_image(file, x, y + (277 - image1.rows * 287 / image1.columns ) / 2, 287, nil)
     else
-      put_image(file, x + (287 - image1.dimension.width * 277 / image1.dimension.height) / 2, y, nil, 277)
+      put_image(file, x + (287 - image1.columns * 277 / image1.rows) / 2, y, nil, 277)
     end
   end
 

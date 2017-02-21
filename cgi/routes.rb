@@ -37,7 +37,7 @@ begin
 
 rescue Exception => e
   # when exception 404 Not Found
-  LogWriter.error("System", e.to_s)
+  #LogWriter.error("System", e.to_s)
 
   puts "Status: 404 Not Found\n"
   puts "Content-Type: text/html\n\n"
