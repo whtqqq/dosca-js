@@ -269,6 +269,7 @@
 
     var g = svg.append("g")
         .call(zoom);
+    g.on('dblclick.zoom', null);
 
     var color = d3.scale.ordinal()
         .range(["#98abc5", "#fff"]);
