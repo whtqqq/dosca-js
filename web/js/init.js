@@ -71,6 +71,32 @@ $(document).ready(function() {
         dropZoneTitle:"PDF file Drag & Drop here !"
     });
   }
+
+  $('#Picture')
+    .on("filebatchuploaderror", function(event, data) {
+      if(data.response) {
+          invaild_flg = 0;
+          submitStatus = false;
+      }
+    })
+    .on("filecustomerror", function(event, data) {
+      if(data.response) {
+          invaild_flg = 0;
+          submitStatus = false;
+      }
+    })
+    .on("fileuploaderror", function(event, data) {
+      if(data.response) {
+          invaild_flg = 0;
+          submitStatus = false;
+      }
+    })
+    .on("filebatchuploadsuccess", function(event, data) {
+      if(data.response.result === "SUCCESS") {
+        //alert("upload success");
+      }
+    });
+
   if($("#pageStatus").val() != 2) {
     $("#noPeriod").click();
   }
@@ -103,24 +129,9 @@ $(document).ready(function() {
     submitBtnActive();
   });
 /*##########Add submitBtn active listener##########*/
-  // $('#Subject').blur(function () {
-  //   inputBlurChk($('#Subject'));
-  // });
-  // $('#Summary').blur(function () {
-  //   inputBlurChk($('#Summary'));
-  //   summaryLineNumChk();
-  // });
-  // $('#Position').blur(function () {
-  //   inputBlurChk($('#Position'));
-  // });
-  // $('#WebPage').blur(function () {
-  //   URLChk($('#WebPage'));
-  // });
 
   if($("#pageStatus").val() == 2 && $("#pageID").val() == "past") {
-    // $("#PictureDownload").attr("style", "display:block;").attr("disabled","true");
     $("#PictureDownload").attr("style", "display:block;");
-    $("#picUp").val("true");
     $('#Picture').fileinput('destroy').fileinput({
         theme: "explorer",
         uploadUrl: '/dosca-js/edit/upload',

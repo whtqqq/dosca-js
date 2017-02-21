@@ -1,5 +1,14 @@
 /*##########Submit Chk##########*/
+var invaild_flg = 0;
+var submitStatus = true;
+
 function submitChk(action){
+  if (invaild_flg == 1) {
+    return false; 
+  }
+  else {
+    invaild_flg = 1;  
+  }
   var flg = 0;
   var category         = $("#Category").val();
   var subject          = $("#Subject").val();
@@ -143,73 +152,31 @@ function submitChk(action){
     }
   }
 
-  //if($("#pageID").val() == "edit") {
-    if(!afterDateChk()) {
+  if(!afterDateChk()) {
       flg ++;
-    }
-  //}
+  }
 
   if(!URLChk($('#WebPage'))) {
     flg ++;
   }
 
-
-  var submitStatus = true;
+  submitStatus = true;
   if(flg != 0) {
+    invaild_flg = 0;
     submitStatus = false;
   } else {
-    //file upload submit
-    $('#Picture')
-    .on("filebatchuploaderror", function(event, data) {
-      if(data.response) {
-          submitStatus = false;
-      }
-    })
-    .on("filecustomerror", function(event, data) {
-      if(data.response) {
-          submitStatus = false;
-      }
-    })
-    .on("fileuploaderror", function(event, data) {
-      if(data.response) {
-          submitStatus = false;
-      }
-    })
-    .on("filebatchuploadsuccess", function(event, data) {
-      if(data.response.result === "SUCCESS") {
-        var html = d3.select("svg")
-              .attr("version", 1.1)
-              .attr("xmlns", "http://www.w3.org/2000/svg")
-              .node().parentNode.innerHTML;
-
-        // console.log(html);
-        var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
-        $("#d3Map").val(imgsrc);
-        if(action === "preview") {
-          $("form").attr("action", "/dosca-js/edit/preview");
-          $("form").attr("target", "_blank");
-          homeLoader.hide();
-        }
-        $("form").submit();
-        var toAction = "news";
-        if($("#pageID").val() == "past") {
-          toAction = "past";
-        }
-        $("form").attr("action", "/dosca-js/edit/" + toAction);
-        $("form").attr("target", "_self");
-
-      }
-    });
-    //news page
-    if($("#pageID").val() == "edit" && $('#Picture').fileinput('getFilesCount') > 0 ) {
+    //In past page, no file is selected
+    if($("#pageID").val() === "past" && $('#Picture').fileinput('getFilesCount') == 0 && !$("#ContentNo").val()) {
+      invaild_flg = 0;
+      submitStatus = false;
       $('#Picture').fileinput('upload');
     }
-    //past page newItem
-    if($("#pageID").val() == "past" && $('#Picture').fileinput('getFilesCount') == 0 && $("#picUp").val() == "false") {
-      submitStatus = false;
+
+    if($('#Picture').fileinput('getFilesCount') > 0 ) {
+      $('#Picture').fileinput('upload');
     }
 
-    ////Todo submit
+    //news page or update of past page
     //Summit immedately when no file is selected
     if(submitStatus && $('#Picture').fileinput('getFilesCount') == 0) {
       //D3 pic save
@@ -222,31 +189,18 @@ function submitChk(action){
       // console.log(html);
       var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
       $("#d3Map").val(imgsrc);
+
+      $("form").attr("action", "/dosca-js/edit/" + $("#pageID").val());
+      $("form").attr("target", "_self");
       if(action === "preview") {
         $("form").attr("action", "/dosca-js/edit/preview");
         $("form").attr("target", "_blank");
+        invaild_flg = 0;
         homeLoader.hide();
       }
       $("form").submit();
-      var toAction = "news";
-      if($("#pageID").val() === "past") {
-        toAction = "past";
-      }
-      $("form").attr("action", "/dosca-js/edit/" + toAction);
-      $("form").attr("target", "_self");
-    }
-
-    if($("#pageID").val() == "past" && $("#picUp").val() != "true") {
-      $('#Picture').fileinput('upload');
-    }
-    //past page update
-    if($("#pageID").val() == "past" && $("#picUp").val() == "true" && $('#Picture').fileinput('getFilesCount') > 0) {
-      $('#Picture').fileinput('upload');
     }
   }
-
-
-  return submitStatus;
 }
 
 

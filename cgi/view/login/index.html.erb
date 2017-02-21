@@ -72,91 +72,97 @@
     <script src="<%=@contents_uri%>/js/bootstrap.min.js"></script>
     <script src="<%=@contents_uri%>/js/message.js"></script>
     <script>
-      function chkSubmit() {
-        var flg = 0;
-        var username = $("#username").val();
-        var pwd = $("#password").val();
-        if(chkEmpty(username)) {
-          $("#userNameGroup").attr("class","form-group has-error");
-          $("#userNameMsg").text(getMsg("jsit.validation.error.required"));
-          $("#userNameMsg").show();
-          flg++;
-        } else {
-          $("#userNameGroup").attr("class","form-group");
-          $("#userNameMsg").hide();
-          if(!usernameChk()){
-            flg++;
-          }
-        }
-        if(chkEmpty(pwd)) {
-          $("#pwdGroup").attr("class","form-group has-error");
-          $("#pwdMsg").text(getMsg("jsit.validation.error.required"));
-          $("#pwdMsg").show();
-          flg++;
-        } else {
-          $("#pwdGroup").attr("class","form-group");
-          $("#pwdMsg").hide();
-        }
+        var invaild_flg = 0;
+        
+        function chkSubmit() {
 
-        if(!chkEmail()) {
-          flg++;
-        }
+            if (invaild_flg == 0) {
+                invaild_flg = 1;
 
-        if(flg > 0) {
-          return false;
-        } else {
-          return true;
-          //location.href = success;
-          //$('#success').trigger('click');
-        }
-      }
-
-      function usernameChk() {
-        var input = $("#username").val();
-        var reg = /^[ -~\n]+$/;
-        if(reg.test(input)) {
-          $("#userNameGroup").attr("class","form-group");
-          $("#userNameMsg").text("");
-          $("#userNameMsg").hide();
-          return true;
-        }else{
-          $("#userNameGroup").attr("class","form-group has-error");
-          $("#userNameMsg").text(getMsg("jsit.validation.error.alphanum"));
-          $("#userNameMsg").show();
-          return false;
-        }
-      }
-
-      function chkEmail() {
-        var email = $("#email").val();
-        if(email != "") {
-          var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-          if(reg.test(email)){
-            $("#emailGroup").attr("class","form-group");
-            $("#emailMsg").hide();
-            return true;
-          }else{
-            $("#emailGroup").attr("class","form-group has-error");
-            $("#emailMsg").text(getMsg("jsit.validation.error.format"));
-            $("#emailMsg").show();
+                var flg = 0;
+                var username = $("#username").val();
+                var pwd = $("#password").val();
+                if(chkEmpty(username)) {
+                    $("#userNameGroup").attr("class","form-group has-error");
+                    $("#userNameMsg").text(getMsg("jsit.validation.error.required"));
+                    $("#userNameMsg").show();
+                    flg++;
+                } else {
+                    $("#userNameGroup").attr("class","form-group");
+                    $("#userNameMsg").hide();
+                    if(!usernameChk()){
+                        flg++;
+                    }
+                }
+                if(chkEmpty(pwd)) {
+                    $("#pwdGroup").attr("class","form-group has-error");
+                    $("#pwdMsg").text(getMsg("jsit.validation.error.required"));
+                    $("#pwdMsg").show();
+                    flg++;
+                } else {
+                    $("#pwdGroup").attr("class","form-group");
+                    $("#pwdMsg").hide();
+                }
+        
+                if(!chkEmail()) {
+                    flg++;
+                }
+        
+                if(flg > 0) {
+                    invaild_flg = 0;
+                    return false;
+                }
+                return true;
+            }
             return false;
-          }
-        } else {
-          $("#emailGroup").attr("class","form-group has-error");
-          $("#emailMsg").text(getMsg("jsit.validation.error.required"));
-          $("#emailMsg").show();
-          return false;
         }
-      }
-
-      function chkEmpty(str) {
-        if(str != "") {
-          return false;
-        } else {
-          return true;
+    
+       function usernameChk() {
+            var input = $("#username").val();
+            var reg = /^[ -~\n]+$/;
+            if(reg.test(input)) {
+                $("#userNameGroup").attr("class","form-group");
+                $("#userNameMsg").text("");
+                $("#userNameMsg").hide();
+                return true;
+            }else{
+                $("#userNameGroup").attr("class","form-group has-error");
+                $("#userNameMsg").text(getMsg("jsit.validation.error.alphanum"));
+                $("#userNameMsg").show();
+                return false;
+            }
         }
-      }
-
+    
+        function chkEmail() {
+            var email = $("#email").val();
+            if(email != "") {
+                var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                if(reg.test(email)){
+                    $("#emailGroup").attr("class","form-group");
+                    $("#emailMsg").hide();
+                    return true;
+                }else{
+                    $("#emailGroup").attr("class","form-group has-error");
+                    $("#emailMsg").text(getMsg("jsit.validation.error.format"));
+                    $("#emailMsg").show();
+                    return false;
+                }
+            } else {
+                $("#emailGroup").attr("class","form-group has-error");
+                $("#emailMsg").text(getMsg("jsit.validation.error.required"));
+                $("#emailMsg").show();
+                return false;
+            }
+        }
+    
+        function chkEmpty(str) {
+            if(str != "") {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    
     </script>
   </body>
 </html>
