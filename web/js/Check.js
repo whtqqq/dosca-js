@@ -4,10 +4,10 @@ var submitStatus = true;
 
 function submitChk(action){
   if (invaild_flg == 1) {
-    return false; 
+    return false;
   }
   else {
-    invaild_flg = 1;  
+    invaild_flg = 1;
   }
   var flg = 0;
   var category         = $("#Category").val();
@@ -198,6 +198,11 @@ function submitChk(action){
         invaild_flg = 0;
         homeLoader.hide();
       }
+      var fileStr = "";
+      $("tr[id^='uploaded']").find('div.explorer-caption').each(function (index, domEle) {
+          fileStr += domEle.title + ";";
+      });
+      $("#fileNames").val(fileStr);
       $("form").submit();
     }
   }
