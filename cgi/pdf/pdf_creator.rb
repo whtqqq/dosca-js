@@ -93,27 +93,74 @@ class PDFCreator
 
   def put_news_picture()
     create_table(15, "                       Picture", 311, @pdf.margin_width, :all, :shaded)
+
     #One picture
     if @news_images && @news_images.size == 1
-      put_image(@news_images[0], 160, 33, nil, 230)
+      # x =>21, y =>11
+      put_ratio_one_picture (21, 11, @news_images[0])
     end
+
     #Two pircture
     if @news_images && @news_images.size == 2
-      put_image(@news_images[0], 45, 50, nil, 200)
-      put_image(@news_images[1], 320, 50, nil, 200)
+      # x =>21, y =>11
+      put_ratio_two_picture (21, 11, @news_images[0])
+
+      # x => 305, y => 11;
+      put_ratio_two_picture (308, 11, @news_images[1])
     end
+
     #Three picture
     if @news_images && @news_images.size == 3
-      put_image(@news_images[0], 100, 160, nil, 115)
-      put_image(@news_images[1], 385, 160, nil, 115)
-      put_image(@news_images[2], 100, 33, nil, 115)
+      # x =>21, y =>150
+      put_ratio_picture (21, 150, @news_images[0])
+
+      # x => 308, y => 150;
+      put_ratio_picture (308, 150, @news_images[1])
+ 
+      # x => 21, y => 11;
+      put_ratio_picture (21, 11, @news_images[2])
     end
+
     #Four picture
     if @news_images && @news_images.size == 4
-      put_image(@news_images[0], 100, 160, nil, 115)
-      put_image(@news_images[1], 385, 160, nil, 115)
-      put_image(@news_images[2], 100, 33, nil, 115)
-      put_image(@news_images[3], 385, 33, nil, 115)
+      # x => 21, y => 150
+      put_ratio_picture (21, 150, @news_images[0])
+
+      # x => 308, y => 150;
+      put_ratio_picture (308, 150, @news_images[1])
+
+      # x => 21, y => 11;
+      put_ratio_picture (21, 11, @news_images[2])
+
+      # x => 308, y => 11;
+      put_ratio_picture(308, 11, @news_images[3])
+    end
+  end
+
+  def put_ratio_picture (x, y, file)
+    image1 = ChunkyPNG::Image.from_file(file)
+    if image1.dimension.width > 2 * image1.dimension.height
+      put_image(file, x, y + (138 - image1.dimension.height * 287 / image1.dimension.width ) / 2, 287, nil)
+    else
+      put_image(file, x + (287 - image1.dimension.width * 138 / image1.dimension.height) / 2, y, nil, 138)
+    end
+  end
+
+   def put_ratio_one_picture (x, y, file)
+    image1 = ChunkyPNG::Image.from_file(file)
+    if image1.dimension.width > image1.dimension.height
+      put_image(file, x, y + (277 - image1.dimension.height * 574 / image1.dimension.width ) / 2, 574, nil)
+    else
+      put_image(file, x + (574 - image1.dimension.width * 277 / image1.dimension.height) / 2, y, nil, 277)
+    end
+  end
+
+  def put_ratio_two_picture (x, y, file)
+    image1 = ChunkyPNG::Image.from_file(file)
+    if image1.dimension.width > image1.dimension.height
+      put_image(file, x, y + (277 - image1.dimension.height * 287 / image1.dimension.width ) / 2, 287, nil)
+    else
+      put_image(file, x + (287 - image1.dimension.width * 277 / image1.dimension.height) / 2, y, nil, 277)
     end
   end
 
