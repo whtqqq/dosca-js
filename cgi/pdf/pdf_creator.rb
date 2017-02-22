@@ -181,7 +181,7 @@ class PDFCreator
   def put_ratio_two_picture (x, y, file)
     image1 = Magick::Image.read(file).first
     if image1.columns > image1.rows
-      put_image(file, x, y + (277 - image1.rows * 287 / image1.columns -2 * SUMMARY_TOP_SPACE) / 2, 287, nil)
+      put_image(file, x, y + (277 - image1.rows * 287 / image1.columns - 2 * SUMMARY_TOP_SPACE) / 2, 287, nil)
     else
       put_image(file, x + (287 - image1.columns * 277 / image1.rows) / 2, y, nil, 277 - 2 * SUMMARY_TOP_SPACE)
     end

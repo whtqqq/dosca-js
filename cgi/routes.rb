@@ -37,7 +37,6 @@ begin
 
 rescue Exception => e
   # when exception 404 Not Found
-  LogWriter.error("System", e.to_s)
 
   puts "Status: 404 Not Found\n"
   puts "Content-Type: text/html\n\n"
@@ -47,6 +46,8 @@ rescue Exception => e
   puts "System failure! at #{controller_name}\##{action_name}:"
   puts e.to_s
   puts ""
+
+  LogWriter.error("System", e.to_s)
 
   #write to stderr
   $stderr.puts "#{$!} (#{$!.class})"
