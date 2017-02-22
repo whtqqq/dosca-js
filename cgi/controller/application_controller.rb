@@ -79,7 +79,7 @@ class ApplicationController
       return
     end
 
-    if @error_message
+    if @error_message.nil? || @error_message.empty?
       viewfile = prev_view
     else 
       viewfile =  default_view
