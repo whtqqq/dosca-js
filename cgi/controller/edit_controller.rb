@@ -50,8 +50,7 @@ class EditController < ApplicationController
     @values[:status] = status
     
     if status == STATUS_NEW
-      files = JSON.parse(@session["files"])
-      new_proc(@past_contents, @values, contents_no, files[0])
+      new_proc(@past_contents, @values, contents_no, find_last_file)
       unless empty?(@error_message)
         copy_values(@values, @params)
       else
@@ -70,7 +69,7 @@ class EditController < ApplicationController
 
       file = nil
       unless empty?(@session["files"])
-        file = JSON.parse(@session["files"])[0]
+        file = find_last_file
       end
       edit_proc(@past_contents, @values, contents_no, file, false)
       unless empty?(@error_message)
@@ -236,16 +235,18 @@ class EditController < ApplicationController
     user_info = user_info_from_session
     @mail = user_info[:mail]
 
-    file_names  = []
+    pictures = []
+    pictures = JSON.parse(@session["files"]) unless empty?(@session["files"])
+
     files = @cgi.params["files[]"]
     if !files.is_a?(Array)
-      file_names.push(save_temp_file(files))
+      picturs.push(save_temp_file(files))
     else
       files.each do |file|
-        file_names.push(save_temp_file(file))
+        pictures.push(save_temp_file(file))
       end
     end
-    @session["files"] = file_names.to_json
+    @session["files"] = pictures.to_json
      
     api_response("SUCCESS", "")
     LogWriter.info("System", "Edit#upload End.")
@@ -342,8 +343,6 @@ class EditController < ApplicationController
       pdf_name = path + "/" + [@client_code, contents_code, "new"].join("_") + ".pdf"
     end
     map_picture = save_base64_picture(@cgi.params["map_picture"].to_s, path)
-    news_pictures = []
-    news_pictures = JSON.parse(@session["files"]) unless empty?(@session["files"])
 
     pdf = PDFCreator.new(pdf_name, 
           title,
@@ -351,7 +350,7 @@ class EditController < ApplicationController
           data[:position],  data[:category],
           data[:subject],
           data[:summary],
-          map_picture, news_pictures)
+          map_picture, find_real_files)
     pdf.create()
 
     File.delete map_picture if File.exist?(map_picture)
@@ -360,14 +359,15 @@ class EditController < ApplicationController
   end
 
   def save_base64_picture(data_url, path)
-    png  = Base64.decode64(data_url['data:image/svg+xml;base64,'.length..-1])
-    file_name = path + '/chart.svg'
-    File.open(file_name, 'wb') { |f| f.write(png) }
+    svg  = Base64.decode64(data_url["data:image/svg+xml;base64,".length..-1])
+    file_name = path + "/" + edit_mail + "_chart.svg"
+    File.open(file_name, "wb") { |f| f.write(svg) }
     file_name
   end
   
   def save_temp_file(file) 
-    path = [Settings._settings[:server][:temp_directory], file.original_filename].join("/") 
+    file_name = [milliseconds_string, edit_mail,  file.original_filename].join("_")
+    path = [Settings._settings[:server][:temp_directory], file_name].join("/")
     File.open(path, "w") { |f| f.write file.read }
     path
   end
@@ -439,5 +439,40 @@ class EditController < ApplicationController
     end
 
     to[:pdf_file] = @session["original_pdf_file"]
+  end
+
+  def edit_mail()
+    parts = @mail.split("@")
+    [parts[0], parts[1].split(".").join("_")].join("_")
+  end
+
+  def find_last_file
+    files = []
+    files  = JSON.parse(@session["files"]) unless empty?(@session["files"])
+    files.last
+  end
+
+  def find_real_files
+    files = []
+    files  = JSON.parse(@session["files"]) unless empty?(@session["files"])
+    r_files = files.reverse 
+    t_files = @params[:file_names].to_s.strip.split(";")
+    real_files = []
+    
+    edited_mail = edit_mail
+    t_files.each do |tfile|
+      r_files.each do |rfile|
+        base_name = File.basename(rfile)
+        if base_name.index([edited_mail, tfile].join("_"))
+          real_files.push(rfile)
+          break
+        end
+      end 
+    end
+    real_files 
+  end
+
+  def milliseconds_string
+    Time.now.instance_eval {'%s%03d' % [strftime('%Y%m%d%H%M%S'), (usec / 1000.0).round]}
   end
 end

@@ -15,6 +15,7 @@ class PDFCreator
 
   SUMMARY_LINES = 25
   SUMMARY_LINE_WIDTH = 120
+  SUMMARY_TOP_SPACE = 4
 
   def initialize(pdf_name, title_name, issue_date, location, category, subject, str_list,
      map_image, news_images)
@@ -133,11 +134,11 @@ class PDFCreator
 
     #Three picture
     if @news_images && @news_images.size == 3
-      # x =>21, y =>150
-      put_ratio_picture(21, 150, @news_images[0])
+      # x =>21, y =>150 - SUMMARY_TOP_SPACE
+      put_ratio_picture(21, 150 - SUMMARY_TOP_SPACE, @news_images[0])
 
-      # x => 308, y => 150;
-      put_ratio_picture(308, 150, @news_images[1])
+      # x => 308, y => 150 - SUMMARY_TOP_SPACE;
+      put_ratio_picture(308, 150 - SUMMARY_TOP_SPACE, @news_images[1])
  
       # x => 21, y => 11;
       put_ratio_picture(21, 11, @news_images[2])
@@ -145,11 +146,11 @@ class PDFCreator
 
     #Four picture
     if @news_images && @news_images.size == 4
-      # x => 21, y => 150
-      put_ratio_picture(21, 150, @news_images[0])
+      # x => 21, y => 150 - SUMMARY_TOP_SPACE
+      put_ratio_picture(21, 150 - SUMMARY_TOP_SPACE, @news_images[0])
 
       # x => 308, y => 150;
-      put_ratio_picture(308, 150, @news_images[1])
+      put_ratio_picture(308, 150 - SUMMARY_TOP_SPACE, @news_images[1])
 
       # x => 21, y => 11;
       put_ratio_picture(21, 11, @news_images[2])
@@ -162,27 +163,27 @@ class PDFCreator
   def put_ratio_picture (x, y, file)
     image1 = Magick::Image.read(file).first
     if image1.columns > 2 * image1.rows
-      put_image(file, x, y + (138 - image1.rows * 287 / image1.columns ) / 2, 287, nil)
+      put_image(file, x, y + (138 - image1.rows * 287 / image1.columns - SUMMARY_TOP_SPACE) / 2, 287, nil)
     else
-      put_image(file, x + (287 - image1.columns * 138 / image1.rows) / 2, y, nil, 138)
+      put_image(file, x + (287 - image1.columns * 138 / image1.rows) / 2, y, nil, 138 - SUMMARY_TOP_SPACE)
     end
   end
 
    def put_ratio_one_picture(x, y, file)
     image1 = Magick::Image.read(file).first
     if image1.columns > image1.rows
-      put_image(file, x, y + (277 - image1.rows * 574 / image1.columns ) / 2, 574, nil)
+      put_image(file, x, y + (277 - image1.rows * 574 / image1.columns - 2 * SUMMARY_TOP_SPACE) / 2, 574, nil)
     else
-      put_image(file, x + (574 - image1.columns * 277 / image1.rows) / 2, y, nil, 277)
+      put_image(file, x + (574 - image1.columns * 277 / image1.rows) / 2, y, nil, 277 - 2 *  SUMMARY_TOP_SPACE)
     end
   end
 
   def put_ratio_two_picture (x, y, file)
     image1 = Magick::Image.read(file).first
     if image1.columns > image1.rows
-      put_image(file, x, y + (277 - image1.rows * 287 / image1.columns ) / 2, 287, nil)
+      put_image(file, x, y + (277 - image1.rows * 287 / image1.columns -2 * SUMMARY_TOP_SPACE) / 2, 287, nil)
     else
-      put_image(file, x + (287 - image1.columns * 277 / image1.rows) / 2, y, nil, 277)
+      put_image(file, x + (287 - image1.columns * 277 / image1.rows) / 2, y, nil, 277 - 2 * SUMMARY_TOP_SPACE)
     end
   end
 
@@ -211,10 +212,11 @@ class PDFCreator
     arr = str_to_arr(@str_list)
     @pdf.move_pointer(2)
     create_table(15, "                       Summary", 311, @pdf.margin_width, :all, :shaded)
-    @pdf.move_pointer(2)
+    @pdf.move_pointer(SUMMARY_TOP_SPACE + 3)
     (0..SUMMARY_LINES - 1).each { |i| 
-      create_table(7.9, "#{arr[i]}", 309, @pdf.margin_width + 50, :none, :none)
+      create_table(7.8, "#{arr[i]}", 316, @pdf.margin_width + 50, :none, :none)
     }
+    @pdf.move_pointer(SUMMARY_TOP_SPACE + 1)
   end
 
   def time_formt()
