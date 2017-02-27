@@ -128,7 +128,7 @@ class PDFCreator
       # x =>21, y =>11
       put_ratio_two_picture(21, 11, @news_images[0])
 
-      # x => 305, y => 11;
+      # x => 308, y => 11;
       put_ratio_two_picture(308, 11, @news_images[1])
     end
 
@@ -162,28 +162,28 @@ class PDFCreator
 
   def put_ratio_picture (x, y, file)
     image1 = Magick::Image.read(file).first
-    if image1.columns > 2 * image1.rows
-      put_image(file, x, y + (138 - image1.rows * 287 / image1.columns - SUMMARY_TOP_SPACE) / 2, 287, nil)
+    if image1.columns > 574.0 / 273 * image1.rows
+      put_image(file, x, y + (138 - image1.rows * 287.0 / image1.columns - SUMMARY_TOP_SPACE) / 2, 287, nil)
     else
-      put_image(file, x + (287 - image1.columns * 138 / image1.rows) / 2, y, nil, 138 - SUMMARY_TOP_SPACE)
+      put_image(file, x + (287 - image1.columns * (138.0 - SUMMARY_TOP_SPACE) / image1.rows) / 2, y, nil, 138 - SUMMARY_TOP_SPACE)
     end
   end
 
    def put_ratio_one_picture(x, y, file)
     image1 = Magick::Image.read(file).first
-    if image1.columns > image1.rows
-      put_image(file, x, y + (277 - image1.rows * 574 / image1.columns - 2 * SUMMARY_TOP_SPACE) / 2, 574, nil)
+    if image1.columns >  574.0 / 273 * image1.rows
+      put_image(file, x, y + (277 - image1.rows * 574.0 / image1.columns - 2 * SUMMARY_TOP_SPACE) / 2, 574, nil)
     else
-      put_image(file, x + (574 - image1.columns * 277 / image1.rows) / 2, y, nil, 277 - 2 *  SUMMARY_TOP_SPACE)
+      put_image(file, x + (574 - image1.columns * (277.0 - 2 * SUMMARY_TOP_SPACE) / image1.rows) / 2, y, nil, 277 - 2 *  SUMMARY_TOP_SPACE)
     end
   end
 
   def put_ratio_two_picture (x, y, file)
     image1 = Magick::Image.read(file).first
-    if image1.columns > image1.rows
-      put_image(file, x, y + (277 - image1.rows * 287 / image1.columns - 2 * SUMMARY_TOP_SPACE) / 2, 287, nil)
+    if image1.columns > 287.0 / 277 * image1.rows
+      put_image(file, x, y + (277 - image1.rows * 287.0 / image1.columns - 2 * SUMMARY_TOP_SPACE) / 2, 287, nil)
     else
-      put_image(file, x + (287 - image1.columns * 277 / image1.rows) / 2, y, nil, 277 - 2 * SUMMARY_TOP_SPACE)
+      put_image(file, x + (287 - image1.columns * (277.0 - 2 * SUMMARY_TOP_SPACE) / image1.rows) / 2, y, nil, 277 - 2 * SUMMARY_TOP_SPACE)
     end
   end
 
